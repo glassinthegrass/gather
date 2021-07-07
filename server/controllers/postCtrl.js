@@ -55,15 +55,30 @@ module.exports = {
       return res.sendStatus(200);
     }
   },
-  deletePost:async (req,res)=>{
-      const db = req.app.get("db");
-      const {post_id}=req.query
-      try{
-        await db.posts.delete_post(post_id);
-        return res.status(200).send({"message":"post was deleted"})
-      }catch(err){
-          console.log(err)
-          return res.sendStatus(404)
+  deletePost: async (req, res) => {
+    const db = req.app.get("db");
+    const { post_id } = req.params;
+    try {
+      const [toBeDeleted] = await db.posts.get_post_for_deletion(post_id);
+      if (!toBeDeleted) {
+        return res.sendStatus(404);
+      } else {
+        const { post_content, post_url, user_id, person_id } = toBeDeleted;
+        const [deletedPostEntry] = await db.posts.create_deleted_post_entry(
+          post_content,
+          post_url,
+          user_id,
+          person_id,
+          post_id
+        );
+        if (deletedPostEntry) {
+          await db.posts.delete_post(post_id);
+          return res.status(200).send(deletedPostEntry);
+        }
       }
-  }
+    } catch (err) {
+      console.log(err);
+      return res.sendStatus(404);
+    }
+  },
 };

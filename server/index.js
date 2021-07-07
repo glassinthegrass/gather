@@ -3,13 +3,12 @@ const express = require("express");
 const app = express();
 const session = require("express-session");
 const massive = require("massive");
-const path = require("path");
+// const path = require("path");
 const { SERVER_PORT, CONNECTION_STRING, SESSION_SECRET } = process.env;
 const authCtrl = require("./controllers/authCtrl");
 const pplCtrl = require("./controllers/pplCtrl");
 const postCtrl = require("./controllers/postCtrl");
 const groupCtrl = require("./controllers/groupCtrl");
-const { group } = require("console");
 app.use(express.json());
 
 app.use(
@@ -49,7 +48,7 @@ app.delete("/api/people/:person_id", pplCtrl.deletePerson);
 app.get("/api/posts", postCtrl.getPosts);
 app.post("/api/posts/:person_id/:user_id", postCtrl.addPost);
 app.put("/api/posts/:post_id",postCtrl.editPost);
-app.delete("/api/posts",postCtrl.deletePost);
+app.delete("/api/posts/:post_id",postCtrl.deletePost);
 
 //groups
 app.post("/api/groups",groupCtrl.addGroup);

@@ -1,13 +1,3 @@
-DROP TABLE paragraphs;
-DROP TABLE announcements;
-DROP TABLE groups_users;
-DROP TABLE groups_people;
-DROP TABLE groups;
-DROP TABLE person_user_post;
-DROP TABLE post;
-DROP TABLE person;
-DROP TABLE users;
-
 CREATE TABLE users(
     user_id SERIAL PRIMARY KEY,
     first_name VARCHAR(255) NOT NULL,
@@ -49,6 +39,8 @@ CREATE TABLE person_user_post(
 CREATE TABLE groups(
 group_id SERIAL PRIMARY KEY,
 group_name VARCHAR(200),
+creator int,
+FOREIGN KEY (creator) REFERENCES users(user_id)
 );
 
 CREATE TABLE groups_people(
@@ -69,7 +61,7 @@ FOREIGN KEY(user_id) REFERENCES users(user_id)
 
 CREATE TABLE announcements(
     announcement_id SERIAL PRIMARY KEY,
-    title VARCHAR(100),
+    title VARCHAR(125),
     announcement_picture text,
     announcement_url text,
     group_id INT,
@@ -83,3 +75,11 @@ CREATE TABLE paragraphs(
     paragraph_content text
 );
 
+CREATE TABLE deleted_posts(
+deleted_id SERIAL PRIMARY KEY,
+deleted_content text,
+deleted_url text,
+deleted_user_id int,
+deleted_person_id int,
+deleted_post_id int
+);

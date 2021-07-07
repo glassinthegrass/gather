@@ -1,10 +1,7 @@
-import React,{useState} from 'react';
+import React from "react";
 
+const Home = (props) => {
+  return <>asdfasdfasdfadsfasd</>;
+};
 
-const Home = (props)=>{
-
-return(<>asdfasdfasdfadsfasd</>)
-
-}
-
-export default Home
+export default Home;
