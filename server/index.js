@@ -9,6 +9,8 @@ const authCtrl = require("./controllers/authCtrl");
 const pplCtrl = require("./controllers/pplCtrl");
 const postCtrl = require("./controllers/postCtrl");
 const groupCtrl = require("./controllers/groupCtrl");
+const announceCtrl = require("./controllers/announceCtrl");
+
 app.use(express.json());
 
 app.use(
@@ -29,6 +31,7 @@ app.use(
 // });
 
 //endpoints
+
 //auth
 app.post(`/auth/register`, authCtrl.register);
 app.post("/auth/login", authCtrl.login);
@@ -47,11 +50,22 @@ app.delete("/api/people/:person_id", pplCtrl.deletePerson);
 //post
 app.get("/api/posts", postCtrl.getPosts);
 app.post("/api/posts/:person_id/:user_id", postCtrl.addPost);
-app.put("/api/posts/:post_id",postCtrl.editPost);
-app.delete("/api/posts/:post_id",postCtrl.deletePost);
+app.put("/api/posts/:post_id", postCtrl.editPost);
+app.delete("/api/posts/:post_id", postCtrl.deletePost);
 
 //groups
-app.post("/api/groups",groupCtrl.addGroup);
+app.get("/api/groups", groupCtrl.searchGroups);
+app.get("/api/groups/:user_id", groupCtrl.getGroupsByUser);
+app.post("/api/groups", groupCtrl.addGroup);
+app.post("/api/groups/:group_id", groupCtrl.addPersonToGroup);
+app.put(
+  "/api/groups/:group_id/person/:person_id",
+  groupCtrl.deletePersonFromGroup
+);
+app.delete("/api/groups/:group_id", groupCtrl.deleteGroup);
+
+//announcements
+app.post("/api/announcements", announceCtrl.createAnnouncement);
 
 massive({
   connectionString: CONNECTION_STRING,

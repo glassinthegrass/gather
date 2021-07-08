@@ -69,7 +69,7 @@ return res.status(500).send(errorMessage);
     }
   },
 updateEmail: (req,res)=>{
-    const db = req.app.get("db");    
+    const db = req.app.get("db");
     const {email,password}=req.body;
     const [existingUser]=db.auth.get_user_by_email(email);
     const {hash}= existingUser
@@ -79,6 +79,7 @@ updateEmail: (req,res)=>{
         return res.status(409).send(errorMessage);
     }else{
         const [updatedEmail]= db.auth.update_email(email);
+          delete updatedEmail.hash;
         return res.status(200).send(updatedEmail)
     }
 },

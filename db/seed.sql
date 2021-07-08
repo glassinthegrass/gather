@@ -16,7 +16,9 @@ CREATE TABLE person(
     birthday VARCHAR(15),
     picture TEXT,
     zipcode INT,
-    message TEXT
+    message TEXT,
+    creator INT,
+    FOREIGN KEY(creator) REFERENCES users(user_id)
 );
 
 CREATE TABLE post(
