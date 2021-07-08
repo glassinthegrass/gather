@@ -70,7 +70,7 @@ module.exports = {
     const { person_id } = req.params;
     try {
       const [person] = await db.people.get_person(person_id);
-      if (!person) {
+      if (person===[]) {
         return res.status(404).send({ message: "user doesn't exist" });
       } else {
         await db.people.delete_person(person_id);

@@ -65,7 +65,14 @@ app.put(
 app.delete("/api/groups/:group_id", groupCtrl.deleteGroup);
 
 //announcements
+app.get("/api/announcements/:user_id", announceCtrl.getGroupAnnoucementsByUser);
+app.get("/api/announcement/:announcement_id", announceCtrl.getAnnouncement);
 app.post("/api/announcements", announceCtrl.createAnnouncement);
+app.post(
+  "/api/announcements/:announcement_id",
+  announceCtrl.createAnnouncementParagraph
+);
+app.delete("/api/announcements", announceCtrl.deleteAnnouncement);
 
 massive({
   connectionString: CONNECTION_STRING,
