@@ -10,6 +10,10 @@ const pplCtrl = require("./controllers/pplCtrl");
 const postCtrl = require("./controllers/postCtrl");
 const groupCtrl = require("./controllers/groupCtrl");
 const announceCtrl = require("./controllers/announceCtrl");
+const emailCtrl = require("./controllers/emailCtrl");
+const { getBirthday } = require("./controllers/birthdayCtrl");
+const friendCtrl = require("./controllers/friendCtrl");
+// const { isLoggedIn } = require("./middleware/authenticateUser");
 
 app.use(express.json());
 
@@ -34,8 +38,10 @@ app.use(
 
 //auth
 app.post(`/auth/register`, authCtrl.register);
+app.post(`/auth/admin`, authCtrl.registerAdmin);
 app.post("/auth/login", authCtrl.login);
-app.put("/auth/updateEmail", authCtrl.updateEmail);
+app.put("/auth/username", authCtrl.updateEmail);
+app.put("/auth/authentication", authCtrl.updatePassword);
 app.delete("/auth/logout", authCtrl.logout);
 
 //ppl
@@ -49,7 +55,7 @@ app.delete("/api/people/:person_id", pplCtrl.deletePerson);
 
 //post
 app.get("/api/posts", postCtrl.getPosts);
-app.post("/api/posts/:person_id/:user_id", postCtrl.addPost);
+app.post("/api/posts/:person_id", postCtrl.addPost);
 app.put("/api/posts/:post_id", postCtrl.editPost);
 app.delete("/api/posts/:post_id", postCtrl.deletePost);
 
@@ -73,6 +79,24 @@ app.post(
   announceCtrl.createAnnouncementParagraph
 );
 app.delete("/api/announcements", announceCtrl.deleteAnnouncement);
+
+//email
+app.post("/api/email", emailCtrl.sendEmail);
+
+//birthday
+app.get("/api/birthday", getBirthday);
+
+//friends
+app.get("/api/friendships/:user_id",friendCtrl.getFrienships);
+app.post(
+  "/api/friend_request/:requesting_user_id/responding/:responding_user_id",
+  friendCtrl.createFriendRequest
+);
+app.post(
+  "/api/friendship/:responding_user_id/requested/:requesting_user_id",
+  friendCtrl.acceptFriendRequest
+);
+
 
 massive({
   connectionString: CONNECTION_STRING,

@@ -9,8 +9,6 @@ module.exports = {
       const paragraphs = await db.announcements.get_announcement_paragraphs(
         announcement_id
       );
-
-
       return res.status(200).send([announcement,paragraphs]);
     } catch (err) {
       console.log(err);

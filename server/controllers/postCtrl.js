@@ -12,7 +12,8 @@ module.exports = {
   addPost: async (req, res) => {
     const db = req.app.get("db");
     const { post_content, post_url } = req.body;
-    const { person_id, user_id } = req.params;
+    const { person_id} = req.params;
+    const {user_id}=req.session.user.user_id
     try {
       const [post] = await db.posts.create_post(post_content, post_url);
       if (!post) {
