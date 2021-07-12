@@ -61,7 +61,7 @@ module.exports = {
     const { post_id } = req.params;
     try {
       const [toBeDeleted] = await db.posts.get_post_for_deletion(post_id);
-      if (!toBeDeleted) {
+      if (!toBeDeleted?.post_id) {
         return res.sendStatus(404);
       } else {
         const { post_content, post_url, user_id, person_id } = toBeDeleted;

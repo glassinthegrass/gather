@@ -40,7 +40,7 @@ module.exports = {
   addPersonToGroup: async (req, res) => {
     const db = req.app.get("db");
     const { group_id } = req.params;
-    const { first_name, last_name, birthday, picture, zipcode, message } = req.body;
+    const { first_name, last_name, birthday, picture, zipcode, message,creator } = req.body;
     try {
       const [newPerson] = await db.people.create_person(
         first_name,
@@ -48,9 +48,10 @@ module.exports = {
         birthday,
         picture,
         zipcode,
-        message
+        message,
+        creator
       );
-      if (!newPerson) {
+      if (!newPerson?.person_id) {
         return res.sendStatus(409);
       } else {
         await db.groups.create_groups_people(group_id, newPerson.person_id);

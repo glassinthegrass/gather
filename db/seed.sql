@@ -47,11 +47,11 @@ CREATE TABLE person(
     person_id SERIAL PRIMARY KEY,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
-    birthday VARCHAR(15),
+    birthday VARCHAR(15) NOT NULL,
     picture TEXT,
     zipcode INT,
     message TEXT,
-    creator INT,
+    creator INT NOT NULL,
     FOREIGN KEY(creator) REFERENCES users(user_id),
     creation_date DATE NOT NULL DEFAULT CURRENT_DATE
 );
@@ -105,7 +105,6 @@ CREATE TABLE announcements(
     title VARCHAR(125),
     announcement_picture text,
     announcement_url text,
-    timestamp varchar(2000),
     group_id INT,
     FOREIGN KEY (group_id) REFERENCES groups(group_id),
     creation_date DATE NOT NULL DEFAULT CURRENT_DATE

@@ -23,7 +23,7 @@ module.exports = {
   },
   createPerson: async (req, res) => {
     const db = req.app.get("db");
-    const { first_name, last_name, birthday, picture, zipcode, message } =
+    const { first_name, last_name, birthday, picture, zipcode, message, creator } =
       req.body;
 
     try {
@@ -33,7 +33,8 @@ module.exports = {
         birthday,
         picture,
         zipcode,
-        message
+        message,
+        creator
       );
       return res.status(200).send(newPerson);
     } catch (err) {
@@ -70,7 +71,7 @@ module.exports = {
     const { person_id } = req.params;
     try {
       const [person] = await db.people.get_person(person_id);
-      if (person===[]) {
+      if (!person?.person_id) {
         return res.status(404).send({ message: "user doesn't exist" });
       } else {
         await db.people.delete_person(person_id);
