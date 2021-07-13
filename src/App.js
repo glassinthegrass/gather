@@ -1,12 +1,21 @@
-import Home from './Components/Home/Home'
-import './App.css';
+import React from "react";
+import MainRoutes from "./Routes/MainRoutes";
+import "./App.css";
+import Header from "./Components/Header/Header";
+import { HashRouter, BrowserRouter } from "react-router-dom";
 
-function App() {
+
+
+const Router =
+  process.env.NODE_ENV === "development" ? HashRouter : BrowserRouter;
+
+const App = () => {
   return (
-    <div className="App">
-<Home/>
-    </div>
+    <Router>
+      <Header />
+      {MainRoutes}
+    </Router>
   );
-}
+};
 
 export default App;
