@@ -4,7 +4,7 @@ import Login from '../Components/Login/Login'
 
 export default(
         <Switch >
-            <Route exact path="/" render={()=><Home />}/>
-            <Route path='/login' render={()=><Login/>}/>
+            <Route exact path="/" component={Login}/>
+            <Route path='/home' component={Home}/>
         </Switch>
 )

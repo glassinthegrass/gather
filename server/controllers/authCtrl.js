@@ -35,7 +35,7 @@ module.exports = {
     //gain access to db functions
     const db = req.app.get("db");
     const { first_name, last_name, email, password } = req.body;
-    const admin =true
+    const admin = true;
     //check if email used
     try {
       //checking email status
@@ -117,16 +117,14 @@ module.exports = {
     // const {user_id}=req.session.user
     const { email, password, newPassword } = req.body;
     if (password === newPassword) {
-      return res
-        .status(409)
-        .send({
-          message:
-            "Old password and new password match. Please re-enter your new password.",
-        });
+      return res.status(409).send({
+        message:
+          "Old password and new password match. Please re-enter your new password.",
+      });
     }
     try {
       const [existingUser] = await db.auth.get_user_by_email(email);
-      console.log(existingUser)
+      console.log(existingUser);
       const isAuthenticated = bcrypt.compareSync(password, existingUser.hash);
 
       if (!isAuthenticated) {
