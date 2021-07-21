@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs");
+
 let errorMessage = "Bzzzzt- Email is not registered";
 
 module.exports = {
@@ -25,6 +26,9 @@ module.exports = {
           email,
           hash
         );
+        db.groups.create_group_users(1, registeredUser.user_id);
+        delete registeredUser.hash;
+        registeredUser.isRegistered = true;
         return res.status(200).send(registeredUser);
       }
     } catch (err) {
@@ -86,13 +90,12 @@ module.exports = {
     }
   },
   logout: (req, res) => {
+    let user = {};
     if (req.session.user) {
       req.session.destroy();
-      const logoutMsg = "you have successfully logged out!";
-      return res.status(200).send(logoutMsg);
+      return res.status(200).send(user);
     } else {
-      const logoutMsg = "you are not logged in, so you can't log out";
-      return res.status(409).send(logoutMsg);
+      return res.status(200).send(user);
     }
   },
   updateEmail: async (req, res) => {
@@ -139,4 +142,16 @@ module.exports = {
       console.log(err);
     }
   },
+  getUser:async (req,res)=>{
+    const db= req.app.get("db");
+let user_id = req.session.user.user_id;
+    const [existingUser]= await db.auth.get_user_by_user_id(user_id);
+    console.log(existingUser)
+console.log(req.session.user)
+    if(!existingUser){
+      return res.send('you are not registered');
+    }  
+    existingUser.isLoggedIn = true
+    return res.status(200).send(existingUser)
+}
 };

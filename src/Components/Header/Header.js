@@ -1,29 +1,40 @@
 import React from "react";
-import {Link,useHistory} from 'react-router-dom'
-import styled from 'styled-components'
+import { useHistory } from "react-router-dom";
+import { StyledHeader, Arrow, Greeting, GreetingContainer } from "./styles";
+const Header = (props) => {
+  const history = useHistory();
+  const url =
+    `https://res.cloudinary.com/glassinthegrass/image/upload/w_40,h_40,c_fill,r_max,f_png/` +
+    props.user.picture_version +
+    "/" +
+    props.user.picture_public_id;
 
-const StyledHeader = (styled.header`
-display:flex;
-justify-content:flex-end;
-height: 5rem;
-width:100vw;
-background-color:rgb(252, 142, 52, 0.792)
-`)
+  const greeting = props.user.isLoggedIn ? (
+    <GreetingContainer>
+      <img src={url} alt={props.user.picture_public_id} />
+      <Greeting>{`Hi ${props.user.first_name}!`}</Greeting>
+    </GreetingContainer>
+  ) : (
+    <></>
+  );
 
-const Header = () => {
-const history=useHistory()  
-
-return( 
-<StyledHeader>
-    
-      <Link to='/login'>
-      <p>Login</p>
-      </Link>
-
-
-      <h1 onClick={()=>history.go(-1)}> {'<'} </h1>
-      <h1 onClick={()=>history.go(1)}>{'>'}</h1>
-  </StyledHeader>
-)
+  return (
+    <StyledHeader>
+      {greeting}
+      <div
+        onClick={() => {
+          props.logoutUser();
+          history.push("/");
+        }}
+      >
+        Logout
+      </div>
+      <Arrow>
+        <Arrow onClick={() => history.go(-1)}> {"<"} </Arrow>
+        <Arrow onClick={() => history.go(1)}>{">"}</Arrow>
+      </Arrow>
+    </StyledHeader>
+  );
 };
+
 export default Header;

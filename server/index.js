@@ -2,21 +2,26 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const session = require("express-session");
+const formData = require('express-form-data')
 const massive = require("massive");
 // const path = require("path");
-const { SERVER_PORT, CONNECTION_STRING, SESSION_SECRET } = process.env;
+const { SERVER_PORT, CONNECTION_STRING, SESSION_SECRET,CLOUD_NAME,API_KEY,API_SECRET } = process.env;
+const cloudinary= require('cloudinary').v2;
 const authCtrl = require("./controllers/authCtrl");
 const pplCtrl = require("./controllers/pplCtrl");
 const postCtrl = require("./controllers/postCtrl");
 const groupCtrl = require("./controllers/groupCtrl");
 const announceCtrl = require("./controllers/announceCtrl");
+const cloudinaryCtrl= require('./controllers/cloudinaryCtrl')
+const viewsCtrl= require('./controllers/viewsCtrl')
 const emailCtrl = require("./controllers/emailCtrl");
 const { getBirthday } = require("./controllers/birthdayCtrl");
 const friendCtrl = require("./controllers/friendCtrl");
+
 // const { isLoggedIn } = require("./middleware/authenticateUser");
 
+app.use(formData.parse())
 app.use(express.json());
-
 app.use(
   session({
     secret: SESSION_SECRET,
@@ -29,14 +34,26 @@ app.use(
   })
 );
 
+cloudinary.config({
+  cloud_name:CLOUD_NAME,
+  api_key:API_KEY,
+  api_secret:API_SECRET
+});
+console.log(cloudinary.url('sample'))
 // app.use(express.static(__dirname+ "/../build"));
 // app.get("*", (req,res)=>{
 //     res.sendFile(path.join(__dirname, "../build/index.html"));
 // });
 
 //endpoints
+//home
+app.get("/api/home/:user_id", viewsCtrl.getHomeView);
+
+//cloudinary;
+app.post('/api/images/:user_id',cloudinaryCtrl.uploadImages)
 
 //auth
+app.get('/auth/user',authCtrl.getUser);
 app.post(`/auth/register`, authCtrl.register);
 app.post(`/auth/admin`, authCtrl.registerAdmin);
 app.post("/auth/login", authCtrl.login);
@@ -71,7 +88,7 @@ app.put(
 app.delete("/api/groups/:group_id", groupCtrl.deleteGroup);
 
 //announcements
-app.get("/api/announcements/:user_id", announceCtrl.getGroupAnnoucementsByUser);
+
 app.get("/api/announcement/:announcement_id", announceCtrl.getAnnouncement);
 app.post("/api/announcements", announceCtrl.createAnnouncement);
 app.post(
@@ -87,7 +104,7 @@ app.post("/api/email", emailCtrl.sendEmail);
 app.get("/api/birthday", getBirthday);
 
 //friends
-app.get("/api/friendships/:user_id",friendCtrl.getFrienships);
+app.get("/api/friendships/:user_id", friendCtrl.getFrienships);
 app.post(
   "/api/friend_request/:requesting_user_id/responding/:responding_user_id",
   friendCtrl.createFriendRequest
@@ -96,7 +113,6 @@ app.post(
   "/api/friendship/:responding_user_id/requested/:requesting_user_id",
   friendCtrl.acceptFriendRequest
 );
-
 
 massive({
   connectionString: CONNECTION_STRING,

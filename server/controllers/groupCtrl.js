@@ -40,7 +40,15 @@ module.exports = {
   addPersonToGroup: async (req, res) => {
     const db = req.app.get("db");
     const { group_id } = req.params;
-    const { first_name, last_name, birthday, picture, zipcode, message,creator } = req.body;
+    const {
+      first_name,
+      last_name,
+      birthday,
+      picture,
+      zipcode,
+      message,
+      creator,
+    } = req.body;
     try {
       const [newPerson] = await db.people.create_person(
         first_name,
@@ -63,31 +71,39 @@ module.exports = {
       return res.sendStatus(err);
     }
   },
-  deletePersonFromGroup:async (req,res) =>{
+  deletePersonFromGroup: async (req, res) => {
     const db = req.app.get("db");
-    const {person_id,group_id}=req.params;
-    try{
-      const [person]=await db.people.get_person(person_id);
-      if(!person){
-        return res.status(409).send({"message":"person does not exist."})
-      }else{
-        await db.groups.delete_person_from_group(person_id,group_id);
+    const { person_id, group_id } = req.params;
+    try {
+      const [person] = await db.people.get_person(person_id);
+      if (!person) {
+        return res.status(409).send({ message: "person does not exist." });
+      } else {
+        await db.groups.delete_person_from_group(person_id, group_id);
         return res.status(200).send(person);
       }
-    }
-    catch(err){
-      return res.sendStatus(404)
+    } catch (err) {
+      return res.sendStatus(404);
     }
   },
-  deleteGroup:async (req,res)=>{
-      const db = req.app.get("db");
-      const {group_id}=req.params;
-      try{
-        await db.groups.delete_group(group_id)
-        return res.status(200).send({"message":"group was deleted!"}); 
-      }
-      catch(err){
-        return res.sendStatus(404)
-      }
-  }
+  deleteGroup: async (req, res) => {
+    const db = req.app.get("db");
+    const { group_id } = req.params;
+    try {
+      await db.groups.delete_group(group_id);
+      return res.status(200).send({ message: "group was deleted!" });
+    } catch (err) {
+      return res.sendStatus(404);
+    }
+  },
+  getPeopleByGroup: async (req, res) => {
+    const db = req.app.get("db");
+    const { group_id } = req.params;
+    try {
+      const people = await db.groups.get_people_grouped(group_id);
+      res.status(200).send(people);
+    } catch (err) {
+      console.log(err);
+    }
+  },
 };

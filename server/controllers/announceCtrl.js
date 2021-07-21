@@ -9,19 +9,7 @@ module.exports = {
       const paragraphs = await db.announcements.get_announcement_paragraphs(
         announcement_id
       );
-      return res.status(200).send([announcement,paragraphs]);
-    } catch (err) {
-      console.log(err);
-      return res.status(404).send(err);
-    }
-  },
-  getGroupAnnoucementsByUser: async (req, res) => {
-    const db = req.app.get("db");
-    const { user_id } = req.params;
-    try {
-      const allAnnouncements =
-        await db.announcements.get_group_announcements_by_user(user_id);
-      return res.status(200).send(allAnnouncements);
+      return res.status(200).send({announcement, paragraphs});
     } catch (err) {
       console.log(err);
       return res.status(404).send(err);

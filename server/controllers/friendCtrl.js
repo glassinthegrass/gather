@@ -68,7 +68,7 @@ module.exports = {
     const { user_id } = req.params;
     try {
       const friendships = await db.friends.get_friendships_by_user(user_id);
-      if (friendships === []) {
+      if (!friendships[0]) {
         return res
           .status(404)
           .send({ message: "request some friends to build your hive!" });
