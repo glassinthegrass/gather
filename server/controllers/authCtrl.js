@@ -26,7 +26,7 @@ module.exports = {
           email,
           hash
         );
-        db.groups.create_group_users(1, registeredUser.user_id);
+        db.groups.create_group_users(1, registeredUser.user_id,false);
         delete registeredUser.hash;
         registeredUser.isRegistered = true;
         return res.status(200).send(registeredUser);
@@ -127,7 +127,6 @@ module.exports = {
     }
     try {
       const [existingUser] = await db.auth.get_user_by_email(email);
-      console.log(existingUser);
       const isAuthenticated = bcrypt.compareSync(password, existingUser.hash);
 
       if (!isAuthenticated) {
@@ -144,10 +143,8 @@ module.exports = {
   },
   getUser:async (req,res)=>{
     const db= req.app.get("db");
-let user_id = req.session.user.user_id;
+    const {user_id}=req.params
     const [existingUser]= await db.auth.get_user_by_user_id(user_id);
-    console.log(existingUser)
-console.log(req.session.user)
     if(!existingUser){
       return res.send('you are not registered');
     }  

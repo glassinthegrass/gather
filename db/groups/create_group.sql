@@ -1,3 +1,3 @@
-INSERT INTO groups(group_name,creator)
-VALUES ($1,$2)
+INSERT INTO groups(group_name)
+VALUES ($1)
 returning *;

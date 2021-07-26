@@ -18,7 +18,7 @@ const emailCtrl = require("./controllers/emailCtrl");
 const { getBirthday } = require("./controllers/birthdayCtrl");
 const friendCtrl = require("./controllers/friendCtrl");
 
-// const { isLoggedIn } = require("./middleware/authenticateUser");
+const { isLoggedIn } = require("./middleware/authenticateUser");
 
 app.use(formData.parse())
 app.use(express.json());
@@ -39,7 +39,7 @@ cloudinary.config({
   api_key:API_KEY,
   api_secret:API_SECRET
 });
-console.log(cloudinary.url('sample'))
+// console.log(cloudinary.url('sample'))
 // app.use(express.static(__dirname+ "/../build"));
 // app.get("*", (req,res)=>{
 //     res.sendFile(path.join(__dirname, "../build/index.html"));
@@ -47,13 +47,13 @@ console.log(cloudinary.url('sample'))
 
 //endpoints
 //home
-app.get("/api/home/:user_id", viewsCtrl.getHomeView);
+app.get("/api/home/:user_id", isLoggedIn, viewsCtrl.getHomeView);
 
 //cloudinary;
-app.post('/api/images/:user_id',cloudinaryCtrl.uploadImages)
+app.post('/api/images/:user_id',cloudinaryCtrl.uploadProfileImages)
 
 //auth
-app.get('/auth/user',authCtrl.getUser);
+app.get('/auth/user/:user_id',authCtrl.getUser);
 app.post(`/auth/register`, authCtrl.register);
 app.post(`/auth/admin`, authCtrl.registerAdmin);
 app.post("/auth/login", authCtrl.login);
@@ -79,7 +79,7 @@ app.delete("/api/posts/:post_id", postCtrl.deletePost);
 //groups
 app.get("/api/groups", groupCtrl.searchGroups);
 app.get("/api/groups/:user_id", groupCtrl.getGroupsByUser);
-app.post("/api/groups", groupCtrl.addGroup);
+app.post("/api/groups", groupCtrl.createGroup);
 app.post("/api/groups/:group_id", groupCtrl.addPersonToGroup);
 app.put(
   "/api/groups/:group_id/person/:person_id",
@@ -89,7 +89,7 @@ app.delete("/api/groups/:group_id", groupCtrl.deleteGroup);
 
 //announcements
 
-app.get("/api/announcement/:announcement_id", announceCtrl.getAnnouncement);
+app.get("/api/announcements/:announcement_id", announceCtrl.getAnnouncement);
 app.post("/api/announcements", announceCtrl.createAnnouncement);
 app.post(
   "/api/announcements/:announcement_id",

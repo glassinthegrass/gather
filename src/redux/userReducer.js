@@ -10,9 +10,8 @@ const REGISTER_USER = "REGISTER_USER";
 const LOGOUT_USER = "LOGOUT_USER";
 const GET_USER = "GET_USER";
 
-export const getUser = () => {
-  let user = axios.get('/auth/user').then(res=>res.data).catch(err=>console.log(err))
-  console.log(user)
+export const getUser = (user_id) => {
+  let user = axios.get(`/auth/user/${user_id}`).then(res=>res.data).catch(err=>console.log(err))
   return {
     type: GET_USER,
     payload: user

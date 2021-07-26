@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import HomeAnnouncements from './Announcements/HomeAnnouncements'
+import Groups from './Groups'
 import { useHistory } from "react-router";
 import { connect } from "react-redux";
 import styled from "styled-components";
 
-const HomeDiv = styled.section`
-  width: 100%;
-  heigth: 100%;
-  display: flex;
-  justify-content: center;
-  align-content: center;
+const HomeDiv = styled.div`
+display: flex;
+justify-content: center;
+flex-direction:column;
+align-items: center;
+align-content: center;
+min-width:80%;
+font-family:'Nunito Black'
 `;
 const Home = (props) => {
   const history = useHistory();
@@ -55,22 +59,15 @@ const Home = (props) => {
     }
   };
 
-  const mappedAnnouncements = announcements ? (
-    <div>
-      <p onClick={() => handleDecrement()}>{"<"}</p>
-      <p>{announcements[idx].group_name}</p>
-      <h1>{announcements[idx].title}</h1>
-      <p>{announcements[idx]?.announcement_picture}</p>
-      <p>{announcements[idx]?.announcement_url}</p>
-      <p onClick={() => handleIncrement()}>{">"}</p>
-    </div>
+  const showAnnouncements = announcements ? (
+   <HomeAnnouncements idx={idx} handleIncrement={handleIncrement} handleDecrement={handleDecrement} announcements={announcements}/>
   ) : (
     <></>
   );
 
-  let mappedGroups = groups ? (
+  const mappedGroups = groups ? (
     groups.map((group, i) => {
-      return <div key={i}>{group.group_name}</div>;
+      return <Groups group={group} key={i}/>
     })
   ) : (
     <></>
@@ -88,7 +85,7 @@ const Home = (props) => {
   );
   return (
     <HomeDiv>
-      <div>{mappedAnnouncements}</div>
+      <div>{showAnnouncements}</div>
       <div>{mappedGroups}</div>
       <div>{mappedFriends}</div>
     </HomeDiv>

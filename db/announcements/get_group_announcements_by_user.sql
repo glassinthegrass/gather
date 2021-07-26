@@ -1,5 +1,6 @@
-SELECT ann.announcement_id,ann.title,ann.announcement_picture,ann.announcement_url,grp.group_name FROM announcements ann
-join groups grp ON grp.group_id = ann.group_id
-join groups_users gpus ON gpus.group_id = grp.group_id
-WHERE gpus.user_id = $1
-Limit 6;
+SELECT grp.group_id, grp.group_name,grp.picture_version as group_picture_version,grp.picture_public_id as group_picture_public_id, ann.announcement_id,ann.title,ann.picture_url as announcement_picture_url, ann.picture_version as announcement_picture_version,ann.picture_public_id as announcement_picture_public_id, us.first_name,us.last_name FROM groups_announcements_users gau
+join announcements ann ON ann.announcement_id = gau.announcement_id
+join groups_users gu ON gau.group_id = gu.group_id
+join groups grp ON grp.group_id = gau.group_id
+join users us ON gu.user_id = us.user_id
+WHERE gu.user_id= $1 AND published = true;

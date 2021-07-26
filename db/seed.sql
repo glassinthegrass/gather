@@ -1,6 +1,8 @@
 DROP TABLE IF EXISTS deleted_posts;
 DROP TABLE IF EXISTS paragraphs;
+DROP TABLE IF EXISTS groups_announcements_users;
 DROP TABLE IF EXISTS announcements;
+DROP TABLE IF EXISTS group_post_user;
 DROP TABLE IF EXISTS groups_people;
 DROP TABLE IF EXISTS groups_users;
 DROP TABLE IF EXISTS groups;
@@ -15,11 +17,11 @@ CREATE TABLE users(
     user_id SERIAL PRIMARY KEY,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
+    email VARCHAR(255) NOT NULL,
     hash TEXT NOT NULL,
-    admin BOOL NOT NULL DEFAULT false,
     phone_number INT,
     birthday varchar(11),
+    zipcode INT,
     profile_picture_url VARCHAR(5000),
     picture_public_id varchar(1000),
     picture_version varchar(1000),
@@ -50,7 +52,7 @@ CREATE TABLE person(
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
     birthday VARCHAR(15) NOT NULL,
-    picture TEXT,
+    picture_url TEXT,
     zipcode INT,
     message TEXT,
     creator INT NOT NULL,
@@ -65,6 +67,7 @@ CREATE TABLE post(
     creation_date DATE NOT NULL DEFAULT CURRENT_DATE,
     edited BOOL DEFAULT false
     );
+
 
 CREATE TABLE person_user_post(
     person_user_post_id SERIAL PRIMARY KEY,
@@ -82,8 +85,16 @@ group_name VARCHAR(200),
 picture_url TEXT,
 picture_public_id TEXT,
 picture_version TEXT,
-creator int,
-FOREIGN KEY (creator) REFERENCES users(user_id),
+creation_date DATE NOT NULL DEFAULT CURRENT_DATE
+);
+
+CREATE TABLE groups_users(
+group_users_id SERIAL PRIMARY KEY,
+group_id INT,
+FOREIGN KEY(group_id) REFERENCES groups(group_id),
+user_id INT,
+FOREIGN KEY(user_id) REFERENCES users(user_id),
+admin BOOL DEFAULT false,
 creation_date DATE NOT NULL DEFAULT CURRENT_DATE
 );
 
@@ -96,13 +107,15 @@ CREATE TABLE groups_people(
     creation_date DATE NOT NULL DEFAULT CURRENT_DATE
 );
 
-CREATE TABLE groups_users(
-group_users_id SERIAL PRIMARY KEY,
-group_id INT,
-FOREIGN KEY(group_id) REFERENCES groups(group_id),
-user_id INT,
-FOREIGN KEY(user_id) REFERENCES users(user_id),
-creation_date DATE NOT NULL DEFAULT CURRENT_DATE
+
+CREATE TABLE group_post_user(
+    group_post_user_id SERIAL PRIMARY KEY,
+    group_id INT,
+    FOREIGN KEY (group_id) REFERENCES groups(group_id),
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    post_id INT,
+    FOREIGN KEY (post_id) REFERENCES post(post_id)
 );
 
 CREATE TABLE announcements(
@@ -111,9 +124,18 @@ CREATE TABLE announcements(
     picture_url text,
     picture_public_id text,
     picture_version text,
+    published BOOL DEFAULT False,
+    creation_date DATE NOT NULL DEFAULT CURRENT_DATE
+);
+
+CREATE TABLE groups_announcements_users(
+    group_announcement_user_id SERIAL PRIMARY KEY,
+    announcement_id INT,
+    FOREIGN KEY (announcement_id) REFERENCES announcements(announcement_id),
     group_id INT,
     FOREIGN KEY (group_id) REFERENCES groups(group_id),
-    creation_date DATE NOT NULL DEFAULT CURRENT_DATE
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
 CREATE TABLE paragraphs(
@@ -159,12 +181,28 @@ VALUES(1,2,true),
 (5,1,true);
 
 INSERT INTO friendships(user_id,friend_id)
-VALUES(1,2),
+VALUES
+(1,2),
+(2,1),
+(3,1),
 (1,3),
-(1,5);
+(4,1),
+(1,4),
+(5,1),
+(1,5),
+(6,1),
+(1,6),
+(7,1),
+(1,7),
+(8,1),
+(1,8),
+(9,1),
+(1,9),
+(10,1),
+(1,10);
  
 
-INSERT INTO person(first_name,last_name,birthday,picture,zipcode,message,creator)
+INSERT INTO person(first_name,last_name,birthday,picture_url,zipcode,message,creator)
 VALUES('Doug','Andersen','1974-05-26','https://live.staticflickr.com/65535/51131849486_3bdfac2296_w.jpg','92694','Big Bro One',1),
 ('Milagros','Andersen','1971-09-01','https://live.staticflickr.com/65535/51131174862_b6994e1e24_w.jpg','92694','Big sislaw one',1),
 ('Brooks','Watson','1970-09-21','https://live.staticflickr.com/65535/51132060193_509dfc89dc_w.jpg','99352',':)',1),
@@ -209,48 +247,51 @@ VALUES
 (12,9,2),
 (12,10,3);
 
-INSERT INTO groups(group_name,picture_url,picture_public_id,picture_version,creator)
-VALUES ('The Hive','https://res.cloudinary.com/glassinthegrass/image/upload/v1626830874/BeeLogoFull_soxi6c.png','BeeLogoFull_soxi6c','v1626830874',1),
-('Doug','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808371/orvd6cflzyudw7bmdy2h.jpg','orvd6cflzyudw7bmdy2h','v1626808371',1),
-('Mindy','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808503/images_p2p3ay.png','images_p2p3ay','v1626808503',1),
-('Noel','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808517/images_dqvyqy.jpg','images_dqvyqy','v1626808517',1),
-('Penny','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808532/images_pcii3n.png','images_pcii3n','v1626808532',1),
-('Tiffany','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808555/images_pqgkqm.jpg','images_pqgkqm','v1626808555',1),
-('Brock','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808567/images_ahz9wy.jpg','images_ahz9wy','v1626808567',1),
-('Craig','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808577/images_ouha4t.jpg','images_ouha4t','v1626808577',1),
-('Jared','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808632/images_odxr2r.jpg','images_odxr2r','v1626808632',1),
-('Sharlene','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808622/images_pttbbz.jpg','images_pttbbz','v1626808622',1),
-('Kids','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808925/b33d7fef79ac8d9ef0ef3b3972f32d3a74776cad_full_f8rhmz.jpg','b33d7fef79ac8d9ef0ef3b3972f32d3a74776cad_full_f8rhmz','v1626808925',1);
+INSERT INTO groups(group_name,picture_url,picture_public_id,picture_version)
+VALUES ('The Hive','https://res.cloudinary.com/glassinthegrass/image/upload/v1626830874/BeeLogoFull_soxi6c.png','BeeLogoFull_soxi6c','v1626830874'),
+('Doug','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808371/orvd6cflzyudw7bmdy2h.jpg','orvd6cflzyudw7bmdy2h','v1626808371'),
+('Mindy','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808503/images_p2p3ay.png','images_p2p3ay','v1626808503'),
+('Noel','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808517/images_dqvyqy.jpg','images_dqvyqy','v1626808517'),
+('Penny','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808532/images_pcii3n.png','images_pcii3n','v1626808532'),
+('Tiffany','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808555/images_pqgkqm.jpg','images_pqgkqm','v1626808555'),
+('Brock','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808567/images_ahz9wy.jpg','images_ahz9wy','v1626808567'),
+('Craig','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808577/images_ouha4t.jpg','images_ouha4t','v1626808577'),
+('Jared','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808632/images_odxr2r.jpg','images_odxr2r','v1626808632'),
+('Sharlene','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808622/images_pttbbz.jpg','images_pttbbz','v1626808622'),
+('Kids','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808925/b33d7fef79ac8d9ef0ef3b3972f32d3a74776cad_full_f8rhmz.jpg','b33d7fef79ac8d9ef0ef3b3972f32d3a74776cad_full_f8rhmz','v1626808925');
  
-INSERT INTO groups_users(group_id,user_id)
-VALUES(2,1),
-(3,1),
-(4,1),
-(5,1),
-(6,1),
-(7,1),
-(8,1),
-(9,1),
-(10,1),
-(11,2),
-(11,3),
-(11,4),
-(11,5),
-(11,6),
-(11,7),
-(11,8),
-(11,9),
-(11,10),
-(11,1),
-(1,2),
-(1,3),
-(1,4),
-(1,5),
-(1,6),
-(1,7),
-(1,8),
-(1,9),
-(1,10);
+
+INSERT INTO groups_users(group_id,user_id,admin)
+VALUES
+(1,1,true),
+(2,1,true),
+(3,1,true),
+(4,1,true),
+(5,1,true),
+(6,1,true),
+(7,1,true),
+(8,1,true),
+(9,1,true),
+(10,1,true),
+(11,2,false),
+(11,3,false),
+(11,4,false),
+(11,5,false),
+(11,6,false),
+(11,7,false),
+(11,8,false),
+(11,9,false),
+(11,10,false),
+(11,1,true),
+(1,2,false),
+(1,3,false),
+(1,4,false),
+(1,5,false),
+(1,6,false),
+(1,7,false),
+(1,8,false),
+(1,9,false),
+(1,10,false);
 
  
 INSERT INTO groups_people(group_id,person_id)
@@ -282,18 +323,32 @@ VALUES(1,1),
 (10,15),
 (10,17),
 (10,18);
- 
-INSERT INTO announcements(title,picture_url,picture_public_id,picture_version,group_id)
-VALUES('First Announcement Ever!','','','',1),
-('I have nothing to tell you','','','',1),
-('the world is cool','','','',1),
-('BANANAS ARE TASTY','','','',1),
-('MY AGE IS SHOWING- justin bieber - whats up with that','','','',1),
-('my name is enigo montoya-','','','',1),
-('Are we Human? -Or- Are we Dancer?','','','',9),
-('Jenny Was A friend of Mine','','','',9),
-('Do you Hear what I hear','','','',11),
-('candy- why is it the best?','','','',11);
+
+INSERT INTO announcements(title,picture_url,picture_public_id,picture_version,published)
+VALUES('First Announcement Ever!','https://res.cloudinary.com/glassinthegrass/image/upload/v1626830874/BeeLogoFull_soxi6c.png','BeeLogoFull_soxi6c','v1626830874',true),
+('I have nothing to tell you','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808371/orvd6cflzyudw7bmdy2h.jpg','orvd6cflzyudw7bmdy2h','v1626808371',true),
+('the world is cool','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808503/images_p2p3ay.png','images_p2p3ay','v1626808503',true),
+('BANANAS ARE TASTY','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808517/images_dqvyqy.jpg','images_dqvyqy','v1626808517',true),
+('MY AGE IS SHOWING- justin bieber - whats up with that','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808532/images_pcii3n.png','images_pcii3n','v1626808532',true),
+('my name is enigo montoya-','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808555/images_pqgkqm.jpg','images_pqgkqm','v1626808555',true),
+('Are we Human? -Or- Are we Dancer?','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808567/images_ahz9wy.jpg','images_ahz9wy','v1626808567',true),
+('Jenny Was A friend of Mine','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808577/images_ouha4t.jpg','images_ouha4t','v1626808577',true),
+('Do you Hear what I hear','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808925/b33d7fef79ac8d9ef0ef3b3972f32d3a74776cad_full_f8rhmz.jpg','b33d7fef79ac8d9ef0ef3b3972f32d3a74776cad_full_f8rhmz','v1626808925',true),
+('candy- why is it the best?','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808622/images_pttbbz.jpg','images_pttbbz','v1626808622',true);
+
+INSERT INTO groups_announcements_users(announcement_id,group_id,user_id)
+VALUES
+(1,1,1),
+(2,1,1),
+(3,1,1),
+(4,1,1),
+(5,1,1),
+(6,1,1),
+(7,9,1),
+(8,9,1),
+(9,11,1),
+(10,11,1);
+
 
 INSERT INTO paragraphs(announcement_id,paragraph_content)
 VALUES

@@ -5,7 +5,8 @@ export const Window = styled.div`
   justify-content: center;
   align-items: center;
   align-content: center;
-  height: 100vh;
+  height: 90vh;
+  min-width:80%;
   font-family:'Nunito Black'
 `;
 export const Box = styled.div`
@@ -92,3 +93,7 @@ export const ToggleBox = styled.section`
   display: flex;
   flex-direction: row;
 `;
+
+export let BusyBee = styled.img`
+
+`

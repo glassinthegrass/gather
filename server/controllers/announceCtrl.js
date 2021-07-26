@@ -6,10 +6,15 @@ module.exports = {
       const [announcement] = await db.announcements.get_announcement(
         announcement_id
       );
-      const paragraphs = await db.announcements.get_announcement_paragraphs(
-        announcement_id
-      );
-      return res.status(200).send({announcement, paragraphs});
+
+      if (announcement) {
+        const paragraphs = await db.announcements.get_announcement_paragraphs(
+          announcement_id
+        );
+        return res.status(200).send([announcement, paragraphs]);
+      } else {
+        return res.status(404).send("announcement hasnt been published yet!");
+      }
     } catch (err) {
       console.log(err);
       return res.status(404).send(err);
@@ -17,15 +22,17 @@ module.exports = {
   },
   createAnnouncement: async (req, res) => {
     const db = req.app.get("db");
-    const { title, announcement_picture, announcement_url, group_id } =
-      req.body;
+    const { title, group_id, user_id } = req.body;
     try {
       const [announcement] = await db.announcements.create_group_announcement(
-        title,
-        announcement_picture,
-        announcement_url,
-        group_id
+        title
       );
+      await db.announcements.create_group_announce_user(
+        announcement.announcement_id,
+        group_id,
+        user_id
+      );
+
       return res.status(200).send(announcement);
     } catch (err) {
       console.log(err);

@@ -1,12 +1,12 @@
 const cloudinary = require("cloudinary").v2;
 
 module.exports = {
-  uploadImages: async (req, res) => {
+  uploadProfileImages: async (req, res) => {
     const db = req.app.get("db");
     const { user_id } = req.params;
     const { path } = req.files.image;
-
-    const user = await db.auth.get_user_by_user_id(user_id);
+console.log(req.files)
+    const [user] = await db.auth.get_user_by_user_id(user_id);
 
     if (user?.picture_public_id) {
       cloudinary.uploader.destroy(user.picture_public_id, { invalidate: true });
@@ -17,9 +17,9 @@ module.exports = {
       {
         eager: {
           fetch_format: "auto",
-          width: 350,
-          height: 350,
-          crop: "fill",
+          width:600,
+          height: 600,
+          crop: "fill_pad",
           gravity: "auto",
           quality: "auto",
           format:'png'
@@ -42,7 +42,8 @@ module.exports = {
           return res.status(200).send(profile_picture_url);
         }
         if (error) {
-          res.status(404);
+          return res.status(404);
+
         }
       }
     );

@@ -2,9 +2,8 @@ import styled from "styled-components";
 
 export const StyledHeader = styled.header`
   display: flex;
-  justify-content: space-between;
-  height: 5%;
-  width: 100%;
+  height: 5vh;
+  justify-content:flex-end;
   padding: 10px;
   background-color: rgb(252, 142, 52, 0.792);
   box-shadow: 10px 0px 13px -7px #897b7b, 0px 7px 13px -7px #000000;

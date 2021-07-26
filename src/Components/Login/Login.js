@@ -1,25 +1,38 @@
 import React, { useEffect, useState } from "react";
-import { useHistory,Link } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { loginUser, registerUser } from "../../redux/userReducer.js";
-import { ToggleBox,Window, Box, Input, Submit, LoginToggle,RegisterToggle } from "./styles.js";
+import {
+  ToggleBox,
+  Window,
+  Box,
+  Input,
+  Submit,
+  LoginToggle,
+  RegisterToggle
+} from "./styles.js";
 
 
 const Login = (props) => {
   const [loginUser, setLoginUser] = useState("");
   const [newUser, setNewUser] = useState("");
-  const [toggle, setToggle] = useState({nullToggle: true,loginToggle: false,registerToggle: false,});
-  const { user } = props;
+  const [toggle, setToggle] = useState({
+    nullToggle: true,
+    loginToggle: false,
+    registerToggle: false,
+  });
   const history = useHistory();
   const { push } = history;
-  
-  
+  const { user } = props;
+  const { isLoggedIn } = user;
+  const { pathname } = props.history.location.pathname;
+
 
   useEffect(() => {
-    if (!user.isLoggedIn) {
-      push('/')
-    }else{push('/home')}
-  }, [user.isLoggedIn, push]);
+    if (isLoggedIn && pathname !== "/") {
+      push("/home");
+    }
+  }, [isLoggedIn, pathname, push]);
 
   const handleLogin = () => {
     props.loginUser(loginUser.email, loginUser.password);
@@ -33,7 +46,6 @@ const Login = (props) => {
     );
   };
 
-
   let loginWindow = (
     <>
       <Input
@@ -42,14 +54,15 @@ const Login = (props) => {
         placeholder="Enter email"
       />
       <Input
-        onChange={(e) => setLoginUser({ ...loginUser, password: e.target.value })}
+        onChange={(e) =>
+          setLoginUser({ ...loginUser, password: e.target.value })
+        }
         type="text"
         placeholder="Enter password"
       />
       <Submit onClick={() => handleLogin()}>Submit</Submit>
     </>
   );
-  
 
   let registerWindow = (
     <>
@@ -83,10 +96,13 @@ const Login = (props) => {
         }
         className="registerInput"
         type="text"
-        placeholder="Enter your password again"
+        placeholder="Please verify your password"
       />
-      {props.user.isRegistered ? <Link to='/registerPT2'>Next</Link>:<Submit onClick={()=>handleRegister()}>Submit</Submit>}
-
+      {props.user.isRegistered ? (
+        <Link to="/uploads/profile">Next</Link>
+      ) : (
+        <Submit onClick={() => handleRegister()}>Submit</Submit>
+      )}
     </>
   );
 
@@ -130,27 +146,26 @@ const Login = (props) => {
     loginWindow
   ) : toggle.registerToggle ? (
     registerWindow
-    
   ) : (
     <></>
   );
 
   return (
-        <Window>
-          
-    <div>
-    <p>
-        A place for friends to...
-        </p>
-      <Box>
-        <h1>Gather</h1>
-        {windowToggle}
-      </Box>
+    <Window>
+      <div>
+        <p>A place for friends to...</p>
+        <Box>
+          <h1>Gather</h1>
+          {windowToggle}
+        </Box>
         <ToggleBox>
-        <LoginToggle onClick={handleLoginClick}>Login</LoginToggle>
-        <RegisterToggle onClick={handleRegisterClick}>Register</RegisterToggle>
-      </ToggleBox>
+          <LoginToggle onClick={handleLoginClick}>Login</LoginToggle>
+          <RegisterToggle onClick={handleRegisterClick}>
+            Register
+          </RegisterToggle>
+        </ToggleBox>
       </div>
+
     </Window>
   );
 };
