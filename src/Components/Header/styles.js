@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const StyledHeader = styled.header`
   display: flex;
   height: 5vh;
-  justify-content:flex-end;
+  justify-content:space-around;
   padding: 10px;
   background-color: rgb(252, 142, 52, 0.792);
   box-shadow: 10px 0px 13px -7px #897b7b, 0px 7px 13px -7px #000000;
@@ -22,8 +22,12 @@ export const GreetingContainer = styled.section`
 display:flex;
 justify-content:flex-start;
 flex-direction:row;
+float:left;
 `
 
 export const Greeting= styled.h1`
 font-family:'Nunito Light';
+`
+export let Container = styled.section`
+
 `

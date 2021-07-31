@@ -1,11 +1,10 @@
 module.exports = {
-
   createGroup: async (req, res) => {
     const db = req.app.get("db");
     const { group_name, user_id } = req.body;
     try {
       const [newGroup] = await db.groups.create_group(group_name);
-      await db.groups.create_group_users(newGroup.group_id, user_id,true );
+      await db.groups.create_group_users(newGroup.group_id, user_id, true);
       return res.status(200).send(newGroup);
     } catch (err) {
       console.log(err);
@@ -97,14 +96,14 @@ module.exports = {
       return res.sendStatus(404);
     }
   },
-  getPeopleByGroup: async (req, res) => {
+  createGroupPostUser: async (req, res) => {
     const db = req.app.get("db");
-    const { group_id } = req.params;
-    try {
-      const people = await db.groups.get_people_grouped(group_id);
-      return res.status(200).send(people);
-    } catch (err) {
-      console.log(err);
+    const {group_id,user_id}=req.params
+    try{
+      const [post]=await db.posts.create_group_post_user()
+
+    }catch(err){
+      console.log(err)
     }
   },
 };

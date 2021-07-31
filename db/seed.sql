@@ -81,7 +81,7 @@ CREATE TABLE person_user_post(
 
 CREATE TABLE groups(
 group_id SERIAL PRIMARY KEY,
-group_name VARCHAR(200),
+group_name UNIQUE VARCHAR(200),
 picture_url TEXT,
 picture_public_id TEXT,
 picture_version TEXT,
@@ -248,7 +248,7 @@ VALUES
 (12,10,3);
 
 INSERT INTO groups(group_name,picture_url,picture_public_id,picture_version)
-VALUES ('The Hive','https://res.cloudinary.com/glassinthegrass/image/upload/v1626830874/BeeLogoFull_soxi6c.png','BeeLogoFull_soxi6c','v1626830874'),
+VALUES ('The Mother Hive','https://res.cloudinary.com/glassinthegrass/image/upload/v1627490255/BeeLogoFull_qw1jve.png','BeeLogoFull_qw1jve','v1627490255'),
 ('Doug','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808371/orvd6cflzyudw7bmdy2h.jpg','orvd6cflzyudw7bmdy2h','v1626808371'),
 ('Mindy','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808503/images_p2p3ay.png','images_p2p3ay','v1626808503'),
 ('Noel','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808517/images_dqvyqy.jpg','images_dqvyqy','v1626808517'),
@@ -325,7 +325,7 @@ VALUES(1,1),
 (10,18);
 
 INSERT INTO announcements(title,picture_url,picture_public_id,picture_version,published)
-VALUES('First Announcement Ever!','https://res.cloudinary.com/glassinthegrass/image/upload/v1626830874/BeeLogoFull_soxi6c.png','BeeLogoFull_soxi6c','v1626830874',true),
+VALUES('First Announcement Ever!','https://res.cloudinary.com/glassinthegrass/image/upload/v1627490255/BeeLogoFull_qw1jve.png','BeeLogoFull_qw1jve','v1627490255',true),
 ('I have nothing to tell you','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808371/orvd6cflzyudw7bmdy2h.jpg','orvd6cflzyudw7bmdy2h','v1626808371',true),
 ('the world is cool','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808503/images_p2p3ay.png','images_p2p3ay','v1626808503',true),
 ('BANANAS ARE TASTY','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808517/images_dqvyqy.jpg','images_dqvyqy','v1626808517',true),

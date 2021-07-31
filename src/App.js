@@ -17,6 +17,7 @@ flex-direction:row;
 
 
 const App = (props) => {
+  console.log(props)
   const {user,logoutUser}=props
 
   const [menuToggle,setMenuToggle]=useState(false)
@@ -25,7 +26,7 @@ const handleMenuToggle =()=>{
   setMenuToggle(!menuToggle)
 }
 
-const menuSwitch= menuToggle ? <Menu logoutUser={logoutUser}/>:<></>
+const menuSwitch= menuToggle ? <Menu user={user} logoutUser={logoutUser}/>:<></>
 
   
   return (

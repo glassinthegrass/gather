@@ -1,22 +1,22 @@
 import axios from "axios";
 
 const initialState = {
-  user: {
-    isLoggedIn:false
-  },
+  user: {isLoggedIn:false},
 };
+
 const LOGIN_USER = "LOGIN_USER";
 const REGISTER_USER = "REGISTER_USER";
 const LOGOUT_USER = "LOGOUT_USER";
 const GET_USER = "GET_USER";
 
 export const getUser = (user_id) => {
-  let user = axios.get(`/auth/user/${user_id}`).then(res=>res.data).catch(err=>console.log(err))
+  let user = axios.get(`/api/profile/${user_id}`).then(res=>res.data).catch(err=>console.log(err))
   return {
     type: GET_USER,
     payload: user
   };
 };
+
 export const loginUser = (email, password) => {
   let login = axios
     .post("/auth/login", { email, password })

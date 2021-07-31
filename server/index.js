@@ -18,7 +18,7 @@ const emailCtrl = require("./controllers/emailCtrl");
 const { getBirthday } = require("./controllers/birthdayCtrl");
 const friendCtrl = require("./controllers/friendCtrl");
 
-const { isLoggedIn } = require("./middleware/authenticateUser");
+
 
 app.use(formData.parse())
 app.use(express.json());
@@ -46,14 +46,14 @@ cloudinary.config({
 // });
 
 //endpoints
-//home
-app.get("/api/home/:user_id", isLoggedIn, viewsCtrl.getHomeView);
-
+//views
+app.get("/api/home/:user_id", viewsCtrl.getHomeView);
+app.get("/api/group/:group_name",viewsCtrl.getGroupView)
 //cloudinary;
 app.post('/api/images/:user_id',cloudinaryCtrl.uploadProfileImages)
 
 //auth
-app.get('/auth/user/:user_id',authCtrl.getUser);
+app.get('/api/profile/:user_id',authCtrl.getUser);
 app.post(`/auth/register`, authCtrl.register);
 app.post(`/auth/admin`, authCtrl.registerAdmin);
 app.post("/auth/login", authCtrl.login);
@@ -79,6 +79,7 @@ app.delete("/api/posts/:post_id", postCtrl.deletePost);
 //groups
 app.get("/api/groups", groupCtrl.searchGroups);
 app.get("/api/groups/:user_id", groupCtrl.getGroupsByUser);
+
 app.post("/api/groups", groupCtrl.createGroup);
 app.post("/api/groups/:group_id", groupCtrl.addPersonToGroup);
 app.put(

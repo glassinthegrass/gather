@@ -22,7 +22,8 @@ module.exports = {
   },
   createAnnouncement: async (req, res) => {
     const db = req.app.get("db");
-    const { title, group_id, user_id } = req.body;
+    const {user_id }=req.session.user
+    const { title, group_id } = req.body;
     try {
       const [announcement] = await db.announcements.create_group_announcement(
         title

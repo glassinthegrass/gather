@@ -43,19 +43,16 @@ const mappedParagraphs =paragraphs?paragraphs.map((para,i)=>{
 }):''
 
 
-  return <>
-
+  return <AnnouncementContainer>
       <AnnouncementImageSpacer></AnnouncementImageSpacer>
-      <AnnouncementContainer>
         <AnnouncementImage src={announcementUrl} alt={"announcement pic"} />
         <Title>{announcement?.title}</Title>
         <GroupImage src={groupUrl} alt={"group pic"} />
         <GroupName>{announcement?.group_name}</GroupName>
         <AuthorName>{`${announcement?.first_name} ${announcement?.last_name}`}</AuthorName>
-      </AnnouncementContainer>
-        <AnnouncementImageSpacer></AnnouncementImageSpacer>
   {mappedParagraphs}
-  </>;
+        <AnnouncementImageSpacer></AnnouncementImageSpacer>
+      </AnnouncementContainer>;
 };
 
 export default Announcement;

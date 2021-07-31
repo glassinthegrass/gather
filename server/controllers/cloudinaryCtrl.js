@@ -5,7 +5,6 @@ module.exports = {
     const db = req.app.get("db");
     const { user_id } = req.params;
     const { path } = req.files.image;
-console.log(req.files)
     const [user] = await db.auth.get_user_by_user_id(user_id);
 
     if (user?.picture_public_id) {
@@ -42,7 +41,9 @@ console.log(req.files)
           return res.status(200).send(profile_picture_url);
         }
         if (error) {
+          console.log(error)
           return res.status(404);
+
 
         }
       }

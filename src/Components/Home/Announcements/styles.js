@@ -1,4 +1,5 @@
 import styled from "styled-components";
+
 export let AnnouncementContainer = styled.section`
   display: flex;
   justify-content: center;
@@ -15,20 +16,25 @@ height:3rem;
 font-size:3rem;
 margin-left:10%;
 `
-export let NavArrows = styled.p`
+export let LeftArrow = styled.p`
 display:flex;
 justify-content:space-around;
 align-items:center;
 font-size:5rem;
 width:5rem;
+border-radius:50px 0px 0px 50px;
+background-color: rgb(88,88,88);
+color:rgb(88,88,88);
 &:hover {
-    background-color: rgb(88,88,88);
 color:rgb(252, 142, 52, 0.792);
   };
   &:active{
     background-color:rgb(252,142,52,0.792);
     color:rgb(88,88,88);
   };
+`
+export let RightArrow= styled(LeftArrow)`
+border-radius:0px 50px 50px 0px;
 `
 export let AnnouncementImageSpacer =styled.div`
 height:10vh;
@@ -38,22 +44,23 @@ position:absolute;
 font-size:30px;
 margin-top:6rem;
 text-shadow: -1.5px 0 white, 0 1.5px white, 1.5px 0 white, 0 -1.5px white;
-max-width:60vw;
+max-width:40vw;
 color:rgb(88, 88, 88);
 z-index:1;
 `
 export let GroupImage = styled.img`
-position:absolute;
 max-height:40px;
 margin-top:23.5rem;
 margin-left:-18rem;
-z-index:1;
+
 `
 export let AnnouncementImage= styled.img`
-background-color:rgb(252, 219, 166);
-border:1px solid rgb(88,88,88);
+background: rgb(245,242,234);
+background: linear-gradient(90deg, rgba(245,242,234,1) 5%, rgba(251,170,105,1) 25%, rgba(245,242,234,1) 50%, rgba(251,170,105,1) 75%, rgba(245,242,234,1) 95%);
+border:3px solid rgb(88,88,88);
 box-shadow: 10px 0px 13px -7px #897b7b, 0px 7px 13px -7px #000000;
 &:hover{
+  background:rgb(88,88,88);
     background-color:rgb(252, 142, 52, 0.6);
 };
 &:active{
@@ -61,13 +68,19 @@ box-shadow: 10px 0px 13px -7px #897b7b, 0px 7px 13px -7px #000000;
 }
 `
 export let GroupName= styled.h6`
-position:absolute;
-margin-top:26rem;
-margin-right:33rem;
-z-index:1;
+color:rgb(88,88,88);
+text-decoration:none;
 `
 export let AuthorName =styled.p`
 position:absolute;
 margin-right:-30rem;
+z-index:1;
+`
+
+export let AnnouncementGroup = styled.div`
+position:absolute;
+max-height:40px;
+margin-top:23.5rem;
+margin-left:-34rem;
 z-index:1;
 `

@@ -1,7 +1,8 @@
 import React from "react";
 import { useHistory } from "react-router";
-import {AnnouncementContainer,NavArrows,AnnouncementImageSpacer,Title,GroupImage,AnnouncementImage,GroupName,AuthorName,} from "./styles";
+import {AnnouncementContainer,LeftArrow,RightArrow,Title,GroupImage,AnnouncementImage,GroupName,AnnouncementGroup,AuthorName,} from "./styles";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 let Container = styled.div`
 display:flex;
@@ -9,8 +10,8 @@ flex-direction:row;
 `
 
 const HomeAnnouncements = (props) => {
-    console.log(props)
-const push= useHistory().push
+const history= useHistory(),
+{push}=history
 
   const { announcements, idx, handleIncrement, handleDecrement } = props;
 
@@ -33,17 +34,17 @@ push(`/announcements/${announcements[idx].announcement_id}`)
   let announcementDisplay = (
 
     <Container>
-
-        <AnnouncementImageSpacer></AnnouncementImageSpacer>
-        <NavArrows onClick={() => handleDecrement()}>{"<"}</NavArrows>
+        <LeftArrow onClick={() => handleDecrement()}>{"<"}</LeftArrow>
       <AnnouncementContainer onClick={handleAnnouncementClick}>
         <AnnouncementImage src={announcementUrl} alt={"announcement pic"} />
         <Title>{announcements[idx].title}</Title>
-        <GroupImage src={groupUrl} alt={"group pic"} />
+<AnnouncementGroup>
+        <img src={groupUrl} alt={"group pic"} />
         <GroupName>{announcements[idx].group_name}</GroupName>
+</AnnouncementGroup>
         <AuthorName>{`${announcements[idx].first_name} ${announcements[idx].last_name}`}</AuthorName>
       </AnnouncementContainer>
-        <NavArrows onClick={() => handleIncrement()}>{">"}</NavArrows>
+        <RightArrow onClick={() => handleIncrement()}>{">"}</RightArrow>
     </Container>
 
   );

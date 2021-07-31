@@ -12,24 +12,30 @@ const UploadsProfile = (props) => {
   const { user_id } = props.user;
   const [response, setResponse] = useState(null);
   const { getUser } = props;
-  
-  const handleUpload = (img) => {
-      let fileData = new FormData();
-      fileData.append("image", img[0]);
-      let config = {
-          headers: {
-              "Content-Type": "multipart/form-data",
-            },
-        };
-        
-    axios
-      .post(`/api/images/${user_id}`,fileData, config)
-      .then(function (res) {
-        setResponse(res.data);
-      })
-      .catch((err) => console.log(err));
-    };
+  const [photo,setPhoto]=useState([])
 
+  const handleUpload = (img) => {
+    setPhoto(img[0])
+      // fileData.append("image", img[0]);
+    };
+    const handlePhoto = ()=>{
+      let fileData = new FormData();
+      fileData.append("image",photo);
+      
+      let config = {
+        headers: {
+            "Content-Type": "multipart/form-data",
+          },
+      };
+      
+  axios
+    .post(`/api/images/${user_id}`,fileData, config)
+    .then(function (res) {
+      setResponse(res.data);
+    })
+    .catch((err) => console.log(err));
+
+    }
   useEffect(() => {
     if (response) {
       getUser(user_id);
@@ -38,6 +44,7 @@ const UploadsProfile = (props) => {
 
   return (<>
     <UploadContainter>
+
     <div className="button">
       <label htmlFor="single">{">"}</label>
       <input
@@ -45,7 +52,7 @@ const UploadsProfile = (props) => {
         id="single"
         onChange={(e) => handleUpload(e.target.files)}
       />
-
+<button onClick={()=>handlePhoto()}>asdf</button>
       {response ? <img src={response} alt={"userProfile"} /> : <></>}
     </div>
     </UploadContainter>

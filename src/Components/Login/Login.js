@@ -21,18 +21,17 @@ const Login = (props) => {
     loginToggle: false,
     registerToggle: false,
   });
-  const history = useHistory();
-  const { push } = history;
+  const history = useHistory(),
+      { push } = history;
   const { user } = props;
-  const { isLoggedIn } = user;
   const { pathname } = props.history.location.pathname;
 
 
   useEffect(() => {
-    if (isLoggedIn && pathname !== "/") {
+    if (user?.isLoggedIn) {
       push("/home");
     }
-  }, [isLoggedIn, pathname, push]);
+  }, [user.isLoggedIn, pathname, push]);
 
   const handleLogin = () => {
     props.loginUser(loginUser.email, loginUser.password);
