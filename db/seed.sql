@@ -64,6 +64,7 @@ CREATE TABLE post(
     post_id SERIAL PRIMARY KEY,
     post_content TEXT NOT NULL,
     post_url VARCHAR(5000),
+    
     creation_date DATE NOT NULL DEFAULT CURRENT_DATE,
     edited BOOL DEFAULT false
     );

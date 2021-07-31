@@ -14,14 +14,14 @@ const UploadsProfile = (props) => {
   const { getUser } = props;
   const [photo,setPhoto]=useState([])
 
-  const handleUpload = (img) => {
+  const handleFile = (img) => {
     setPhoto(img[0])
       // fileData.append("image", img[0]);
     };
     const handlePhoto = ()=>{
       let fileData = new FormData();
       fileData.append("image",photo);
-      
+
       let config = {
         headers: {
             "Content-Type": "multipart/form-data",
@@ -45,16 +45,16 @@ const UploadsProfile = (props) => {
   return (<>
     <UploadContainter>
 
-    <div className="button">
+    <div >
       <label htmlFor="single">{">"}</label>
       <input
         type="file"
         id="single"
-        onChange={(e) => handleUpload(e.target.files)}
+        onChange={(e) => handleFile(e.target.files)}
       />
 <button onClick={()=>handlePhoto()}>asdf</button>
-      {response ? <img src={response} alt={"userProfile"} /> : <></>}
     </div>
+      {response ? <img src={response} alt={"userProfile"} /> : <></>}
     </UploadContainter>
     </>
   );

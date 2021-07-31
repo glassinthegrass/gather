@@ -1,3 +1,5 @@
+const cloudinary = require("cloudinary").v2;
+
 module.exports = {
   createGroup: async (req, res) => {
     const db = req.app.get("db");
@@ -96,14 +98,63 @@ module.exports = {
       return res.sendStatus(404);
     }
   },
-  createGroupPostUser: async (req, res) => {
+  createGroupPost: async (req, res) => {
     const db = req.app.get("db");
-    const {group_id,user_id}=req.params
-    try{
-      const [post]=await db.posts.create_group_post_user()
+    const { group_id, user_id } = req.params;
+    const { post_content } = req.query;
+    if (req.files.image?.path) {
+      try {
+        const { path } = req.files.image;
+        const [post] = await db.posts.create_post(post_content, "");
 
-    }catch(err){
-      console.log(err)
+        if (post) {
+          await db.posts.create_group_post_user(
+            group_id,
+            post.post_id,
+            user_id
+          );
+        }
+        cloudinary.uploader.upload(
+          path,
+          {
+            eager: {
+              fetch_format: "auto",
+              width: 300,
+              height: 300,
+              crop: "fill_pad",
+              gravity: "auto",
+              quality: "auto",
+              format: "png",
+            },
+            use_filename: true,
+          },
+
+          function (error, result) {
+            if (result) {
+              const { eager } = result;
+              let { url } = eager[0];
+              db.posts.update_post_url(post.post_id, url);
+              post.post_url=url
+              return res.send(post)
+                
+            }
+            if (error) {
+              console.log(error);
+              return res.status(404);
+            }
+          }
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      try {
+        const [post] = await db.posts.create_post(post_content, null);
+        await db.posts.create_group_post_user(group_id, post.post_id, user_id);
+        return res.status(200).send(post);
+      } catch (err) {
+        console.log(err);
+      }
     }
   },
 };

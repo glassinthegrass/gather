@@ -73,6 +73,7 @@ app.delete("/api/people/:person_id", pplCtrl.deletePerson);
 //post
 app.get("/api/posts", postCtrl.getPosts);
 app.post("/api/posts/:person_id", postCtrl.addPost);
+app.post("/api/groupPosts/:group_id/user/:user_id",groupCtrl.createGroupPost);
 app.put("/api/posts/:post_id", postCtrl.editPost);
 app.delete("/api/posts/:post_id", postCtrl.deletePost);
 

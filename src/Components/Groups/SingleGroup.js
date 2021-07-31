@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
+import CreatePost from "./CreatePost";
 let GroupImage = styled.img`
   background-color: rgb(88, 88, 88, 0.7);
 `;
@@ -58,9 +59,7 @@ useEffect(() => {
         <GroupName>{group.group_name}</GroupName>
         <GroupImage src={groupUrl} alt="asdf" />
       </div>
-      {console.log(group)}
-      {console.log(people)}
-      {console.log(users)}
+<CreatePost user={props.user} group={group}/>
     </section>
   );
 };
