@@ -105,15 +105,17 @@ module.exports = {
     if (req.files.image?.path) {
       try {
         const { path } = req.files.image;
-        const [post] = await db.posts.create_post(post_content, "");
+        const [post] = await db.posts.create_post(post_content, null);
 
         if (post) {
           await db.posts.create_group_post_user(
             group_id,
             post.post_id,
             user_id
-          );
-        }
+            );
+          }
+          const [newPost] = await db.posts.get_post_by_post_id(post.post_id);
+          console.log(newPost)
         cloudinary.uploader.upload(
           path,
           {
@@ -134,9 +136,8 @@ module.exports = {
               const { eager } = result;
               let { url } = eager[0];
               db.posts.update_post_url(post.post_id, url);
-              post.post_url=url
-              return res.send(post)
-                
+              newPost.post_url = url;
+              return res.send(newPost);
             }
             if (error) {
               console.log(error);

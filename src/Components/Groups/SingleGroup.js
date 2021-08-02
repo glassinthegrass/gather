@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import CreatePost from "./CreatePost";
+import Posts from "./Posts";
 let GroupImage = styled.img`
   background-color: rgb(88, 88, 88, 0.7);
 `;
@@ -16,8 +17,10 @@ const SingleGroup = (props) => {
   const history = useHistory(),
   {push}=history
   const [group, setGroup] = useState({});
+  const [posts,setPosts]=useState(null);
   const [people, setPeople] = useState({});
   const [users, setUsers] = useState({});
+  
   const [groupUrl, setGroupUrl] = useState("");
   const { group_name } = props.match.params;
   const { isLoggedIn } = props.user;
@@ -30,6 +33,7 @@ useEffect(() => {
       setGroup(res.data[0]);
       setPeople(res.data[1]);
       setUsers(res.data[2]);
+      setPosts(res.data[3])
     })
     .catch((err) => console.log(err));
 }, [group_name]);
@@ -52,14 +56,19 @@ useEffect(() => {
     }
   }, [isLoggedIn, image, redirect]);
 
+let mappedPosts = posts? posts.map((post,i)=>{
+    return <Posts key={i} post={post}/>
+}):<></>;
 
   return (
     <section>
+        {console.log(posts)}
       <div>
         <GroupName>{group.group_name}</GroupName>
         <GroupImage src={groupUrl} alt="asdf" />
       </div>
-<CreatePost user={props.user} group={group}/>
+<CreatePost user={props.user} group={group} posts={posts} setPosts={setPosts}/>
+        {mappedPosts}
     </section>
   );
 };
