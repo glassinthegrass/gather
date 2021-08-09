@@ -1,8 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router";
-import {AnnouncementContainer,LeftArrow,RightArrow,Title,GroupImage,AnnouncementImage,GroupName,AnnouncementGroup,AuthorName,} from "./styles";
+import {AnnouncementContainer,LeftArrow,RightArrow,Title,AnnouncementImage,GroupName,AnnouncementGroup} from "./styles";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 
 let Container = styled.div`
 display:flex;
@@ -10,6 +9,7 @@ flex-direction:row;
 `
 
 const HomeAnnouncements = (props) => {
+  console.log(props)
 const history= useHistory(),
 {push}=history
 
@@ -42,7 +42,7 @@ push(`/announcements/${announcements[idx].announcement_id}`)
         <img src={groupUrl} alt={"group pic"} />
         <GroupName>{announcements[idx].group_name}</GroupName>
 </AnnouncementGroup>
-        <AuthorName>{`${announcements[idx].first_name} ${announcements[idx].last_name}`}</AuthorName>
+
       </AnnouncementContainer>
         <RightArrow onClick={() => handleIncrement()}>{">"}</RightArrow>
     </Container>

@@ -102,7 +102,7 @@ module.exports = {
     const db = req.app.get("db");
     const { group_id, user_id } = req.params;
     const { post_content } = req.query;
-    if (req.files.image?.path) {
+    if (req.files?.image) {
       try {
         const { path } = req.files.image;
         const [post] = await db.posts.create_post(post_content, null);
@@ -112,10 +112,9 @@ module.exports = {
             group_id,
             post.post_id,
             user_id
-            );
-          }
-          const [newPost] = await db.posts.get_post_by_post_id(post.post_id);
-          console.log(newPost)
+          );
+        }
+        const [newPost] = await db.posts.get_post_by_post_id(post.post_id);
         cloudinary.uploader.upload(
           path,
           {
@@ -126,7 +125,6 @@ module.exports = {
               crop: "fill_pad",
               gravity: "auto",
               quality: "auto",
-              format: "png",
             },
             use_filename: true,
           },
@@ -135,8 +133,16 @@ module.exports = {
             if (result) {
               const { eager } = result;
               let { url } = eager[0];
-              db.posts.update_post_url(post.post_id, url);
-              newPost.post_url = url;
+              const picture_public_id = result.public_id;
+              const picture_version = "v" + result.version;
+              db.posts.update_post_url(
+                post.post_id,
+                url,
+                picture_version,
+                picture_public_id
+              );
+              newPost.post_picture_version = picture_version;
+              newPost.post_picture_public_id = picture_public_id;
               return res.send(newPost);
             }
             if (error) {
@@ -150,9 +156,10 @@ module.exports = {
       }
     } else {
       try {
-        const [post] = await db.posts.create_post(post_content, null);
+        let [post] = await db.posts.create_post(post_content, null);
         await db.posts.create_group_post_user(group_id, post.post_id, user_id);
-        return res.status(200).send(post);
+        const [newPost] = await db.posts.get_post_by_post_id(post.post_id);
+        return res.status(200).send(newPost);
       } catch (err) {
         console.log(err);
       }

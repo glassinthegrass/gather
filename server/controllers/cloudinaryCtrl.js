@@ -18,15 +18,16 @@ module.exports = {
           fetch_format: "auto",
           width:600,
           height: 600,
-          crop: "fill_pad",
-          gravity: "auto",
+          crop: "fill",
+          gravity: "face",
           quality: "auto",
-          format:'png'
+
         },
         use_filename: true,
       },
       function (error, result) {
         if (result) {
+          console.log(result)
             const { eager } = result;
             const profile_picture_url = eager[0].url;
             const picture_public_id = result.public_id;

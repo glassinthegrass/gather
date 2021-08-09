@@ -3,11 +3,17 @@ import styled from "styled-components";
 export const StyledHeader = styled.header`
   display: flex;
   height: 5vh;
-  justify-content:space-around;
+justify-content:center;
   padding: 10px;
-  background-color: rgb(252, 142, 52, 0.792);
+  border-bottom:1px inset rgb(88,88,88,0.7);
+background-color: rgb(252, 142, 52, 0.792);
   box-shadow: 10px 0px 13px -7px #897b7b, 0px 7px 13px -7px #000000;
 `;
+
+export let HeaderSpacer = styled.div`
+height:100%;
+width:20%;
+`
 export const Arrow = styled.div`
   float: left;
   padding: 10px;
@@ -27,7 +33,4 @@ float:left;
 
 export const Greeting= styled.h1`
 font-family:'Nunito Light';
-`
-export let Container = styled.section`
-
 `

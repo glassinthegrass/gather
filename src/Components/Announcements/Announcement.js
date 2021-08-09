@@ -1,6 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useState,useCallback } from "react";
-import {AnnouncementContainer,AnnouncementImageSpacer,Title,GroupImage,AnnouncementImage,GroupName,AuthorName,} from "../Home/Announcements/styles";
+import styled from "styled-components";
+
+let Container = styled.section`
+width:100vw;
+min-height:90vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+`
 const Announcement = (props) => {
 
   const { announcement_id } = props.match.params;
@@ -26,7 +34,7 @@ useEffect(() => {
 }, [getAnnouncement]);
 
 const announcementUrl =announcement ?
-`https://res.cloudinary.com/glassinthegrass/image/upload/w_1080,h_540,c_pad,f_auto/` +
+`https://res.cloudinary.com/glassinthegrass/image/upload/w_600,h_400,c_pad,f_auto/` +
 announcement.announcement_picture_version +
 "/" +
 announcement.announcement_public_id:"";
@@ -43,16 +51,19 @@ const mappedParagraphs =paragraphs?paragraphs.map((para,i)=>{
 }):''
 
 
-  return <AnnouncementContainer>
-      <AnnouncementImageSpacer></AnnouncementImageSpacer>
-        <AnnouncementImage src={announcementUrl} alt={"announcement pic"} />
-        <Title>{announcement?.title}</Title>
-        <GroupImage src={groupUrl} alt={"group pic"} />
-        <GroupName>{announcement?.group_name}</GroupName>
-        <AuthorName>{`${announcement?.first_name} ${announcement?.last_name}`}</AuthorName>
-  {mappedParagraphs}
-        <AnnouncementImageSpacer></AnnouncementImageSpacer>
-      </AnnouncementContainer>;
+  return <Container><div>
+    {console.log(props)}
+    {console.log(announcement)}
+
+        <img src={announcementUrl} alt={""} />
+        <h1>{announcement?.title}</h1>
+        <img src={groupUrl} alt={"asdfasdfas"} />
+        <h1>{announcement?.group_name}</h1>
+        <p>{`${announcement?.first_name} ${announcement?.last_name}`}</p>
+        {mappedParagraphs}
+
+      </div>
+      </Container>
 };
 
 export default Announcement;

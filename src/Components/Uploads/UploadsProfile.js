@@ -32,9 +32,9 @@ const UploadsProfile = (props) => {
     .post(`/api/images/${user_id}`,fileData, config)
     .then(function (res) {
       setResponse(res.data);
+console.log(res.data)
     })
     .catch((err) => console.log(err));
-
     }
   useEffect(() => {
     if (response) {

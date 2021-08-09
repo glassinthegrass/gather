@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-import { StyledHeader, Arrow,Greeting, GreetingContainer } from "./styles";
+import { Link } from "react-router-dom";
+import { StyledHeader, Arrow,Greeting,HeaderSpacer, GreetingContainer } from "./styles";
 const Header = (props) => {
-  const history = useHistory();
+
   const [style, setStyle] = useState('flex-end');
   const[profilePicture,setProfilePicture]=useState('')
   const { isLoggedIn,user_id,first_name,profile_picture_url,picture_public_id,picture_version } = props.user;
@@ -35,10 +35,14 @@ const Header = (props) => {
   return (
     <StyledHeader>
 
+
       {greeting}
+      <HeaderSpacer></HeaderSpacer>
+      <HeaderSpacer></HeaderSpacer>
+      <HeaderSpacer></HeaderSpacer>
       <Arrow>
-        <Arrow onClick={() => history.go(-1)}> {"<"} </Arrow>
-        <Arrow onClick={() => history.go(1)}>{">"}</Arrow>
+
+
         <img
           src="https://img.icons8.com/material-outlined/24/000000/menu--v1.png"
           alt={"menu"}

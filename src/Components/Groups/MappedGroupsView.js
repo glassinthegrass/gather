@@ -4,6 +4,7 @@ import styled from 'styled-components';
 let Container = styled.section`
 display:flex;
 justify-content:center;
+
 width:12rem;
 `
 let GroupImage = styled.img`
@@ -23,8 +24,6 @@ text-shadow: -1.5px 0 black, 0 1.5px black, 1.5px 0 black, 0 -1.5px black;
 `
 const MappedGroupsView =(props)=>{
     const push= useHistory().push
-
-    console.log(props.group)
     const {group_name,picture_version,picture_public_id}=props.group
 
 const url =

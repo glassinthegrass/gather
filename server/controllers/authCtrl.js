@@ -7,11 +7,11 @@ module.exports = {
   register: async (req, res) => {
     //gain access to db functions
     const db = req.app.get("db");
-    const { first_name, last_name, email, password } = req.body;
+    const { first_name, last_name, username, email, password } = req.body;
     //check if email used
     try {
       //checking email status
-      const [existingUser] = await db.auth.get_user_by_email(email);
+      const [existingUser] = await db.auth.get_user_by_email(email, username);
 
       //if an object is returned, send an error
       if (existingUser) {
@@ -24,9 +24,11 @@ module.exports = {
           first_name,
           last_name,
           email,
+          username,
           hash
         );
-        db.groups.create_group_users(1, registeredUser.user_id,false);
+
+        await db.groups.create_group_users(1, registeredUser.user_id, false);
         delete registeredUser.hash;
         registeredUser.isRegistered = true;
         return res.status(200).send(registeredUser);
@@ -67,9 +69,9 @@ module.exports = {
   },
   login: async (req, res) => {
     const db = req.app.get("db");
-    const { email, password } = req.body;
+    const { email, password, } = req.body;
     try {
-      const [existingUser] = await db.auth.get_user_by_email(email);
+      const [existingUser] = await db.auth.get_user_by_email(email,email);
       if (!existingUser) {
         return res.status(403).send(errorMessage);
       } else {
@@ -141,14 +143,24 @@ module.exports = {
       console.log(err);
     }
   },
-  getUser:async (req,res)=>{
-    const db= req.app.get("db");
-    const {user_id}=req.params
-    const [existingUser]= await db.auth.get_user_by_user_id(user_id);
-    if(!existingUser){
-      return res.send('you are not registered');
-    }  
-    existingUser.isLoggedIn = true
-    return res.status(200).send(existingUser)
-}
+  getUser: async (req, res) => {
+    const db = req.app.get("db");
+    const { user_id } = req.params;
+    try{
+      const [existingUser] = await db.auth.get_user_by_user_id(user_id);
+      if (!existingUser) {
+        return res.send("you are not registered");
+
+    }
+    const posts = await db.posts.get_post_by_user_id(user_id);
+
+    existingUser.isLoggedIn = true;
+    delete existingUser.hash
+    return res.status(200).send([existingUser,posts]);
+    }catch(err){
+      console.log(err)
+      return res.send(404)
+    }
+  
+  },
 };

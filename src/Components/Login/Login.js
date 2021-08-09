@@ -40,6 +40,7 @@ const Login = (props) => {
     props.registerUser(
       newUser.first_name,
       newUser.last_name,
+    newUser.username,
       newUser.email,
       newUser.password
     );
@@ -66,6 +67,18 @@ const Login = (props) => {
   let registerWindow = (
     <>
       <Input
+        onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}
+        className="registerInput"
+        type="text"
+        placeholder="Pick a username!"
+      />
+        <Input
+          onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+          className="registerInput"
+          type="text"
+          placeholder="What's your email?"
+        />
+      <Input
         onChange={(e) => setNewUser({ ...newUser, first_name: e.target.value })}
         className="registerInput"
         type="text"
@@ -76,12 +89,6 @@ const Login = (props) => {
         className="registerInput"
         type="text"
         placeholder="What's your last name?"
-      />
-      <Input
-        onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
-        className="registerInput"
-        type="text"
-        placeholder="Tell me your email"
       />
       <Input
         onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
@@ -98,7 +105,7 @@ const Login = (props) => {
         placeholder="Please verify your password"
       />
       {props.user.isRegistered ? (
-        <Link to="/uploads/profile">Next</Link>
+        <Link to="/profile/uploads">Next</Link>
       ) : (
         <Submit onClick={() => handleRegister()}>Submit</Submit>
       )}

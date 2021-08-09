@@ -17,15 +17,16 @@ CREATE TABLE users(
     user_id SERIAL PRIMARY KEY,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
+    username varchar(20) UNIQUE NOT NULL,
     email VARCHAR(255) NOT NULL,
     hash TEXT NOT NULL,
-    phone_number INT,
-    birthday varchar(11),
-    zipcode INT,
     profile_picture_url VARCHAR(5000),
     picture_public_id varchar(1000),
     picture_version varchar(1000),
-    creation_date DATE NOT NULL DEFAULT CURRENT_DATE
+    phone_number INT,
+    birthday varchar(11),
+    zipcode INT,
+    creation_date TEXT NOT NULL DEFAULT CURRENT_DATE
 );
 
 CREATE TABLE friend_requests(
@@ -62,9 +63,10 @@ CREATE TABLE person(
 
 CREATE TABLE post(
     post_id SERIAL PRIMARY KEY,
-    post_content TEXT NOT NULL,
+    post_content VARCHAR(1000),
     post_url VARCHAR(5000),
-    
+    picture_version TEXT,
+    picture_public_id TEXT,
     creation_date DATE NOT NULL DEFAULT CURRENT_DATE,
     edited BOOL DEFAULT false
     );
@@ -82,7 +84,7 @@ CREATE TABLE person_user_post(
 
 CREATE TABLE groups(
 group_id SERIAL PRIMARY KEY,
-group_name UNIQUE VARCHAR(200),
+group_name VARCHAR(200) UNIQUE,
 picture_url TEXT,
 picture_public_id TEXT,
 picture_version TEXT,
@@ -157,17 +159,19 @@ deleted_post_id int,
 creation_date DATE NOT NULL DEFAULT CURRENT_DATE
 );
 
-INSERT INTO users(first_name,last_name,email,hash)
-VALUES('Jared','Andersen','thejaredandersen@gmail.com','$2a$10$6RNlT6ljGRr5MZY1kDYHpe//jg0hoh.pMPFVpO1BNIYxdOkYXZu.2'),
-('Lisa','Andersen','lisa@gather.com','$2a$10$6RNlT6ljGRr5MZY1kDYHpe//jg0hoh.pMPFVpO1BNIYxdOkYXZu.2'),
-('Craig','Merrill','craig@gather.com','$2a$10$6RNlT6ljGRr5MZY1kDYHpe//jg0hoh.pMPFVpO1BNIYxdOkYXZu.2'),
-('Aye','Myet','aye@gather.com','$2a$10$6RNlT6ljGRr5MZY1kDYHpe//jg0hoh.pMPFVpO1BNIYxdOkYXZu.2'),
-('Christine','theMachine','christine@gather.com','$2a$10$6RNlT6ljGRr5MZY1kDYHpe//jg0hoh.pMPFVpO1BNIYxdOkYXZu.2'),
-('Candy','Lane','candy@gather.com','$2a$10$6RNlT6ljGRr5MZY1kDYHpe//jg0hoh.pMPFVpO1BNIYxdOkYXZu.2'),
-('Sharlene','Hart','sharlene@gather.com','$2a$10$6RNlT6ljGRr5MZY1kDYHpe//jg0hoh.pMPFVpO1BNIYxdOkYXZu.2'),
-('Bart','Simpson','bart@gather.com','$2a$10$6RNlT6ljGRr5MZY1kDYHpe//jg0hoh.pMPFVpO1BNIYxdOkYXZu.2'),
-('Brandon','Flowers','brandon@gather.com','$2a$10$6RNlT6ljGRr5MZY1kDYHpe//jg0hoh.pMPFVpO1BNIYxdOkYXZu.2'),
-('John','Mulaney','john@gather.com','$2a$10$6RNlT6ljGRr5MZY1kDYHpe//jg0hoh.pMPFVpO1BNIYxdOkYXZu.2');
+
+
+INSERT INTO users(first_name,last_name,email,hash,username,picture_version,picture_public_id)
+VALUES('Jared','Andersen','thejaredandersen@gmail.com','$2a$10$6RNlT6ljGRr5MZY1kDYHpe//jg0hoh.pMPFVpO1BNIYxdOkYXZu.2','glassinthegrass','v1628116031','TqXaFbYdVtbxOoi2LJQQDaEh_wif4vm'),
+('Lisa','Andersen','lisa@gather.com','$2a$10$6RNlT6ljGRr5MZY1kDYHpe//jg0hoh.pMPFVpO1BNIYxdOkYXZu.2','leesuh311','v1628115370','Screen_Shot_2021-08-04_at_3.08.13_PM_cjr53v'),
+('Craig','Merrill','craig@gather.com','$2a$10$6RNlT6ljGRr5MZY1kDYHpe//jg0hoh.pMPFVpO1BNIYxdOkYXZu.2','cragthemag','v1628115252','75643561_10102937721206884_8412432664627249152_n.jpg_fdylrx'),
+('Aye','Myet','aye@gather.com','$2a$10$6RNlT6ljGRr5MZY1kDYHpe//jg0hoh.pMPFVpO1BNIYxdOkYXZu.2','ayeBayBay','v1628115375','Screen_Shot_2021-08-04_at_3.04.59_PM_ce2esk'),
+('Christine','Andersen','christine@gather.com','$2a$10$6RNlT6ljGRr5MZY1kDYHpe//jg0hoh.pMPFVpO1BNIYxdOkYXZu.2','ChristineTheMachine','v1628115289','157615075_10103640438705384_2752476975868474944_n.jpg_ecaxva'),
+('Candy','Lane','candy@gather.com','$2a$10$6RNlT6ljGRr5MZY1kDYHpe//jg0hoh.pMPFVpO1BNIYxdOkYXZu.2','_i_like_candy','v1628115365','Screen_Shot_2021-08-04_at_3.08.51_PM_rmjifa'),
+('Sharlene','Hart','sharlene@gather.com','$2a$10$6RNlT6ljGRr5MZY1kDYHpe//jg0hoh.pMPFVpO1BNIYxdOkYXZu.2','sharshar_isa_harhar','v1628115359','Screen_Shot_2021-08-04_at_3.09.39_PM_st8r1n'),
+('Bart','Simpson','bart@gather.com','$2a$10$6RNlT6ljGRr5MZY1kDYHpe//jg0hoh.pMPFVpO1BNIYxdOkYXZu.2','klondikeTempter','v1628115352','Screen_Shot_2021-08-04_at_3.10.43_PM_r3tzmk'),
+('Brandon','Flowers','brandon@gather.com','$2a$10$6RNlT6ljGRr5MZY1kDYHpe//jg0hoh.pMPFVpO1BNIYxdOkYXZu.2','HumanSpacemanDancer','v1628115345','Screen_Shot_2021-08-04_at_3.11.37_PM_wbzhqh'),
+('John','Mulaney','john@gather.com','$2a$10$6RNlT6ljGRr5MZY1kDYHpe//jg0hoh.pMPFVpO1BNIYxdOkYXZu.2','red','v1628115340','Screen_Shot_2021-08-04_at_3.12.20_PM_iseifj');
 
 INSERT INTO friend_requests(requesting_user_id,responding_user_id,accepted)
 VALUES(1,2,true),

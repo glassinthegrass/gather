@@ -44,7 +44,7 @@ position:absolute;
 font-size:30px;
 margin-top:6rem;
 text-shadow: -1.5px 0 white, 0 1.5px white, 1.5px 0 white, 0 -1.5px white;
-max-width:40vw;
+
 color:rgb(88, 88, 88);
 z-index:1;
 `
@@ -52,6 +52,7 @@ export let GroupImage = styled.img`
 max-height:40px;
 margin-top:23.5rem;
 margin-left:-18rem;
+
 
 `
 export let AnnouncementImage= styled.img`
@@ -69,7 +70,9 @@ box-shadow: 10px 0px 13px -7px #897b7b, 0px 7px 13px -7px #000000;
 `
 export let GroupName= styled.h6`
 color:rgb(88,88,88);
-text-decoration:none;
+width:20vw;
+text-align:left;
+overflow:hidden;
 `
 export let AuthorName =styled.p`
 position:absolute;
@@ -79,8 +82,9 @@ z-index:1;
 
 export let AnnouncementGroup = styled.div`
 position:absolute;
+width:10vw;
 max-height:40px;
 margin-top:23.5rem;
-margin-left:-34rem;
+margin-left:-27rem;
 z-index:1;
 `

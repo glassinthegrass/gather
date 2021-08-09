@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const initialState = {
-  user: {isLoggedIn:false},
+  user: { isLoggedIn: false },
 };
 
 const LOGIN_USER = "LOGIN_USER";
@@ -10,10 +10,13 @@ const LOGOUT_USER = "LOGOUT_USER";
 const GET_USER = "GET_USER";
 
 export const getUser = (user_id) => {
-  let user = axios.get(`/api/profile/${user_id}`).then(res=>res.data).catch(err=>console.log(err))
+  let user = axios
+    .get(`/api/profile/${user_id}`)
+    .then((res) => res.data)
+    .catch((err) => console.log(err));
   return {
     type: GET_USER,
-    payload: user
+    payload: user,
   };
 };
 
@@ -28,9 +31,21 @@ export const loginUser = (email, password) => {
   };
 };
 
-export const registerUser = (first_name, last_name, email, password) => {
+export const registerUser = (
+  first_name,
+  last_name,
+  email,
+  username,
+  password
+) => {
   let register = axios
-    .post("/auth/register", { first_name, last_name, email, password })
+    .post("/auth/register", {
+      first_name,
+      last_name,
+      email,
+      username,
+      password,
+    })
     .then((res) => res.data)
     .catch((err) => console.log(err));
   return {
@@ -53,21 +68,21 @@ export const logoutUser = () => {
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case GET_USER + "_PENDING":
-      return{
-        ...state
+      return {
+        ...state,
       };
     case GET_USER + "_FULFILLED":
-      return{
+      return {
         ...state,
-        user:action.payload
+        user: action.payload,
       };
     case LOGOUT_USER + "_PENDING":
       return {
-        ...state
+        ...state,
       };
     case LOGOUT_USER + "_FULFILLED":
       return {
-        ...initialState
+        ...initialState,
       };
 
     case LOGIN_USER + "_PENDING":

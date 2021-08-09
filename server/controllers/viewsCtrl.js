@@ -19,6 +19,10 @@ module.exports = {
       const [group] = await db.groups.get_group_by_group_name(group_name);
       const people = await db.groups.get_people_grouped(group.group_id);
       const users = await db.groups.get_users_grouped(group.group_id);
+      users.forEach(user=>{
+        delete user.hash
+      })
+
       const posts = await db.posts.get_posts_by_group(group.group_id);
       return res.status(200).send([group, people, users,posts]);
     } catch (err) {
