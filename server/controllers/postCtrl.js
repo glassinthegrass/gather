@@ -1,9 +1,9 @@
 module.exports = {
   getPosts: async (req, res) => {
     const db = req.app.get("db");
-
+    const {user_id}=req.query
     try {
-      const posts = await db.posts.get_posts();
+      const posts = await db.posts.get_post_by_user_id(user_id);
       res.status(200).send(posts);
     } catch (err) {
       res.status(404).send(err);

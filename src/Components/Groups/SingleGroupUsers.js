@@ -1,11 +1,9 @@
 import React from 'react';
-
 import styled from 'styled-components';
 import MappedSingleGroupUsers from './MappedSingleGroupUsers';
 
 let Title = styled.h1`
 font-family:'Nunito Black';
-
 `
 
 let Container= styled.aside`

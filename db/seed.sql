@@ -88,7 +88,8 @@ group_name VARCHAR(200) UNIQUE,
 picture_url TEXT,
 picture_public_id TEXT,
 picture_version TEXT,
-creation_date DATE NOT NULL DEFAULT CURRENT_DATE
+subject VARCHAR(100),
+creation_date TEXT NOT NULL DEFAULT CURRENT_DATE
 );
 
 CREATE TABLE groups_users(
@@ -252,18 +253,18 @@ VALUES
 (12,9,2),
 (12,10,3);
 
-INSERT INTO groups(group_name,picture_url,picture_public_id,picture_version)
-VALUES ('The Mother Hive','https://res.cloudinary.com/glassinthegrass/image/upload/v1627490255/BeeLogoFull_qw1jve.png','BeeLogoFull_qw1jve','v1627490255'),
-('Doug','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808371/orvd6cflzyudw7bmdy2h.jpg','orvd6cflzyudw7bmdy2h','v1626808371'),
-('Mindy','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808503/images_p2p3ay.png','images_p2p3ay','v1626808503'),
-('Noel','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808517/images_dqvyqy.jpg','images_dqvyqy','v1626808517'),
-('Penny','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808532/images_pcii3n.png','images_pcii3n','v1626808532'),
-('Tiffany','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808555/images_pqgkqm.jpg','images_pqgkqm','v1626808555'),
-('Brock','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808567/images_ahz9wy.jpg','images_ahz9wy','v1626808567'),
-('Craig','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808577/images_ouha4t.jpg','images_ouha4t','v1626808577'),
-('Jared','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808632/images_odxr2r.jpg','images_odxr2r','v1626808632'),
-('Sharlene','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808622/images_pttbbz.jpg','images_pttbbz','v1626808622'),
-('Kids','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808925/b33d7fef79ac8d9ef0ef3b3972f32d3a74776cad_full_f8rhmz.jpg','b33d7fef79ac8d9ef0ef3b3972f32d3a74776cad_full_f8rhmz','v1626808925');
+INSERT INTO groups(group_name,picture_url,picture_public_id,picture_version,subject)
+VALUES ('Mother_Hive','https://res.cloudinary.com/glassinthegrass/image/upload/v1627490255/BeeLogoFull_qw1jve.png','BeeLogoFull_qw1jve','v1627490255','Whats buzzing?'),
+('Doug','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808371/orvd6cflzyudw7bmdy2h.jpg','orvd6cflzyudw7bmdy2h','v1626808371','The Oldest!'),
+('Mindy','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808503/images_p2p3ay.png','images_p2p3ay','v1626808503','The Oldest Girl!'),
+('Noel','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808517/images_dqvyqy.jpg','images_dqvyqy','v1626808517','Second Girl'),
+('Penny','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808532/images_pcii3n.png','images_pcii3n','v1626808532','Third Girl'),
+('Tiffany','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808555/images_pqgkqm.jpg','images_pqgkqm','v1626808555','Fourth Girl'),
+('Brock','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808567/images_ahz9wy.jpg','images_ahz9wy','v1626808567','Second Girl'),
+('Craig','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808577/images_ouha4t.jpg','images_ouha4t','v1626808577','Third Girl'),
+('Jared','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808632/images_odxr2r.jpg','images_odxr2r','v1626808632','The Master'),
+('Sharlene','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808622/images_pttbbz.jpg','images_pttbbz','v1626808622','Mommas group'),
+('Kids','https://res.cloudinary.com/glassinthegrass/image/upload/v1626808925/b33d7fef79ac8d9ef0ef3b3972f32d3a74776cad_full_f8rhmz.jpg','b33d7fef79ac8d9ef0ef3b3972f32d3a74776cad_full_f8rhmz','v1626808925','One of Us');
  
 
 INSERT INTO groups_users(group_id,user_id,admin)

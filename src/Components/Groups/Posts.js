@@ -11,7 +11,7 @@ justify-content:flex-start;
 align-items:flex-end;
 `
 let PostContainer = styled.section`
-  max-height: 25rem;
+  max-height: 60vh;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -57,6 +57,7 @@ let PostUser = styled.img`
 
 let PostPicture = styled.img`
   background-color: white;
+  width:90%;
 `;
 let UserName = styled.p`
   font-family: "Nunito SemiBold";

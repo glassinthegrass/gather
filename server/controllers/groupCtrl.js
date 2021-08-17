@@ -1,16 +1,97 @@
 const cloudinary = require("cloudinary").v2;
 
 module.exports = {
+  // CREATE TABLE groups(
+  //   group_id SERIAL PRIMARY KEY,
+  //   group_name VARCHAR(200) UNIQUE,
+  //   picture_url TEXT,
+  //   picture_public_id TEXT,
+  //   picture_version TEXT,
+  //   subject VARCHAR(100),
+  //   creation_date TEXT NOT NULL DEFAULT CURRENT_DATE
+  //   );
+
+  //   CREATE TABLE groups_users(
+  //   group_users_id SERIAL PRIMARY KEY,
+  //   group_id INT,
+  //   FOREIGN KEY(group_id) REFERENCES groups(group_id),
+  //   user_id INT,
+  //   FOREIGN KEY(user_id) REFERENCES users(user_id),
+  //   admin BOOL DEFAULT false,
+  //   creation_date DATE NOT NULL DEFAULT CURRENT_DATE
+  //   );
+
   createGroup: async (req, res) => {
     const db = req.app.get("db");
-    const { group_name, user_id } = req.body;
+    const { group_name, user_id, subject } = req.query;
+
+    if (req.files?.image) {
+      const { path } = req.files.image;
+
+      try {
+        const [newGroup] = await db.groups.create_group(group_name, subject);
+        await db.groups.create_group_users(newGroup.group_id, user_id, true);
+
+        cloudinary.uploader.upload(
+          path,
+          {
+            eager: {
+              fetch_format: "auto",
+              width: 300,
+              height: 300,
+              crop: "fill_pad",
+              gravity: "auto",
+              quality: "auto",
+            },
+            use_filename: true,
+          },
+
+          function (error, result) {
+            if (result) {
+              console.log(result);
+              const { eager } = result;
+              let { url } = eager[0];
+              const picture_public_id = result.public_id;
+              const picture_version = "v" + result.version;
+              console.log(picture_public_id);
+              console.log(picture_version);
+              db.groups.update_group_url(
+                newGroup.group_id,
+                url,
+                picture_version,
+                picture_public_id
+              );
+              newGroup.picture_url = url;
+              newGroup.picture_version = picture_version;
+              newGroup.picture_public_id = picture_public_id;
+              return res.status(200).send(newGroup);
+            }
+            if (error) {
+              console.log(error);
+              return res.status(404);
+            }
+          }
+        );
+      } catch (err) {
+        console.log(err);
+        return res.status(404).send(err);
+      }
+    }
+  },
+  getAllGroups: async (req, res) => {
+    const db = req.app.get("db");
+    const {filter,user_id}=req.query
+
     try {
-      const [newGroup] = await db.groups.create_group(group_name);
-      await db.groups.create_group_users(newGroup.group_id, user_id, true);
-      return res.status(200).send(newGroup);
+      if(filter==='all'){
+        const allGroups = await db.groups.get_all_groups();
+        return res.status(200).send(allGroups);
+      }else{
+        const userGroups = await db.groups.get_groups_by_user(user_id)
+        return res.status(200).send(userGroups)
+      }
     } catch (err) {
       console.log(err);
-      return res.status(404).send(err);
     }
   },
   getGroupsByUser: async (req, res) => {
@@ -27,14 +108,9 @@ module.exports = {
     const db = req.app.get("db");
     const { searchQuery } = req.query;
     try {
-      const searchResults = await db.groups.search_groups(searchQuery);
-      if (!searchResults) {
-        return res
-          .status(404)
-          .send({ message: "Nothing matches your search request" });
-      } else {
-        return res.status(200).send(searchResults);
-      }
+      const searchResults = await db.groups.check_new_group_name(searchQuery);
+
+      return res.status(200).send(searchResults);
     } catch (err) {
       console.log(err);
     }
@@ -88,12 +164,36 @@ module.exports = {
       return res.sendStatus(404);
     }
   },
+  deleteUserFromGroup: async (req, res) => {
+    const db = req.app.get("db");
+    const { loggedInUser,user, group_id,filter } = req.query;
+
+    try {
+      await db.groups.delete_user_from_group(loggedInUser, group_id);
+      if(filter==='all'){
+        const groups = await db.groups.get_all_groups();
+        return res.status(200).send(groups);
+      }else{
+        const groups=await db.groups.get_groups_by_user(user);
+        return res.status(200).send(groups);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  },
   deleteGroup: async (req, res) => {
     const db = req.app.get("db");
-    const { group_id } = req.params;
+    const { group_id,filter,user } = req.query;
+
     try {
       await db.groups.delete_group(group_id);
-      return res.status(200).send({ message: "group was deleted!" });
+      if(filter==='all'){
+        const groups = await db.groups.get_all_groups();
+        return res.status(200).send(groups);
+      }else{
+        const groups =await db.groups.get_groups_by_user(user);
+        return res.status(200).send(groups)
+      }
     } catch (err) {
       return res.sendStatus(404);
     }
@@ -143,7 +243,7 @@ module.exports = {
               );
               newPost.post_picture_version = picture_version;
               newPost.post_picture_public_id = picture_public_id;
-              return res.send(newPost);
+              return res.status(200).send(newPost);
             }
             if (error) {
               console.log(error);
@@ -163,6 +263,49 @@ module.exports = {
       } catch (err) {
         console.log(err);
       }
+    }
+  },
+  addMemberToGroup: async (req, res) => {
+    const db = req.app.get("db");
+    const { loggedInUser,user, group_id,filter} = req.query;
+    try {
+      const [member] = await db.groups.check_group_membership(
+        group_id,
+        loggedInUser
+      );
+      if (!member) {
+        await db.groups.create_group_users(group_id, loggedInUser, false);
+        if(filter==='all'){
+          const groups = await db.groups.get_all_groups();
+          return res.status(200).send(groups);
+        }else{
+          const groups = await db.groups.get_groups_by_user(user)
+          return res.status(200).send(groups)
+        }
+        
+      } else {
+        return res.sendStatus(409);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  checkGroupMembership: async (req, res) => {
+    const db = req.app.get("db");
+    const { group_id, user_id } = req.query;
+
+    try {
+      const [member] = await db.groups.check_group_membership(
+        group_id,
+        user_id
+      );
+      if (!member) {
+        return res.status(200).send(false);
+      } else {
+        return res.status(200).send(member);
+      }
+    } catch (err) {
+      console.log(err);
     }
   },
 };

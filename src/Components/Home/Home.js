@@ -28,6 +28,25 @@ let Title = styled.h6`
   margin: 20px;
   padding: 10px;
 `;
+let AddGroupContainer = styled.div`
+display:flex;
+background-color:rgb(252, 219, 165);
+padding-top:1rem;
+padding-left:1rem;
+`
+let AddGroup = styled.div`
+font-family:'Nunito Black';
+width:50px;
+height:50px;
+font-size:48px;
+text-align:center;
+border-radius:50%;
+border:3px solid rgb(88,88,88);
+color:rgb(88,88,88);
+padding:1px;
+
+
+`
 
 const Home = (props) => {
   const history = useHistory();
@@ -96,7 +115,8 @@ const Home = (props) => {
       <Title>Recent Announcements</Title>
       <div>{showAnnouncements}</div>
       <Title>Groups</Title>
-      <GroupsDiv>{mappedGroups}</GroupsDiv>
+     <AddGroupContainer> <AddGroup onClick={()=>push('/add-new-group')}>+</AddGroup>
+      <GroupsDiv>{mappedGroups}</GroupsDiv></AddGroupContainer>
     </HomeDiv>
   );
 };

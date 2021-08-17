@@ -1,6 +1,11 @@
 import React from "react";
 import Posts from "../Groups/Posts";
+import styled from "styled-components";
 
+let Container = styled.section`
+width:100vw;
+min-height:90vh;
+`
 const UserPosts = (props) => {
   const { posts } = props;
 
@@ -14,7 +19,7 @@ const UserPosts = (props) => {
     <></>
   );
 
-  return <>{mappedPosts}</>;
+  return <Container>{mappedPosts}</Container>;
 };
 
 export default UserPosts;

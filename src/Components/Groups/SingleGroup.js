@@ -15,7 +15,7 @@ let Container = styled.section`
   justify-content: center;
   flex-direction: column;
   align-items:center;
-  width: 85vw;
+  width: 100vw;
 `;
 
 let GroupName = styled.h1`
@@ -26,6 +26,7 @@ let PostContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column-reverse;
+  
   padding-bottom:3rem;
 `;
 

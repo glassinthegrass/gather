@@ -4,19 +4,21 @@ import styled from "styled-components";
 let Container = styled.section`
 display:flex;
 justify-content:center;
-
+width:100vw;
 
 `
 let ProfileRow = styled.div`
   display: flex;
+
 ;
 
 `;
 let ProfileContainer = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: rgb(252, 219, 166);
 
+align-content:center;
+  background-color: rgb(252, 219, 166);
 width:35rem;
 
 

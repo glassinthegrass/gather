@@ -34,6 +34,8 @@ const MappedSingleGroupUsers = (props) => {
 const history = useHistory();
 const {push}=history;
 const{user_id}=props.user
+
+
 const handleProfileClick=()=>{
   push(`/profile/${user_id}`)
 }

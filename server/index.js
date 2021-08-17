@@ -78,16 +78,19 @@ app.put("/api/posts/:post_id", postCtrl.editPost);
 app.delete("/api/posts/:post_id", postCtrl.deletePost);
 
 //groups
+app.get('/api/groups/all',groupCtrl.getAllGroups)
 app.get("/api/groups", groupCtrl.searchGroups);
 app.get("/api/groups/:user_id", groupCtrl.getGroupsByUser);
-
+app.get('/api/member/groups',groupCtrl.checkGroupMembership);
+app.post('/api/groups/member',groupCtrl.addMemberToGroup);
 app.post("/api/groups", groupCtrl.createGroup);
 app.post("/api/groups/:group_id", groupCtrl.addPersonToGroup);
 app.put(
   "/api/groups/:group_id/person/:person_id",
   groupCtrl.deletePersonFromGroup
 );
-app.delete("/api/groups/:group_id", groupCtrl.deleteGroup);
+app.delete('/api/groups',groupCtrl.deleteUserFromGroup)
+app.delete("/api/delete-group", groupCtrl.deleteGroup);
 
 //announcements
 

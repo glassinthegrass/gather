@@ -11,7 +11,7 @@ flex-direction:column;
 border-radius:15px 15px 15px 15px;
 background-color:rgb(88,88,88);
 position:absolute;
-z-index:1;
+z-index:3;
 margin-right:-50vw;
 `;
 let LinkContainer = styled.div`
@@ -31,7 +31,7 @@ const Menu = (props) => {
   <MenuWindow>
     <LinkContainer>
         <Link to='/home'>Home</Link>
-        <Link to='/groups'>Groups</Link>
+        <Link to={`/all-groups`}>Groups</Link>
         <Link to={`/profile/${user_id}`}>Profile</Link>
         <p onClick={props.logoutUser}>Logout</p>
         </LinkContainer>
