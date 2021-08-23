@@ -16,6 +16,7 @@ let Container = styled.section`
   flex-direction: column;
   align-items:center;
   width: 100vw;
+  min-height:90vh;
 `;
 
 let GroupName = styled.h1`
@@ -44,7 +45,7 @@ const SingleGroup = (props) => {
     { push } = history;
   const [group, setGroup] = useState({});
   const [posts, setPosts] = useState([]);
-  const [people, setPeople] = useState({});
+  const [people, setPeople] = useState([]);
   const [users, setUsers] = useState([]);
 
   const [groupUrl, setGroupUrl] = useState("");
@@ -86,6 +87,9 @@ const SingleGroup = (props) => {
     setPosts([...posts, post]);
   };
 
+  const handleAdd =(group_id,person_id)=>{
+    axios.post(`/api/groups/add-person?group_id=${group_id}&person_id=${person_id}`).then(res=>setPeople(res.data)).catch(err=>console.log(err))
+}
   let mappedPosts = posts.map((post, i) => {
     return <Posts key={i} post={post} group_name={group_name} group_picture_public_id={picture_public_id} group_picture_version={picture_version}/>;
   });
@@ -114,7 +118,8 @@ const SingleGroup = (props) => {
 
 
       </Container>
-      <SingleGroupUsers users={users} people={people}/>
+
+      <SingleGroupUsers handleAdd={handleAdd} group={group} users={users} people={people}/>
 
 
     </>

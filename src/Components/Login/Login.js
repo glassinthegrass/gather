@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { loginUser, registerUser } from "../../redux/userReducer.js";
+import styled from "styled-components";
 import {
   ToggleBox,
   Window,
@@ -9,8 +10,12 @@ import {
   Input,
   Submit,
   LoginToggle,
-  RegisterToggle
+  RegisterToggle,
+  Bee,
+  Title
 } from "./styles.js";
+import bee from '../../Assets/Gather_Line_with_Bee.png'
+
 
 
 const Login = (props) => {
@@ -161,7 +166,8 @@ const Login = (props) => {
       <div>
         <p>A place for friends to...</p>
         <Box>
-          <h1>Gather</h1>
+          <Title>Gather</Title>
+        <Bee src={bee} alt=''/>
           {windowToggle}
         </Box>
         <ToggleBox>

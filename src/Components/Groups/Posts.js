@@ -1,9 +1,17 @@
 import React from "react";
+import { useHistory, useRouteMatch } from "react-router-dom";
 import styled from "styled-components";
+import line from '../../Assets/Gather_Dotted_Line.png'
 let Container = styled.section`
 display:flex;
 justify-content:center;
-
+`
+let Line = styled.img`
+height:4.5vh;
+position:absolute;
+margin-left:4rem;
+margin-top:-0.9rem;
+transform:rotate(189deg);
 `
 let PostRow= styled.div`
 display:flex;
@@ -60,9 +68,12 @@ let PostPicture = styled.img`
   width:90%;
 `;
 let UserName = styled.p`
+
   font-family: "Nunito SemiBold";
+  font-size:15px;
   margin-bottom: 8px;
   margin-left: -5px;
+  white-space:nowrap;
 `;
 let GroupPicture=styled.img`
 width:25px;
@@ -76,33 +87,44 @@ font-family:'Nunito Light';
 font-size:10px;
 margin-right:-10px;
 margin-bottom:-1px;
+
 `
 const Posts = (props) => {
+  const path = useRouteMatch().path
+
+const push = useHistory().push
   const { post } = props;
-  let userUrl = `https://res.cloudinary.com/glassinthegrass/image/upload/w_50,h_50,r_max,c_fill,g_auto,f_auto/${post.user_picture_version}/${post.user_picture_public_id}`;
-  let postUrl = `https://res.cloudinary.com/glassinthegrass/image/upload/w_300,h_300,c_fill_pad,g_auto,f_auto/${post.post_picture_version}/${post.post_picture_public_id}`;
-  let groupUrl = `https://res.cloudinary.com/glassinthegrass/image/upload/w_25,h_25,r_max,c_fill_pad,g_auto,f_auto/${props.group_picture_version}/${props.group_picture_public_id}`;
+  console.log(post)
+  let userUrl = post.user_picture_public_id?`https://res.cloudinary.com/glassinthegrass/image/upload/w_50,h_50,r_max,c_fill,g_auto,f_auto/${post.user_picture_version}/${post.user_picture_public_id}`:'';
+  let groupUrl = props.group_picture_public_id?`https://res.cloudinary.com/glassinthegrass/image/upload/w_25,h_25,r_max,c_fill_pad,g_auto,f_auto/${props?.group_picture_version}/${props?.group_picture_public_id}`:'';
+  let postUrl = post.post_picture_public_id ? `https://res.cloudinary.com/glassinthegrass/image/upload/w_300,h_300,c_fill_pad,g_auto,f_auto/${post?.post_picture_version}/${post?.post_picture_public_id}`:'';
   let postPicture = post.post_picture_version ? (
     <PostPicture src={postUrl} alt="postPic" />
   ) : (
     <></>
   );
-
+const pathway = ()=>{
+  if(path!=='/birthdays'){
+    push(`/groups/${props?.group_name}`)
+  }
+}
   return (
     <Container>
+
     <PostContainer>
       <PostHeader>
-        <PostRow>
-        <PostUser src={userUrl} alt="user" />
+        <PostRow onClick={()=>push(`/profile/${post.user_id}`)}>
+        <PostUser src={userUrl} alt="" />
         <UserName>{`${post.first_name} ${post.last_name}`}</UserName>
         </PostRow>
-        <PostRow>
-<GroupName>{props.group_name}</GroupName>
+        <Line src={line} alt=''/>
+        <PostRow onClick={()=>pathway()}>
+<GroupName>{props?.group_name}</GroupName>
         <GroupPicture src={groupUrl} alt=''/>
         </PostRow>
       </PostHeader>
       <PostBody>
-        <PostContent>{post.post_content}</PostContent>
+        <PostContent>{post?.post_content}</PostContent>
         {postPicture}
       </PostBody>
     </PostContainer>

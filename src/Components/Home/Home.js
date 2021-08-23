@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import HomeAnnouncements from "./Announcements/HomeAnnouncements";
 import Groups from "./Groups";
 import { useHistory } from "react-router";
 import { connect } from "react-redux";
 import styled from "styled-components";
+import Posts from "../Groups/Posts";
+import Birthdays from "./Birthdays";
 
 const HomeDiv = styled.div`
   display: flex;
@@ -12,95 +13,88 @@ const HomeDiv = styled.div`
   flex-direction: column;
   align-items: center;
   align-content: center;
-  min-width: 80%;
+  width: 100vw;
   min-height: 90vh;
   font-family: "Nunito Black";
-`;
-
-let GroupsDiv = styled.div`
+  `;
+  
+  let GroupsDiv = styled.div`
   display: flex;
-  height: 10vh;
-  width: 30rem;
+  width: 100%;
+  background-color: rgb(252, 219, 165);
   justify-content: flex-start;
   overflow-x: scroll;
-`;
-let Title = styled.h6`
-  margin: 20px;
-  padding: 10px;
-`;
-let AddGroupContainer = styled.div`
+
+  border-bottom: 0.5px dotted rgb(88, 88, 88, 0.5);
+  `;
+  let Title = styled.div`
+  background-color: rgb(252, 219, 165);
+  width: 100%;
+  padding: 3px;
+  border-bottom: 0.5px dotted rgb(88, 88, 88, 0.5);
+  `;
+  let Spacer = styled.div`
+  width: 100%;
+  height: 1rem;
+  `;
+  let Announce=styled.div`
+width:100%;
 display:flex;
-background-color:rgb(252, 219, 165);
-padding-top:1rem;
-padding-left:1rem;
-`
-let AddGroup = styled.div`
-font-family:'Nunito Black';
-width:50px;
-height:50px;
-font-size:48px;
-text-align:center;
-border-radius:50%;
-border:3px solid rgb(88,88,88);
-color:rgb(88,88,88);
-padding:1px;
+justify-content:center;
+  `
+  const Home = (props) => {
+    const history = useHistory();
+    const { push } = history;
+    const [groups, setGroups] = useState([]);
+    const [posts, setPosts] = useState([]);
+    const [birthdays, setBirthdays] = useState([]);
 
-
-`
-
-const Home = (props) => {
-  const history = useHistory();
-  const { push } = history;
-  const [announcements, setAnnouncements] = useState(null);
-  const [groups, setGroups] = useState(null);
-
-  const [idx, setIdx] = useState(0);
+  const [idx,setIdx]=useState(0);
   const { user_id, isLoggedIn } = props.user;
-
-  useEffect(() => {
-    if (isLoggedIn === false) {
-      push("/");
+  
+  setInterval(()=>{
+    if(birthdays[0]){
+      if(idx<birthdays.length-1){
+        setIdx(idx+1)
+  
+      }else{
+        setIdx(0)
+      }
     }
-  }, [isLoggedIn, push]);
+  },20000)
 
   useEffect(() => {
     if (isLoggedIn === true) {
       axios
-        .get(`/api/home/${user_id}`)
-        .then((res) => {
-          setAnnouncements(res.data[0]);
-          setGroups(res.data[1]);
-        })
-        .catch((err) => console.log(err));
+      .get(`/api/home/${user_id}`)
+      .then((res) => {
+        setGroups(res.data);
+      })
+      .catch((err) => console.log(err));
+    }else{
+      push('/')
+    }
+  }, [isLoggedIn, user_id,push]);
+  
+  useEffect(() => {
+    if (isLoggedIn === true) {
+      axios
+      .get(`/api/home-posts?user_id=${user_id}`)
+      .then((res) => setPosts(res.data))
+      .catch((err) => console.log(err));
     }
   }, [isLoggedIn, user_id]);
-
-  const handleIncrement = () => {
-    if (idx === announcements.length - 1) {
-      setIdx(0);
-    } else if (idx >= 0 || idx < announcements.length - 1) {
-      setIdx(idx + 1);
+  
+  useEffect(() => {
+    if (isLoggedIn === true) {
+      axios
+        .get(`/api/birthday?user_id=${user_id}`)
+        .then((res) => setBirthdays(res.data))
+        .catch((err) => console.log(err));
     }
-  };
+  }, [isLoggedIn,user_id]);
 
-  const handleDecrement = () => {
-    if (idx === 0) {
-      setIdx(announcements.length - 1);
-    } else if (idx > 0 || idx < announcements.length - 1) {
-      setIdx(idx - 1);
-    }
-  };
-
-  const showAnnouncements = announcements ? (
-    <HomeAnnouncements
-      idx={idx}
-      handleIncrement={handleIncrement}
-      handleDecrement={handleDecrement}
-      announcements={announcements}
-    />
-  ) : (
-    <></>
-  );
+ 
 
   const mappedGroups = groups ? (
     groups.map((group, i) => {
@@ -109,14 +103,33 @@ const Home = (props) => {
   ) : (
     <></>
   );
+  let mappedPosts = posts ? (
+    posts.map((post, i) => {
+      return (
+        <Posts
+          key={i}
+          post={post}
+          group_name={post.group_name}
+          group_picture_public_id={post.group_picture_public_id}
+          group_picture_version={post.group_picture_version}
+        />
+      );
+    })
+  ) : (
+    <></>
+  );
 
   return (
     <HomeDiv>
-      <Title>Recent Announcements</Title>
-      <div>{showAnnouncements}</div>
-      <Title>Groups</Title>
-     <AddGroupContainer> <AddGroup onClick={()=>push('/add-new-group')}>+</AddGroup>
-      <GroupsDiv>{mappedGroups}</GroupsDiv></AddGroupContainer>
+      <Title>Your Hives</Title>
+      <GroupsDiv>{mappedGroups}</GroupsDiv>
+     <Announce>
+     <Birthdays birthday={birthdays[idx]} />
+       </Announce> 
+
+      <Spacer></Spacer>
+      {mappedPosts}
+
     </HomeDiv>
   );
 };

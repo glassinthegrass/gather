@@ -5,7 +5,6 @@ import styled from "styled-components";
 let Container = styled.section`
   display: flex;
   justify-content: center;
-
   width: 12rem;
 `;
 let GroupImage = styled.img`
@@ -21,6 +20,14 @@ let GroupImage = styled.img`
   }
 `;
 
+let GroupName = styled.h6`
+position: absolute;
+margin-top: 3rem;
+z-index: 1;
+font-family: "Nunito Black";
+color: rgb(247, 242, 234);
+text-shadow: -1.5px 0 black, 0 1.5px black, 1.5px 0 black, 0 -1.5px black;
+`;
 let Options = styled.div`
   font-family: "Nunito Black";
   position: absolute;
@@ -34,14 +41,6 @@ let Options = styled.div`
   &: hover {
     font-size: 25px;
   }
-`;
-let GroupName = styled.h6`
-  position: absolute;
-  margin-top: 3rem;
-  z-index: 1;
-  font-family: "Nunito Black";
-  color: rgb(247, 242, 234);
-  text-shadow: -1.5px 0 black, 0 1.5px black, 1.5px 0 black, 0 -1.5px black;
 `;
 let OptionBox = styled.div`
   padding: 3px;

@@ -1,7 +1,7 @@
 module.exports = {
   getPosts: async (req, res) => {
     const db = req.app.get("db");
-    const {user_id}=req.query
+    const { user_id } = req.query;
     try {
       const posts = await db.posts.get_post_by_user_id(user_id);
       res.status(200).send(posts);
@@ -9,34 +9,17 @@ module.exports = {
       res.status(404).send(err);
     }
   },
-  addPost: async (req, res) => {
+  getPostsByJoinedGroups: async (req, res) => {
     const db = req.app.get("db");
-    const { post_content, post_url } = req.body;
-    const { person_id} = req.params;
-    const {user_id}=req.session.user.user_id
+    const { user_id } = req.query;
     try {
-      const [post] = await db.posts.create_post(post_content, post_url);
-      if (!post) {
-        return res.sendStatus(404);
-      } else {
-        const [trackingTable] = await db.posts.create_person_user_post_entry(
-          post.post_id,
-          person_id,
-          user_id
-        );
-        if (!trackingTable) {
-          return res.sendStatus(404);
-        } else {
-          post.person_id = person_id;
-          post.user_id = user_id;
-          return res.status(200).send(post);
-        }
-      }
+      const posts = await db.posts.get_posts_by_joined_group(user_id);
+      return res.status(200).send(posts);
     } catch (err) {
       console.log(err);
-      res.sendStatus(404);
     }
   },
+
   editPost: async (req, res) => {
     const db = req.app.get("db");
     const { post_id } = req.params;
@@ -80,6 +63,17 @@ module.exports = {
     } catch (err) {
       console.log(err);
       return res.sendStatus(404);
+    }
+  },
+  getPostsByPersonId: async (req, res) => {
+    const db = req.app.get("db");
+    const { person_id } = req.query;
+    console.log(person_id)
+    try {
+      const posts = await db.posts.get_posts_by_person_id(person_id);
+      return res.status(200).send(posts);
+    } catch (err) {
+      console.log(err);
     }
   },
 };

@@ -1,1 +1,2 @@
-SELECT * FROM person;
+SELECT * FROM person
+WHERE creator =$1;

@@ -8,8 +8,7 @@ import MappedGroupsView from "./MappedGroupsView";
 
 let Row = styled.div`
 display:flex;
-width:50rem;
-
+width:100%;
 `
 let AddGroup =styled.div`
 border:3px solid rgb(88,88,88,0.7);
@@ -99,11 +98,11 @@ align-content:center;
 `;
 let MapWrap = styled.div`
 display:flex;
-justify-content:flex-start;
+justify-content:center;
 border:3px solid rgb(88,88,88,0.50);
 border-radius:10px 10px 10px 10px;
 flex-wrap:wrap;
-width:48rem;
+width:90%;
 `
 let MapWrapTwo = styled(MapWrap)`
 border:0px;

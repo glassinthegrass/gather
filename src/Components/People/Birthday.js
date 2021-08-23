@@ -1,0 +1,136 @@
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import styled from "styled-components";
+import Posts from "../Groups/Posts";
+import BirthdayCard from "./BirthdayCard";
+import CreatePost from "./CreatePost";
+
+let Container = styled.section`
+  width: 100vw;
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+let PostContainer=styled.div`
+display:flex;
+flex-direction:column-reverse;
+`
+
+const Birthday = (props) => {
+  const { isLoggedIn, user_id } = props.user;
+  const [birthdays, setBirthdays] = useState([]);
+  const [posts, setPosts] = useState([]);
+  const [idx, setIdx] = useState(0);
+  const [image, setImage] = useState([]);
+  const [preview, setPreview] = useState(null);
+  const [postContent, setPostContent] = useState("");
+console.log(props)
+  useEffect(() => {
+    if (isLoggedIn === true) {
+      axios
+        .get(`/api/birthday?user_id=${user_id}`)
+        .then((res) => setBirthdays(res.data))
+        .catch((err) => console.log(err));
+    }
+  }, [isLoggedIn, user_id]);
+
+
+
+  useEffect(() => {
+    if (isLoggedIn === true&&birthdays[0]) {
+      axios
+        .get(`/api/birthday-post?person_id=${birthdays[idx]?.person_id}`)
+        .then((res) => setPosts(res.data))
+        .catch((err) => console.log(err));
+    }
+  }, [isLoggedIn, idx,birthdays]);
+
+  const handleSubmit = () => {
+    let fileData = new FormData();
+    fileData.append("image", image);
+    let config = {
+      header: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    axios
+      .post(
+        `/api/birthday-post?post_content=${postContent}&user_id=${user_id}&person_id=${birthdays[idx]?.person_id}`,
+        fileData,
+        config
+      )
+      .then((res) => setPosts(res.data))
+      .catch((err) => console.log(err));
+  };
+  const handleContent = (content) => {
+    setPostContent(content);
+  };
+  const handleImage = (img) => {
+    if (img[0]) {
+      setImage(img[0]);
+      setPreview(URL.createObjectURL(img[0]));
+    } else {
+      setImage([]);
+      setPreview(null);
+    }
+  };
+  const handleIncrease = () => {
+    if (idx < birthdays.length - 1) {
+      setIdx(idx + 1);
+    } else {
+      setIdx(0);
+    }
+  };
+  const handleDecrease = () => {
+    if (idx > 0) {
+      setIdx(idx - 1);
+    } else {
+      setIdx(birthdays.length - 1);
+    }
+  };
+
+  const mappedPosts = posts[0] ? (
+    posts.map((post, i) => {
+      return (
+
+        <Posts
+          key={i}
+          post={post}
+          group_name={birthdays[idx].first_name}
+          group_picture_public_id={birthdays[idx].person_picture_public_id}
+          group_picture_version={birthdays[idx].person_picture_version}
+        />
+
+      );
+    })
+  ) : (
+    <></>
+  );
+
+  return (
+    <Container>
+
+      <div onClick={handleDecrease}>------</div>
+      <BirthdayCard birthday={birthdays[idx]} />
+      <CreatePost
+        handleContent={handleContent}
+        handleImage={handleImage}
+        handleSubmit={handleSubmit}
+        preview={preview}
+        birthday={birthdays[idx]}
+      />
+      <div onClick={handleIncrease}>++++++</div>
+     <PostContainer>
+          {mappedPosts}
+         </PostContainer>
+    </Container>
+  );
+};
+const mapStateToProps = (reduxState) => {
+  return reduxState.userReducer;
+};
+
+export default connect(mapStateToProps)(Birthday);

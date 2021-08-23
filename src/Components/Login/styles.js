@@ -5,9 +5,10 @@ export const Window = styled.div`
   justify-content: center;
   align-items: center;
   align-content: center;
-  height: 90vh;
+  min-height: 90vh;
   min-width:80%;
-  font-family:'Nunito Black'
+  font-family:'Nunito Black';
+  z-index:1;
 `;
 export const Box = styled.div`
   display: flex;
@@ -23,7 +24,7 @@ export const Box = styled.div`
   border-bottom:0px;
   box-shadow: 10px 0px 13px -7px #897b7b, 0px 7px 13px -7px #000000;
   border-radius: 10px 10px 0px 0px;
-
+  z-index:1;
 `;
 export const Input = styled.input`
   width: 8rem;
@@ -37,6 +38,7 @@ margin-left:10%;
   box-shadow: 10px 0px 13px -7px #897b7b, 0px 7px 13px -7px #000000;
   border-radius: 10px 10px 10px 10px;
   font-size:10px;
+  z-index:1;
 `;
 export const Submit = styled.h1`
   width: 6rem;
@@ -46,8 +48,10 @@ export const Submit = styled.h1`
   margin: 5%;
   margin-left:20%;
   font-family:'Nunito Light';
+  background-color:rgb(252, 219, 166);
   border: 1px solid rgb(88, 88, 88);
   box-shadow: 10px 0px 13px -7px #897b7b, 0px 7px 13px -7px #000000;
+  z-index:1;
   &:hover {
     background-color: rgb(88,88,88);
 color:rgb(252, 142, 52, 0.792);
@@ -56,6 +60,7 @@ color:rgb(252, 142, 52, 0.792);
     background-color:rgb(252,142,52,0.792);
     color:rgb(88,88,88);
   };
+
 `;
 export const LoginToggle = styled.div`
   width: 100%;
@@ -74,13 +79,16 @@ export const LoginToggle = styled.div`
   font-family:'Nunito Light';
   font-size:20px;
   box-shadow: 10px 0px 13px -12px #897b7b, 0px 7px 13px -7px #000000;
+
   &:hover {
     background-color: rgb(88,88,88);
 color:rgb(252, 142, 52, 0.792);
+
   };
   &:active{
     background-color:rgb(252,142,52,0.792);
     color:rgb(88,88,88);
+
   };
 `;
 export const RegisterToggle = styled(LoginToggle)`
@@ -92,8 +100,20 @@ border-right:1px solid rgb(88,88,88);
 export const ToggleBox = styled.section`
   display: flex;
   flex-direction: row;
+  z-index:1;
 `;
 
-export let BusyBee = styled.img`
-
+export let Bee = styled.img`
+width:35rem;
+position:absolute;
+z-index:0;
+margin-left:-15rem;
+margin-top:8rem;
+`
+export let Title = styled.h1`
+font-size:25px;
+color:rgb(88,88,88);
+padding:10px;
+margin:10px;
+text-shadow: -1px -1px 0 rgb(246,243,235), 1px -1px 0 rgb(246,243,235), -1px 1px 0 rgb(246,243,235), 1px 1px 0 rgb(246,243,235);
 `

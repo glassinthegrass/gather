@@ -30,6 +30,7 @@ let Picture = styled.img`
   width: 30px;
   box-shadow: 10px 0px 13px -7px #897b7b, 0px 7px 13px -7px #000000;
 `;
+
 const MappedSingleGroupUsers = (props) => {
 const history = useHistory();
 const {push}=history;

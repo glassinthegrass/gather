@@ -1,26 +1,7 @@
 const cloudinary = require("cloudinary").v2;
 
 module.exports = {
-  // CREATE TABLE groups(
-  //   group_id SERIAL PRIMARY KEY,
-  //   group_name VARCHAR(200) UNIQUE,
-  //   picture_url TEXT,
-  //   picture_public_id TEXT,
-  //   picture_version TEXT,
-  //   subject VARCHAR(100),
-  //   creation_date TEXT NOT NULL DEFAULT CURRENT_DATE
-  //   );
-
-  //   CREATE TABLE groups_users(
-  //   group_users_id SERIAL PRIMARY KEY,
-  //   group_id INT,
-  //   FOREIGN KEY(group_id) REFERENCES groups(group_id),
-  //   user_id INT,
-  //   FOREIGN KEY(user_id) REFERENCES users(user_id),
-  //   admin BOOL DEFAULT false,
-  //   creation_date DATE NOT NULL DEFAULT CURRENT_DATE
-  //   );
-
+ 
   createGroup: async (req, res) => {
     const db = req.app.get("db");
     const { group_name, user_id, subject } = req.query;
@@ -117,32 +98,16 @@ module.exports = {
   },
   addPersonToGroup: async (req, res) => {
     const db = req.app.get("db");
-    const { group_id } = req.params;
-    const {
-      first_name,
-      last_name,
-      birthday,
-      picture,
-      zipcode,
-      message,
-      creator,
-    } = req.body;
+    const { group_id,person_id } = req.query;
     try {
-      const [newPerson] = await db.people.create_person(
-        first_name,
-        last_name,
-        birthday,
-        picture,
-        zipcode,
-        message,
-        creator
-      );
-      if (!newPerson?.person_id) {
+      const [member] = await db.groups.check_person_membership(group_id,person_id);
+      if (member) {
         return res.sendStatus(409);
       } else {
-        await db.groups.create_groups_people(group_id, newPerson.person_id);
-        newPerson.group_id = group_id;
-        return res.status(200).send(newPerson);
+await db.groups.create_groups_people(group_id,person_id);
+        const people = await db.groups.get_people_grouped(group_id)
+
+        return res.status(200).send(people);
       }
     } catch (err) {
       console.log(err);

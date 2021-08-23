@@ -1,8 +1,11 @@
+const cloudinary = require("cloudinary").v2;
+
 module.exports = {
   getPeople: async (req, res) => {
     const db = req.app.get("db");
+    const { user_id } = req.query;
     try {
-      const people = await db.people.get_all_people();
+      const people = await db.people.get_all_people(user_id);
       res.status(200).send(people);
     } catch (err) {
       console.log(err);
@@ -11,8 +14,8 @@ module.exports = {
   },
   personSearch: async (req, res) => {
     const db = req.app.get("db");
-    const { inquery } = req.body;
-    console.log(inquery);
+    const { inquery } = req.query;
+
     try {
       const results = await db.people.search_people(inquery);
       res.status(200).send(results);
@@ -23,20 +26,56 @@ module.exports = {
   },
   createPerson: async (req, res) => {
     const db = req.app.get("db");
-    const { first_name, last_name, birthday, picture, zipcode, message, creator } =
-      req.body;
+    const { path } = req.files.image;
+    const { first_name,last_name,birthday,message,creator } = req.query;
 
     try {
       const [newPerson] = await db.people.create_person(
         first_name,
         last_name,
         birthday,
-        picture,
-        zipcode,
         message,
         creator
       );
-      return res.status(200).send(newPerson);
+
+
+      cloudinary.uploader.upload(
+        path,
+        {
+          eager: {
+            fetch_format: "auto",
+            width: 150,
+            height: 150,
+            crop: "fill",
+            gravity: "face",
+            quality: "80",
+          },
+          use_filename: true,
+        },
+        function (error, result) {
+          if (result) {
+            console.log(result)
+            const { eager } = result;
+            const profile_picture_url = eager[0].url;
+            const picture_public_id = result.public_id;
+            const version = "v" + result.version;
+
+            db.people.update_person_picture(
+              newPerson.person_id,
+              profile_picture_url,
+              picture_public_id,
+              version
+            );
+          }
+          if (error) {
+            console.log(error);
+            return res.status(404);
+          }
+        }
+      );
+
+      const sentPerson = await db.people.get_all_people(creator);
+      return res.status(200).send(sentPerson);
     } catch (err) {
       console.log(err);
       return res.sendStatus(404);
@@ -59,7 +98,7 @@ module.exports = {
         message
       );
 
-      //http://localhost:3111/api/people/1?first_name=banana&last_name=candy&birthday=01-02-0304&picture=asdfasdf&zipcode=99336&message=wowwowowowwowowo
+
       return res.status(200).send([person, updatedPerson].flat());
     } catch (err) {
       console.log(err);
@@ -107,4 +146,5 @@ module.exports = {
       return res.status(404).send("err" + err);
     }
   },
+
 };

@@ -69,9 +69,9 @@ module.exports = {
   },
   login: async (req, res) => {
     const db = req.app.get("db");
-    const { email, password, } = req.body;
+    const { email, password } = req.body;
     try {
-      const [existingUser] = await db.auth.get_user_by_email(email,email);
+      const [existingUser] = await db.auth.get_user_by_email(email, email);
       if (!existingUser) {
         return res.status(403).send(errorMessage);
       } else {
@@ -102,18 +102,21 @@ module.exports = {
   },
   updateEmail: async (req, res) => {
     const db = req.app.get("db");
-    const { email, newEmail, password } = req.body;
+    const { email,newEmail,password } = req.query;
     try {
-      const [existingUser] = await db.auth.get_user_by_email(email);
+      const [existingUser] = await db.auth.get_user_by_email(email,'');
+      console.log(existingUser)
       const isAuthenticated = bcrypt.compareSync(password, existingUser.hash);
       if (!isAuthenticated) {
         errorMessage = "Bad Password";
         return res.status(409).send(errorMessage);
       } else {
         const [updatedUser] = await db.auth.update_email(email, newEmail);
-        return res.status(200).send(updatedUser);
+        delete updatedUser.hash
+        req.session.user= updatedUser
+        return res.status(200).send(req.session.user);
       }
-    } catch (err) {
+    } catch (err) {    
       console.log(err);
     }
   },
@@ -146,21 +149,36 @@ module.exports = {
   getUser: async (req, res) => {
     const db = req.app.get("db");
     const { user_id } = req.params;
-    try{
+    try {
       const [existingUser] = await db.auth.get_user_by_user_id(user_id);
       if (!existingUser) {
         return res.send("you are not registered");
+      }
 
-    }
-    const posts = await db.posts.get_post_by_user_id(user_id);
 
-    existingUser.isLoggedIn = true;
-    delete existingUser.hash
-    return res.status(200).send([existingUser,posts]);
-    }catch(err){
-      console.log(err)
-      return res.send(404)
+      existingUser.isLoggedIn = true;
+      delete existingUser.hash;
+      return res.status(200).send(existingUser);
+    } catch (err) {
+      console.log(err);
+      return res.send(404);
     }
-  
+  },
+  updateUser: async (req, res) => {
+    const db = req.app.get("db");
+    const { newInfo } = req.body;
+    console.log(newInfo);
+    try {
+      await db.auth.update_user(
+        newInfo.first_name,
+        newInfo.last_name,
+        newInfo.birthday,
+        newInfo.user_id
+      );
+      const [user] = await db.auth.get_user_by_user_id(newInfo.user_id);
+      return res.status(200).send(user);
+    } catch (err) {
+      console.log(err);
+    }
   },
 };

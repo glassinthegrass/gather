@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS deleted_posts;
 DROP TABLE IF EXISTS paragraphs;
 DROP TABLE IF EXISTS groups_announcements_users;
 DROP TABLE IF EXISTS announcements;
@@ -54,11 +53,13 @@ CREATE TABLE person(
     last_name VARCHAR(100) NOT NULL,
     birthday VARCHAR(15) NOT NULL,
     picture_url TEXT,
+    picture_version TEXT,
+    picture_public_id TEXT,
     zipcode INT,
     message TEXT,
     creator INT NOT NULL,
     FOREIGN KEY(creator) REFERENCES users(user_id),
-    creation_date DATE NOT NULL DEFAULT CURRENT_DATE
+    creation_date TEXT NOT NULL DEFAULT CURRENT_DATE
 );
 
 CREATE TABLE post(
@@ -67,7 +68,7 @@ CREATE TABLE post(
     post_url VARCHAR(5000),
     picture_version TEXT,
     picture_public_id TEXT,
-    creation_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    creation_date TEXT NOT NULL DEFAULT CURRENT_DATE,
     edited BOOL DEFAULT false
     );
 
@@ -149,18 +150,6 @@ CREATE TABLE paragraphs(
     paragraph_content text,
     creation_date DATE NOT NULL DEFAULT CURRENT_DATE
 );
-
-CREATE TABLE deleted_posts(
-deleted_id SERIAL PRIMARY KEY,
-deleted_content text,
-deleted_url text,
-deleted_user_id int,
-deleted_person_id int,
-deleted_post_id int,
-creation_date DATE NOT NULL DEFAULT CURRENT_DATE
-);
-
-
 
 INSERT INTO users(first_name,last_name,email,hash,username,picture_version,picture_public_id)
 VALUES('Jared','Andersen','thejaredandersen@gmail.com','$2a$10$6RNlT6ljGRr5MZY1kDYHpe//jg0hoh.pMPFVpO1BNIYxdOkYXZu.2','glassinthegrass','v1628116031','TqXaFbYdVtbxOoi2LJQQDaEh_wif4vm'),

@@ -75,7 +75,7 @@ const AddGroup = (props) => {
   const [subject, setSubject] = useState("");
   const [search, setSearch] = useState([]);
   const [newGroup, setNewGroup] = useState(null);
-  const [toggle, setToggle] = useState(false);
+
 
   const handleImage = (img) => {
     setImage(img[0]);

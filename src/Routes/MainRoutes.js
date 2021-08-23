@@ -8,6 +8,7 @@ import Groups from '../Components/Groups/Groups'
 import SingleGroup from '../Components/Groups/SingleGroup'
 import AddGroup from '../Components/Groups/AddGroup'
 import People from '../Components/People/People'
+import Birthday from '../Components/People/Birthday'
 
 export default(
         <Switch>
@@ -15,10 +16,11 @@ export default(
             <Route path='/home' component={Home}/>
             <Route path='/groups/:group_name' component={SingleGroup}/>
             <Route path='/add-new-group' component={AddGroup}/>
-            <Route path='/all-groups' component={Groups}/>
+            <Route path='/all-groups' render={()=><Groups/>}/>
+            <Route path='/birthdays' component={Birthday}/>
             <Route path='/announcements/:announcement_id' component={Announcement}/>
             <Route path='/profile/uploads' component={UploadsProfile}/>
             <Route path='/profile/:user_id' component={Profile}/>
-            <Route path ='people' render={()=><People/>}/>
+            <Route path ='/people' render={()=><People/>}/>
         </Switch>
 )

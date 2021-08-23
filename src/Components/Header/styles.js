@@ -14,6 +14,21 @@ export let HeaderSpacer = styled.div`
 height:100%;
 width:20%;
 `
+
+export let HeaderMenuIcon = styled.img`
+width:30px;
+height:30px;
+padding-top:5px;
+padding-bottom:5px;
+padding-left:10px;
+padding-right:10px;
+margin-left:2px;
+margin-top:-13px;
+margin-right:2px;
+@media(min-width: 601px){
+  display:none;
+}
+`
 export const Arrow = styled.div`
   float: left;
   padding: 10px;
@@ -32,5 +47,19 @@ float:left;
 `
 
 export const Greeting= styled.h1`
-font-family:'Nunito Light';
+font-family:'Nunito';
+`
+export let HeaderIcons = styled.img`
+width:30px;
+height:30px;
+padding-top:5px;
+padding-bottom:5px;
+padding-left:10px;
+padding-right:10px;
+margin-left:2px;
+margin-top:-5px;
+margin-right:2px;
+@media(max-width: 600px){
+  display:none;
+}
 `
