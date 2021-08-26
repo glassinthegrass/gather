@@ -7,14 +7,16 @@ import styled from "styled-components";
 import Posts from "../Groups/Posts";
 import Birthdays from "./Birthdays";
 
+
 const HomeDiv = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   flex-direction: column;
   align-items: center;
   align-content: center;
   width: 100vw;
-  min-height: 90vh;
+  min-height: 95vh;
+z-index:1;
   font-family: "Nunito Black";
   `;
   
@@ -24,14 +26,15 @@ const HomeDiv = styled.div`
   background-color: rgb(252, 219, 165);
   justify-content: flex-start;
   overflow-x: scroll;
-
+z-index:1;
   border-bottom: 0.5px dotted rgb(88, 88, 88, 0.5);
   `;
   let Title = styled.div`
   background-color: rgb(252, 219, 165);
   width: 100%;
-  padding: 3px;
+
   border-bottom: 0.5px dotted rgb(88, 88, 88, 0.5);
+  z-index:1;
   `;
   let Spacer = styled.div`
   width: 100%;
@@ -41,7 +44,9 @@ const HomeDiv = styled.div`
 width:100%;
 display:flex;
 justify-content:center;
-  `
+
+z-index:1;
+`
   const Home = (props) => {
     const history = useHistory();
     const { push } = history;
@@ -53,15 +58,14 @@ justify-content:center;
   const { user_id, isLoggedIn } = props.user;
   
   setInterval(()=>{
-    if(birthdays[0]){
+    if(birthdays[1]){
       if(idx<birthdays.length-1){
         setIdx(idx+1)
-  
       }else{
         setIdx(0)
       }
     }
-  },20000)
+  },15000)
 
   useEffect(() => {
     if (isLoggedIn === true) {
@@ -127,8 +131,10 @@ justify-content:center;
      <Birthdays birthday={birthdays[idx]} />
        </Announce> 
 
+
+        {mappedPosts}
+
       <Spacer></Spacer>
-      {mappedPosts}
 
     </HomeDiv>
   );

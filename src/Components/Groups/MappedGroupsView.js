@@ -5,7 +5,14 @@ import styled from "styled-components";
 let Container = styled.section`
   display: flex;
   justify-content: center;
-  width: 12rem;
+  width: 10rem; 
+  
+  @media(max-width:599px){
+    width:14rem;
+  }
+  @media(min-width:900px){
+    width:17rem;
+  }
 `;
 let GroupImage = styled.img`
   border: 3px solid rgb(88, 88, 88, 0.7);
@@ -15,8 +22,18 @@ let GroupImage = styled.img`
   margin: 10px;
   width: 125px;
   height: 125px;
+  cursor:pointer;
   &:hover {
     border: 3px solid rgb(88, 88, 88);
+  }
+  @media(max-width:599px){
+    width:170px;
+    height:170px;
+
+  }
+  @media(min-width:900px){
+    width:225px;
+    height:225px;
   }
 `;
 
@@ -27,24 +44,50 @@ z-index: 1;
 font-family: "Nunito Black";
 color: rgb(247, 242, 234);
 text-shadow: -1.5px 0 black, 0 1.5px black, 1.5px 0 black, 0 -1.5px black;
+cursor:pointer;
+text-wrap:wrap;
+@media(max-width:600px){
+  font-size:20px;
+
+}
 `;
 let Options = styled.div`
   font-family: "Nunito Black";
   position: absolute;
   z-index: 2;
+
   margin-left: 90px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
   margin-top: 10px;
   font-size: 20px;
   color: rgb(252, 142, 52, 0.792);
-  padding: 10px;
+  padding: 5px;
   text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+  cursor:context-menu;
   &: hover {
     font-size: 25px;
+  }
+
+  @media(max-width:599px){
+font-size:30px;
+    margin-left:125px;
+    margin-top:10px;
+    &:hover{
+      font-size:40px;
+    }
+  }
+  @media(min-width:900px){
+    margin-left:185px;
+    margin-top:15px;
+    font-size:30px;
   }
 `;
 let OptionBox = styled.div`
   padding: 3px;
   height: 1rem;
+  width:4rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -52,6 +95,7 @@ let OptionBox = styled.div`
   border: 1px solid white;
   font-size: 10px;
   background-color: rgb(88, 88, 88, 0.7);
+  cursor:pointer;
 `;
 const MappedGroupsView = (props) => {
   const [toggle, setToggle] = useState(false);
@@ -63,7 +107,7 @@ const MappedGroupsView = (props) => {
 
   const { user_id } = user;
   const url =
-    `https://res.cloudinary.com/glassinthegrass/image/upload/w_125,h_125,c_fill_pad,g_auto,f_auto/` +
+    `https://res.cloudinary.com/glassinthegrass/image/upload/w_150,h_150,q_80,c_fill,g_face,f_auto/` +
     picture_version +
     "/" +
     picture_public_id;

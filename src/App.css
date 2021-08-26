@@ -6,10 +6,38 @@
   flex-direction: column;
 min-height:100vh;
 width:100vw;
+z-index:0
 }
+
 
 input{
   text-align: center;
   background-color: rgb(233, 233, 233);
 }
 
+details {
+  font: 16px "N", Calibri, sans-serif;
+  width: 620px;
+}
+
+details > summary {
+  padding: 2px 6px;
+  width: 15em;
+  background-color: #ddd;
+  border: none;
+  box-shadow: 3px 3px 4px black;
+  cursor: pointer;
+  list-style: none;
+}
+
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+details > p {
+  border-radius: 0 0 10px 10px;
+  background-color: #ddd;
+  padding: 2px 6px;
+  margin: 0;
+  box-shadow: 3px 3px 4px black;
+}

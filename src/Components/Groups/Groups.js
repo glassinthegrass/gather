@@ -6,10 +6,10 @@ import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 let Container = styled.section`
 width:100vw;
-min-height:90vh;
+min-height:95vh;
 `
 let Spacer = styled.div`
-  width: 100vw;
+
   height: 3rem;
   font-family: "Nunito Black";
   font-size: 20px;

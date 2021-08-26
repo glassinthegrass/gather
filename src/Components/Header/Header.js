@@ -1,26 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Profile from "../../Assets/Profile.png";
 import home from "../../Assets/home.png";
 import people from "../../Assets/people.png";
 import groups from "../../Assets/groups.png";
+import ProfileMenu from "./ProfileMenu";
+import logo from '../../Assets/BeeLogoFull.png'
 import {
   HeaderMenuIcon,
-  HeaderIcons,
   StyledHeader,
-
-  Greeting,
+Gather,
+LogoContainer,
   HeaderSpacer,
-  GreetingContainer,
+Hide,
+  Logo,
+  HardSpace
 } from "./styles";
+import ProfileIcons from "./ProfileIcons";
+
 const Header = (props) => {
   const [style, setStyle] = useState("flex-end");
   const [profilePicture, setProfilePicture] = useState("");
+
   const {
     isLoggedIn,
     user_id,
-    first_name,
-    profile_picture_url,
     picture_public_id,
     picture_version,
   } = props.user;
@@ -38,34 +42,18 @@ const Header = (props) => {
     );
   }, [picture_version, picture_public_id]);
 
-  const greeting = props.user.isLoggedIn ? (
-    <GreetingContainer>
-      <Link to={`/profile/${user_id}`}>
-        <img src={profilePicture} alt={profile_picture_url} />
-      </Link>
-      <Greeting>{`Hi ${first_name}!`}</Greeting>
-    </GreetingContainer>
-  ) : (
-    <Greeting>Login!</Greeting>
-  );
+let hideButtons = isLoggedIn ?  (<Hide><ProfileIcons profileMenu={props.profileMenu} user_id={user_id} /></Hide>):(<HeaderSpacer></HeaderSpacer>);
   return (
     <StyledHeader>
-      {greeting}
+
+<LogoContainer>
+      <Logo src={logo} alt=''/>
+<Gather>Gather</Gather>
+</LogoContainer>
       <HeaderSpacer></HeaderSpacer>
       <HeaderSpacer></HeaderSpacer>
       <HeaderSpacer></HeaderSpacer>
-      <Link to={`/home`}>
-        <HeaderIcons src={home} alt="" />
-      </Link>
-      <Link to={`/all-groups`}>
-        <HeaderIcons src={groups} alt="" />
-      </Link>
-      <Link to={`/people`}>
-        <HeaderIcons src={people} alt="" />
-      </Link>
-      <Link to={`/profile/${user_id}`}>
-        <HeaderIcons src={Profile} alt="" />
-      </Link>
+      {hideButtons}
 
       <HeaderMenuIcon
         src="https://img.icons8.com/material-outlined/24/000000/menu--v1.png"

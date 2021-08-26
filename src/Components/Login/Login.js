@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { loginUser, registerUser } from "../../redux/userReducer.js";
-import styled from "styled-components";
+
 import {
   ToggleBox,
   Window,

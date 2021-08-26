@@ -1,11 +1,20 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-
+import bee from '../../Assets/Gather_Line_with_Bee.png'
 import { useHistory } from "react-router-dom";
 
 import styled from "styled-components";
 import MappedGroupsView from "./MappedGroupsView";
 
+let Bee= styled.img`
+max-height:90vh;
+position:fixed;
+z-index:0;
+margin-left:5rem;
+margin-top:-3rem;
+transform:rotate(80deg);
+transform:scaleX(-1);
+`
 let Row = styled.div`
 display:flex;
 width:100%;
@@ -15,9 +24,9 @@ border:3px solid rgb(88,88,88,0.7);
 border-radius:25px 25px 25px 25px;
 background-color:rgb(252, 142, 52, 0.792);
 padding:10px;
+width:10rem;
+margin-top:10px;
 margin:10px;
-margin-left:21px;
-margin-right:20px;
 display:flex;
 justify-content:center;
 align-items:center;
@@ -37,6 +46,19 @@ height:125px;
   }
   &:active #text{
     color:rgb(252,142,52,0.792);
+  }
+  @media(max-width:599px){
+    width:170px;
+    height:170px;
+    font-size:10px;
+
+    margin-left:14px;
+    margin-right:14px;
+  }
+  @media(min-width:900px){
+    width:225px;
+    height:225px;
+    
   }
   `
 let AddGroupText = styled.h1`
@@ -60,15 +82,17 @@ border:1px solid rgb(88,88,88,0.5);
 width: 50%;
 height: 30px;
 font-size: 8px;
-background-color: rgb(252, 219, 166);
 display: flex;
 justify-content: center;
 margin:5px;
 align-items:center;
 border-radius:10px;
 font-family:'Nunito Light';
+z-index:1;
 font-size:20px;
 box-shadow: 10px 0px 13px -12px #897b7b, 0px 7px 13px -7px #000000;
+background-color: rgb(252, 219, 166);
+cursor:pointer;
 &:hover {
   background-color: rgb(88,88,88);
 color:rgb(252, 142, 52, 0.792);
@@ -77,6 +101,11 @@ color:rgb(252, 142, 52, 0.792);
   background-color:rgb(252,142,52,0.792);
   color:rgb(88,88,88);
 };
+@media(max-width:599px){
+  font-size:15px;
+  font-family:'Nunito Semibold';
+}
+
 `
 let Spacer= styled.div`
 width:100%;
@@ -90,7 +119,7 @@ font-family:'Nunito SemiBold';
 let Container = styled.section`
 display:flex;
 flex-direction:column;
-
+z-index:1;
 align-items:center;
 align-content:center;
   width: 100vw;
@@ -99,14 +128,18 @@ align-content:center;
 let MapWrap = styled.div`
 display:flex;
 justify-content:center;
+max-width:90%;
 border:3px solid rgb(88,88,88,0.50);
 border-radius:10px 10px 10px 10px;
 flex-wrap:wrap;
-width:90%;
+z-index:1;
+
 `
 let MapWrapTwo = styled(MapWrap)`
 border:0px;
-width:100%;
+
+align-items:flex-start;
+
 
 `
 const GroupsView = (props) => {
@@ -151,6 +184,7 @@ const MappedGroups = groups? groups.map((group,i)=>{
           </MapWrapTwo>
 
           </MapWrap>
+          <Bee src={bee} alt=''/>
           <Spacer></Spacer>
       </Container>;
 };

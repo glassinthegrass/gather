@@ -1,15 +1,20 @@
 import React from "react";
 import styled from "styled-components";
+
 let Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-width:100%;
-  background-color: blue;
+
+  min-height: 30vh;
+  background-color: rgb(252, 219, 165);
+  padding: 1rem;
+  border-radius: 10px 10px 10px 10px;
 `;
 let Info = styled.p`
   font-family: "Nunito";
   font-size: 14px;
+  padding: 5px;
 `;
 let GroupInfo = styled(Info)`
   font-size: 8px;
@@ -23,31 +28,32 @@ let Column = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  z-index: 2;
 `;
 let GroupPicture = styled.img`
   height: 20px;
   width: 20px;
 `;
-let PersonPicture = styled.img`
+let PersonPicture = styled.img``;
 
-`;
 const BirthdayCard = (props) => {
-    const{birthday}=props
-    let personUrl = `https://res.cloudinary.com/glassinthegrass/image/upload/w_300,h_200,c_fill,g_face,f_auto/${birthday?.person_picture_version}/${birthday?.person_picture_public_id}`;
-    let groupUrl = `https://res.cloudinary.com/glassinthegrass/image/upload/w_50,h_50,c_fill_pad,g_auto,f_auto/${birthday?.group_picture_version}/${birthday?.group_picture_public_id}`;
+  const { birthdays, idx } = props;
+  let personUrl = `https://res.cloudinary.com/glassinthegrass/image/upload/w_400,h_250,c_pad,f_auto/co_rgb:ffff00,l_text:Nunito_20_bold_letter_spacing_2:!!Happy Birthday!!/fl_layer_apply,g_south,y_20/${birthdays[idx]?.person_picture_version}/${birthdays[idx]?.person_picture_public_id}`;
+  let groupUrl = `https://res.cloudinary.com/glassinthegrass/image/upload/w_50,h_50,c_fill_pad,g_auto,f_auto/${birthdays[idx]?.group_picture_version}/${birthdays[idx]?.group_picture_public_id}`;
 
   return (
     <Container>
       <Info>
-        It's {birthday?.first_name} {birthday?.last_name}'s
-        Birthday! Leave a message to brighten their day.
+        It's {birthdays[idx]?.first_name} {birthdays[idx]?.last_name}'s
+        Birthday!
+        <br /> Leave a message to brighten their day.
       </Info>
       <PersonPicture src={personUrl} alt="" />
       <Row>
         <Info>Person shared from</Info>
         <Column>
           <GroupPicture src={groupUrl} alt="" />
-          <GroupInfo>{birthday?.group_name}</GroupInfo>
+          <GroupInfo>{birthdays[idx]?.group_name}</GroupInfo>
         </Column>
       </Row>
     </Container>

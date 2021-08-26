@@ -1,74 +1,133 @@
-import axios from "axios";
-import React, { useState } from "react";
+
 import styled from "styled-components";
 
 
-let SectionContainer = styled.section`
-display:flex;
-flex-direction:column;
-margin-top:2rem;
-width:40%;
-height:90%;
-padding:10px;
-background-color:rgb(252, 142, 52, 0.792);
-box-shadow: 10px 0px 13px -12px #897b7b, 0px 7px 13px -7px #000000;
-border-radius:10px 10px 10px 10px;
-`
 
-let TextInput =styled.textarea`
-overflow-wrap: break-word;
-word-break:break-all;
-height:80px;
-`
+let Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+width:93%;
+padding:1rem;
+`;
+let TextInput = styled.textarea`
+  width: 90%;
+  padding: 5px;
+  outline: none;
+  resize: none;
+  overflow: auto;
+  font-family: "Nunito Light";
+  text-align: left;
+`;
+let HiddenInput = styled.input`
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+`;
+
+let Label = styled.label`
+  font-family: "Nunito";
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 10px;
+`;
+
+let PictureInput = styled.div`
+padding-left:10px;
+padding-right:10px;
+  height: 1.5rem;
+  border: 1px solid rgb(88, 88, 88, 0.5);
+  font-size: 10px;
+  margin-bottom:5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Nunito Light";
+  box-shadow: 10px 0px 13px -12px #897b7b, 0px 7px 13px -7px #000000;
+  background-color: rgb(252, 219, 166);
+  &:hover {
+    background-color: rgb(88,88,88);
+  color:rgb(252, 142, 52);
+  };
+  &:active{
+    background-color:rgb(252,142,52,0.5);
+    color:rgb(88,88,88);
+  };
+`;
+
+let Submit = styled.div`
+  width: 25%;
+  height: 96%;
+  border: 1px solid rgb(88, 88, 88, 0.5);
+  font-size: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left:-1px;
+  font-family: "Nunito Light";
+  background-color: rgb(252, 219, 166);
+  &:hover {
+    background-color: rgb(88,88,88);
+  color:rgb(252, 142, 52);
+  };
+  &:active{
+    background-color:rgb(252,142,52,0.7);
+    color:rgb(88,88,88);
+  };
+`;
+let Preview = styled.img`
+
+height:10rem;
+  border: 1px solid rgb(88, 88, 88, 0.5);
+  font-size: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius:10px 10px 0px 0px;
+  font-family: "Nunito Light";
+
+  box-shadow: 10px 0px 13px -12px #897b7b, 0px 7px 13px -7px #000000;
+  background-color: rgb(88, 88, 88);
+`;
+let Row = styled.div`
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  width: 20rem;
+  height: 3rem;
+`;
+
 const CreatePost = (props) => {
+const {preview,handleImage,handlePostContent,handleSubmit,postContent}=props
+  let picSwitch = preview ? (
+    <Preview src={preview} alt="" />
+  ) : (
+    <PictureInput>UPLOAD PHOTO</PictureInput>
+  );
 
-  const [image, setImage] = useState([]);
-  const [postContent, setPostContent] = useState("");
-  const [preview, setPreview] = useState("");
-
-  const handleImage = (img) => {
-    setImage(img[0]);
-    setPreview(URL.createObjectURL(img[0]));
-  };
-  const handlePostContent = (e) => {
-    setPostContent(e);
-  };
-  const handleSubmit = () => {
-    let fileData = new FormData();
-    fileData.append("image", image);
-
-    let config = {
-      header: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
-
-    axios
-      .post(
-        `/api/groupPosts/${props.group.group_id}/user/${props.user.user_id}?post_content=${postContent}`,
-        fileData,
-        config
-      )
-      .then((res) => props.handleAddPost(res.data))
-      .catch((err) => console.log(err));
-    setPreview('');
-    setPostContent('');
-  };
   return (
 
-    <SectionContainer>
-      <TextInput type='text' value={postContent} onChange={(e) => handlePostContent(e.target.value)}></TextInput>
-      <div>
-        <label htmlFor="single">{">"}</label>
-        <input
+    <Container>
+  <Label htmlFor="single">{picSwitch}</Label>
+      <Row>
+      <TextInput value={postContent}type='text' onChange={(e) => handlePostContent(e.target.value)}></TextInput>
+  <Submit onClick={() => handleSubmit()}>Submit</Submit>
+      </Row>
+<div>
+        <HiddenInput
           type="file"
           id="single"
           onChange={(e) => handleImage(e.target.files)}
         />
-        <button onClick={() => handleSubmit()}>Submit your post!</button>
       </div>
-      <img src={preview} alt=""></img>
-    </SectionContainer>
+
+    </Container>
     
   );
 };

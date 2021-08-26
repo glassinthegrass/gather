@@ -8,6 +8,8 @@ module.exports = {
     //gain access to db functions
     const db = req.app.get("db");
     const { first_name, last_name, username, email, password } = req.body;
+    const today = new Date()
+    const mmddyyyy = String(`${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}-${String(today.getYear()+1900)}`);
     //check if email used
     try {
       //checking email status
@@ -25,7 +27,8 @@ module.exports = {
           last_name,
           email,
           username,
-          hash
+          hash,
+          mmddyyyy
         );
 
         await db.groups.create_group_users(1, registeredUser.user_id, false);

@@ -6,7 +6,6 @@ let GroupsContainer = styled.section`
   display: flex;
   flex-direction: column;
   align-contents: center;
-  width: 100%;
   margin: 2px;
   padding: 5px;
   font-family: "Nunito Light";
@@ -14,7 +13,9 @@ let GroupsContainer = styled.section`
   border: 1px dotted rgb(88, 88, 88, 0.5);
   border-radius: 10px;
   background-color: rgb(88, 88, 88,0.1);
-`;
+cursor:pointer;
+
+  `;
 let GroupName = styled.h6`
   color: rgb(88, 88, 88);
   width: 5rem;

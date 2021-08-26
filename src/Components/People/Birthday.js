@@ -1,22 +1,65 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import Posts from "../Groups/Posts";
 import BirthdayCard from "./BirthdayCard";
 import CreatePost from "./CreatePost";
 
+let Spacer = styled.div`
+height:1rem;
+width:100%;
+`
 let Container = styled.section`
   width: 100vw;
   min-height: 90vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
+align-items:center;
 `;
 let PostContainer=styled.div`
 display:flex;
 flex-direction:column-reverse;
 `
+let Arrow =styled.div`
+display:none;
+justify-content:center;
+align-items:center;
+width:5rem;
+height:5rem;
+font-family:'Nunito Black';
+font-size:80px;
+border-radius:10px 10px 10px 10px;
+background-color: 
+rgb(88,88,88,0.2);
+color:
+rgb(252, 219, 165,0.5);
+
+`
+let Row = styled.div`
+position:absolute;
+display:flex;
+flex-direction:row;
+min-height:42vh;
+
+justify-content:space-around;
+align-items:center;
+width:20rem;
+&:hover .arrow{
+  display:flex;
+}
+
+`
+let Column =styled.div`
+display:flex;
+flex-direction:column;
+align-items:center;
+border-radius:10px 10px 10px 10px;
+background-color:rgb(252, 219, 165);
+margin-top:2rem;
+`
+
 
 const Birthday = (props) => {
   const { isLoggedIn, user_id } = props.user;
@@ -26,15 +69,17 @@ const Birthday = (props) => {
   const [image, setImage] = useState([]);
   const [preview, setPreview] = useState(null);
   const [postContent, setPostContent] = useState("");
-console.log(props)
+const push =useHistory().push
   useEffect(() => {
     if (isLoggedIn === true) {
       axios
         .get(`/api/birthday?user_id=${user_id}`)
         .then((res) => setBirthdays(res.data))
         .catch((err) => console.log(err));
+    }else{
+      push('/')
     }
-  }, [isLoggedIn, user_id]);
+  }, [isLoggedIn, user_id,push]);
 
 
 
@@ -113,16 +158,23 @@ console.log(props)
   return (
     <Container>
 
-      <div onClick={handleDecrease}>------</div>
-      <BirthdayCard birthday={birthdays[idx]} />
+
+<Column>
+      <BirthdayCard birthdays={birthdays} idx={idx}/>
+<Row>
+      <Arrow className='arrow' onClick={handleDecrease}>{'<'}</Arrow>
+      <Arrow className='arrow' onClick={handleIncrease}>{'>'}</Arrow>
+      </Row>
       <CreatePost
         handleContent={handleContent}
         handleImage={handleImage}
         handleSubmit={handleSubmit}
         preview={preview}
         birthday={birthdays[idx]}
-      />
-      <div onClick={handleIncrease}>++++++</div>
+        />
+        </Column>
+
+        <Spacer></Spacer>
      <PostContainer>
           {mappedPosts}
          </PostContainer>

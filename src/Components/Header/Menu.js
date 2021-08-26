@@ -21,6 +21,7 @@ let LinkContainer = styled.div`
   flex-direction: column;
   min-width: 80%;
   height: 40vh;
+  z-index:3;
 `;
 
 const Menu = (props) => {

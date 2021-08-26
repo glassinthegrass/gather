@@ -2,29 +2,46 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 
-let Container = styled.section`
+export let Container = styled.section`
   display: flex;
   justify-content: flex-start;
   font-family: "Nunito SemiBold";
   align-items: center;
   padding: 2px;
+  background-color: rgb(88, 88, 88);
+color: rgb(252, 142, 52, 0.792);
+&:hover {
+  background-color: rgb(252, 219, 166);
+  color:rgb(88,88,88);
+}
+&:active {
+  background-color: rgb(252, 142, 52, 0.792);
+  color: rgb(88, 88, 88);
+}
 `;
-let UserContainer = styled.div`
+export let UserContainer = styled.div`
   display: flex;
-  padding-left:3px;
+  padding-left:5px;
+  cursor:pointer;
+  width:100%;
+
 `;
 
-let Username = styled.p`
+export let Username = styled.p`
   height: 1.5rem;
   display: flex;
   align-items: flex-end;
-  width: 11vw;
+width:100%;
   overflow: hidden;
-  font-size: 10px;
+  font-size: 15px;
   text-align: left;
-  border-top: 1px solid rgb(88, 88, 88, 0.5);
+  border-bottom: 1px solid rgb(252, 219, 166);
+  &:hover{
+    border-bottom: 1px solid rgb(88,88,88);
+  };
+
 `;
-let Picture = styled.img`
+export let Picture = styled.img`
   border-radius: 50%;
   height: 30px;
   width: 30px;

@@ -5,11 +5,12 @@ import line from '../../Assets/Gather_Dotted_Line.png'
 let Container = styled.section`
 display:flex;
 justify-content:center;
+z-index:0;
 `
 let Line = styled.img`
-height:4.5vh;
+height:4.2vh;
 position:absolute;
-margin-left:4rem;
+margin-left:4.5rem;
 margin-top:-0.9rem;
 transform:rotate(189deg);
 `
@@ -17,9 +18,10 @@ let PostRow= styled.div`
 display:flex;
 justify-content:flex-start;
 align-items:flex-end;
+
 `
 let PostContainer = styled.section`
-  max-height: 60vh;
+
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -49,6 +51,7 @@ let PostBody = styled.div`
 
 let PostContent = styled.p`
   display: flex;
+  padding-bottom:5px;
   justify-content: flex-start;
 text-align:left;
   background-color: white;
@@ -56,8 +59,12 @@ text-align:left;
   margin-left: 10%;
   font-family:'Nunito Light';
 `;
+let CreationDate = styled(PostContent)`
+font-size:8px;
+padding:0px;
+`
 let PostUser = styled.img`
-
+cursor:pointer;
   border:1px solid rgb(88,88,88,0.5);
   border-radius:50%;
   margin:5px;
@@ -66,7 +73,8 @@ let PostUser = styled.img`
 let PostPicture = styled.img`
   background-color: white;
   width:90%;
-`;
+
+  `;
 let UserName = styled.p`
 
   font-family: "Nunito SemiBold";
@@ -81,12 +89,14 @@ height:25px;
 border:1px solid rgb(88,88,88,0.5);
 border-radius:50%;
 margin:5px;
+cursor:pointer;
 `
 let GroupName = styled(UserName)`
 font-family:'Nunito Light';
 font-size:10px;
 margin-right:-10px;
 margin-bottom:-1px;
+white-space:nowrap;
 
 `
 const Posts = (props) => {
@@ -94,10 +104,10 @@ const Posts = (props) => {
 
 const push = useHistory().push
   const { post } = props;
-  console.log(post)
-  let userUrl = post.user_picture_public_id?`https://res.cloudinary.com/glassinthegrass/image/upload/w_50,h_50,r_max,c_fill,g_auto,f_auto/${post.user_picture_version}/${post.user_picture_public_id}`:'';
-  let groupUrl = props.group_picture_public_id?`https://res.cloudinary.com/glassinthegrass/image/upload/w_25,h_25,r_max,c_fill_pad,g_auto,f_auto/${props?.group_picture_version}/${props?.group_picture_public_id}`:'';
-  let postUrl = post.post_picture_public_id ? `https://res.cloudinary.com/glassinthegrass/image/upload/w_300,h_300,c_fill_pad,g_auto,f_auto/${post?.post_picture_version}/${post?.post_picture_public_id}`:'';
+
+  let userUrl = post.user_picture_public_id?`https://res.cloudinary.com/glassinthegrass/image/upload/w_50,h_50,r_max,c_fill,g_face,f_png/${post.user_picture_version}/${post.user_picture_public_id}`:'';
+  let groupUrl = props.group_picture_public_id?`https://res.cloudinary.com/glassinthegrass/image/upload/w_25,h_25,r_max,c_fill,g_auto,f_png/${props?.group_picture_version}/${props?.group_picture_public_id}`:'';
+  let postUrl = post.post_picture_public_id ? `https://res.cloudinary.com/glassinthegrass/image/upload/w_300,h_300,c_fill_pad,g_auto,f_jpg/${post?.post_picture_version}/${post?.post_picture_public_id}`:'';
   let postPicture = post.post_picture_version ? (
     <PostPicture src={postUrl} alt="postPic" />
   ) : (
@@ -126,6 +136,9 @@ const pathway = ()=>{
       <PostBody>
         <PostContent>{post?.post_content}</PostContent>
         {postPicture}
+      <CreationDate>
+        {post?.creation_date}
+        </CreationDate>
       </PostBody>
     </PostContainer>
     </Container>

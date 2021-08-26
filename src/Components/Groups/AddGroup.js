@@ -4,7 +4,32 @@ import { connect } from "react-redux";
 
 import styled from "styled-components";
 import GroupCard from "./GroupCard";
+let Submit = styled.div`
+width: 18rem;
+height:2rem;
+  border: 1px solid rgb(88, 88, 88, 0.5);
+  font-size: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin:5px;
+  margin-left:-1px;
+  font-family: "Nunito Light";
 
+  box-shadow: 10px 0px 13px -12px #897b7b, 0px 7px 13px -7px #000000;
+  background-color: rgb(252, 219, 166);
+  &:hover {
+    background-color: rgb(88,88,88);
+  color:rgb(252, 142, 52);
+  };
+  &:active{
+    background-color:rgb(252,142,52,0.7);
+    color:rgb(88,88,88);
+  };
+  @media(max-width:600px){
+    width:80%;
+  }
+`;
 let Column = styled.div`
   display: flex;
   flex-direction: column;
@@ -31,7 +56,7 @@ let Input = styled.input`
 
 let Container = styled.section`
   width: 100vw;
-  min-height: 90vh;
+  min-height: 95vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -52,11 +77,22 @@ let Box = styled.div`
 `;
 
 let PreviewImage = styled.img`
-  min-height: 5vh;
+  min-height: 10vh;
+  min-width:35vw;
   max-height:25vh;
+  margin:1rem;
   padding: 10px;
   border: 1px dotted rgb(88, 88, 88);
   border-radius: 10px 10px 10px 10px;
+
+  &:hover {
+    background-color: rgb(88,88,88);
+  color:rgb(252, 142, 52);
+  };
+  &:active{
+    background-color:rgb(252,142,52,0.7);
+    color:rgb(88,88,88);
+  };
 `;
 
 let HiddenInput = styled.input`
@@ -70,7 +106,7 @@ let HiddenInput = styled.input`
 
 const AddGroup = (props) => {
   const [image, setImage] = useState([]);
-  const [imgPreview, setImgPreview] = useState([]);
+  const [imgPreview, setImgPreview] = useState(null);
   const [group_name, setGroup_Name] = useState("");
   const [subject, setSubject] = useState("");
   const [search, setSearch] = useState([]);
@@ -78,8 +114,13 @@ const AddGroup = (props) => {
 
 
   const handleImage = (img) => {
-    setImage(img[0]);
-    setImgPreview(URL.createObjectURL(img[0]));
+    if(img[0]){
+      setImage(img[0]);
+      setImgPreview(URL.createObjectURL(img[0]));
+    }else{
+      setImage(img[0])
+      setImgPreview(null)
+    }
   };
   const handleGroupNameInput = (groupName) => {
     setGroup_Name(groupName);
@@ -115,8 +156,8 @@ const AddGroup = (props) => {
       .catch((err) => console.log(err));
   };
   let submit =
-    search.length === 0 && group_name.length >= 3 ? (
-      <div onClick={() => handleGroupSubmit()}>Click to Submit!</div>
+    search.length === 0 && group_name.length >= 3 && imgPreview !== null ? (
+      <Submit onClick={() => handleGroupSubmit()}>Click to Submit!</Submit>
     ) : (
       <></>
     );
@@ -137,7 +178,7 @@ const AddGroup = (props) => {
           type="file"
           id="single"
         />
-        <Label htmlFor="single">Select a Group Cover Photo
+        <Label htmlFor="single">
         <PreviewImage src={imgPreview} alt="" />
         </Label>
       </Column>

@@ -1,32 +1,6 @@
 import React from 'react';
-import styled from 'styled-components';
-let Container = styled.section`
-  display: flex;
-  justify-content: flex-start;
-  font-family: "Nunito SemiBold";
-  align-items: center;
-  padding: 2px;
-`;
-let UserContainer = styled.div`
-  display: flex;
-  padding-left:3px;
-`;
+import {Container,UserContainer,Username,Picture} from './MappedSingleGroupUsers'
 
-let Username = styled.p`
-  height: 1.5rem;
-  display: flex;
-  align-items: flex-end;
-  width: 11vw;
-  overflow: hidden;
-  font-size: 10px;
-  text-align: left;
-  border-top: 1px solid rgb(88, 88, 88, 0.5);
-`;
-let Picture = styled.img`
-  border-radius: 50%;
-max-height:10px;
-  box-shadow: 10px 0px 13px -7px #897b7b, 0px 7px 13px -7px #000000;
-`;
 
 
 const MappedSingleGroupPeople=(props)=>{

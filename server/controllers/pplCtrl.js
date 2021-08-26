@@ -1,5 +1,10 @@
 const cloudinary = require("cloudinary").v2;
-
+const today = new Date();
+const mmddyyyy = String(
+  `${String(today.getMonth() + 1).padStart(2, "0")}-${String(
+    today.getDate()
+  ).padStart(2, "0")}-${String(today.getYear() + 1900)}`
+);
 module.exports = {
   getPeople: async (req, res) => {
     const db = req.app.get("db");
@@ -27,7 +32,7 @@ module.exports = {
   createPerson: async (req, res) => {
     const db = req.app.get("db");
     const { path } = req.files.image;
-    const { first_name,last_name,birthday,message,creator } = req.query;
+    const { first_name, last_name, birthday, message, creator } = req.query;
 
     try {
       const [newPerson] = await db.people.create_person(
@@ -35,9 +40,9 @@ module.exports = {
         last_name,
         birthday,
         message,
-        creator
+        creator,
+        mmddyyyy
       );
-
 
       cloudinary.uploader.upload(
         path,
@@ -54,7 +59,7 @@ module.exports = {
         },
         function (error, result) {
           if (result) {
-            console.log(result)
+            console.log(result);
             const { eager } = result;
             const profile_picture_url = eager[0].url;
             const picture_public_id = result.public_id;
@@ -98,7 +103,6 @@ module.exports = {
         message
       );
 
-
       return res.status(200).send([person, updatedPerson].flat());
     } catch (err) {
       console.log(err);
@@ -107,16 +111,16 @@ module.exports = {
   },
   deletePerson: async (req, res) => {
     const db = req.app.get("db");
-    const { person_id } = req.params;
+    const { person_id, user_id } = req.query;
+    console.log(person_id, user_id);
     try {
       const [person] = await db.people.get_person(person_id);
-      if (!person?.person_id) {
+      if (!person) {
         return res.status(404).send({ message: "user doesn't exist" });
       } else {
         await db.people.delete_person(person_id);
-        return res
-          .status(200)
-          .send({ message: "Person Successfully Deleted!" });
+        let people = await db.people.get_all_people(user_id);
+        return res.status(200).send(people);
       }
     } catch (err) {
       return res.status(404).send(err);
@@ -146,5 +150,4 @@ module.exports = {
       return res.status(404).send("err" + err);
     }
   },
-
 };

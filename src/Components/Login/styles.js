@@ -5,8 +5,8 @@ export const Window = styled.div`
   justify-content: center;
   align-items: center;
   align-content: center;
-  min-height: 90vh;
-  min-width:80%;
+  min-height: 95vh;
+  width:100vw;
   font-family:'Nunito Black';
   z-index:1;
 `;
@@ -52,6 +52,7 @@ export const Submit = styled.h1`
   border: 1px solid rgb(88, 88, 88);
   box-shadow: 10px 0px 13px -7px #897b7b, 0px 7px 13px -7px #000000;
   z-index:1;
+  cursor:pointer;
   &:hover {
     background-color: rgb(88,88,88);
 color:rgb(252, 142, 52, 0.792);
@@ -79,7 +80,7 @@ export const LoginToggle = styled.div`
   font-family:'Nunito Light';
   font-size:20px;
   box-shadow: 10px 0px 13px -12px #897b7b, 0px 7px 13px -7px #000000;
-
+cursor:pointer;
   &:hover {
     background-color: rgb(88,88,88);
 color:rgb(252, 142, 52, 0.792);
@@ -109,11 +110,17 @@ position:absolute;
 z-index:0;
 margin-left:-15rem;
 margin-top:8rem;
+@media(max-width:500px){
+width:25rem;
+margin-left:-6rem;
+margin-top:1rem;
+}
 `
 export let Title = styled.h1`
 font-size:25px;
 color:rgb(88,88,88);
 padding:10px;
+z-index:1;
 margin:10px;
 text-shadow: -1px -1px 0 rgb(246,243,235), 1px -1px 0 rgb(246,243,235), -1px 1px 0 rgb(246,243,235), 1px 1px 0 rgb(246,243,235);
 `

@@ -74,7 +74,7 @@ app.get("/api/searchpeople", pplCtrl.personSearch);
 app.get("api/groupedpeople", pplCtrl.getPeopleGrouped);
 app.post("/api/people", pplCtrl.createPerson);
 app.put("/api/people/:person_id", pplCtrl.updatePerson);
-app.delete("/api/people/:person_id", pplCtrl.deletePerson);
+app.delete("/api/people", pplCtrl.deletePerson);
 
 //post
 app.get("/api/posts", postCtrl.getPosts);

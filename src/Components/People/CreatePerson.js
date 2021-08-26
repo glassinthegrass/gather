@@ -3,26 +3,29 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 let Container = styled.section`
-  max-height: 10rem;
   width: 100%;
   background-color: rgb(252, 219, 166);
   padding: 5px;
-  margin: 3px;
 `;
 let Row = styled.div`
   display: flex;
+  justify-content:center;
   align-items: flex-start;
   text-align: left;
-  justify-content: space-between;
+  width:100%;
+
 `;
 let Column = styled.div`
   display: flex;
   flex-direction: column;
 `;
 let TextInput = styled.input`
-  width: 15vw;
+  width:70%;
   font-family: "Nunito Light";
+  padding:3px;
+
 `;
+
 let Title = styled.h6`
   font-family: "Nunito Light";
   font-size: 15px;
@@ -32,19 +35,40 @@ let Headline = styled.h1`
   font-family: "Nunito";
 `;
 let PreviewImage = styled.img`
-max-height: 4rem;
+max-height: 8rem;
 
 padding: 10px;
 border: 1px dotted rgb(88, 88, 88);
 border-radius: 10px 10px 10px 10px;
 `;
 let PreviewDiv = styled.div`
-height: 4rem;
-width: 5rem;
+height: 8rem;
+width: 4rem;
+display:flex;
+align-items:center;
 text-align: center;
 border: 1px dotted rgb(88, 88, 88);
 border-radius: 10px 10px 10px 10px;
-font-size: 10px;
+font-size: 18px;
+padding:10px;
+cursor:pointer;
+margin:5px;
+background-color:rgb(88,88,88,0.3);
+text-shadow: -0.5px 0 white, 0 0.5px white, 0.5px 0 white, 0 -0.5px white;
+&:hover{
+  border:3px solid rgb(88,88,88);
+  }
+  &:
+  &:hover #text{
+    color:rgb(88,88,88,0.7);
+  }
+  &:active{
+    border:3px solid rgb(88,88,88,0.1);
+    background-color:rgb(252,142,52,0.792);
+    color:white;
+  }
+
+
 `;
 let HiddenInput = styled.input`
   width: 0.1px;
@@ -69,15 +93,26 @@ let Submit = styled.div`
   padding: 5px;
   margin: 5px;
   font-family: "Nunito";
+  cursor: pointer;
 `;
+let FirstRow = styled.div`
+width:100%;
+display:flex;
+flex-direction:column;
+`
 const CreatePerson = (props) => {
   const [image, setImage] = useState([]);
   const [preview, setPreview] = useState(null);
   const [person, setPerson] = useState({});
 
   const handleImage = (img) => {
-    setImage(img[0]);
-    setPreview(URL.createObjectURL(img[0]));
+    if (img[0]) {
+      setImage(img[0]);
+      setPreview(URL.createObjectURL(img[0]));
+    } else {
+      setImage([]);
+      setPreview(null);
+    }
   };
 
   const handleSubmit = () => {
@@ -106,6 +141,7 @@ const CreatePerson = (props) => {
   return (
     <Container>
       <Column>
+
         <Headline>Add A Person</Headline>
         <Row>
           <HiddenInput
@@ -115,9 +151,9 @@ const CreatePerson = (props) => {
           />
           <Label htmlFor="single">{imgSwitch}</Label>
           <Column>
-            <Row>
+            <FirstRow>
               <Column>
-                <Title>Name</Title>
+                <Title>name</Title>
                 <Row>
                   <TextInput
                     onChange={(e) =>
@@ -134,7 +170,7 @@ const CreatePerson = (props) => {
                 </Row>
               </Column>
               <Column>
-                <Title>Birthday</Title>
+                <Title>birthday</Title>
                 <TextInput
                   type="date"
                   onChange={(e) =>
@@ -144,15 +180,15 @@ const CreatePerson = (props) => {
                 ></TextInput>
               </Column>
               <Column>
-                <Title>Info</Title>
+                <Title>interest</Title>
                 <TextInput
                   onChange={(e) =>
                     setPerson({ ...person, message: e.target.value })
                   }
-                  placeholder="Write Anything"
+                  placeholder="What do they like?"
                 ></TextInput>
               </Column>
-            </Row>
+            </FirstRow>
             <Row>
               <div></div>
               <Submit onClick={() => handleSubmit()}>Submit</Submit>

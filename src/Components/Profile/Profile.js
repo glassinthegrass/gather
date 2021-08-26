@@ -9,15 +9,16 @@ import UserProfile from "./UserProfile";
 import Groups from "../Profile/Groups";
 
 let Container = styled.section`
-  width: 100vw;
-  min-height: 90vh;
+width:100vw;
+  min-height: 95vh;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+
 `;
 let PostToggle = styled.h1`
   border: 1px solid rgb(88, 88, 88, 0.5);
-  width: 50vw;
+  width: 50%;
   height: 30px;
   font-size: 8px;
   background-color: rgb(252, 219, 166);
@@ -26,6 +27,7 @@ let PostToggle = styled.h1`
   align-items: center;
   font-family: "Nunito Light";
   font-size: 20px;
+  z-index:1;
   box-shadow: 10px 0px 13px -12px #897b7b, 0px 7px 13px -7px #000000;
   &:hover {
     background-color: rgb(88, 88, 88);
@@ -39,26 +41,30 @@ let PostToggle = styled.h1`
 
 let Row = styled.div`
   display: flex;
+  width:100%;
+  z-index:1;
 `;
 let Spacer = styled.div`
   width: 100%;
   height: 2rem;
+  z-index:1;
 `;
 let ProfileContainer = styled.div`
   display: flex;
   flex-direction: column;
+width:100%;
+
 `;
 let PostsOrGroups = styled.section`
-  width: 100%;
-  min-height: 14vh;
+width:100%;
+  min-height: 15vh;
   background-color: rgb(88, 88, 88, 0.5);
   padding-top: 5vh;
 `;
 const Profile = (props) => {
   let loggedInUser = props.user;
 
-  const history = useHistory(),
-    { push } = history;
+  const push = useHistory().push
   const { user_id } = props.match.params;
   const [user, setUser] = useState({});
   const [posts, setPosts] = useState([]);
@@ -127,19 +133,21 @@ const Profile = (props) => {
 
   return (
     <Container>
-      <Spacer></Spacer>
+
       <Spacer></Spacer>
       <ProfileContainer>
+ 
         <UserProfile
         handleEmailSubmit={handleEmailSubmit}
           handleSubmit={handleProfileSubmit}
           profilePicture={profilePicture}
           loggedInUser={props.user}
+          push={push}
           user={user}
         />
       </ProfileContainer>
       <Spacer></Spacer>
-      <Spacer></Spacer>
+
       <Row>
         <PostToggle onClick={togglePosts}>Posts</PostToggle>
         <PostToggle onClick={toggleGroups}>Groups</PostToggle>
