@@ -1,9 +1,9 @@
 const nodemailer = require("nodemailer");
-const { EMAIL, ENTRY_KEY} = process.env;
+const { EMAIL, ENTRY_KEY } = process.env;
 
 module.exports = {
   sendEmail: async (req, res) => {
-    const { first_name, email } = req.body;
+    const { first_name, email } = req.query;
 
     try {
       //invoke the createTransport function passing in your email information.
@@ -18,11 +18,11 @@ module.exports = {
       //invoke the sendMail function with the info in the email
       let info = await transporter.sendMail(
         {
-          from: `'Jared Andersen 🥳🎈🎁' <${EMAIL}>`, //This will show up when you go into the email
+          from: `'Gather 🥳🎈🎁' <${EMAIL}>`, //This will show up when you go into the email
           to: email,
           subject: `${first_name} You've been registered to Gather!`, //This will show on the subject of the email
-          text: 'thanks for joining gather!', //for clients with plaintext support only
-          html: `<div>${'Thanks for joining gather!'}<div> 
+          text: "thanks for joining gather!", //for clients with plaintext support only
+          html: `<div>${"Thanks for joining gather!"}<div> 
                   <img src="cid:unique@nodemailer.com"/>`,
           attachments: [
             {

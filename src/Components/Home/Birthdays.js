@@ -29,6 +29,7 @@ const Birthdays = (props) => {
   const push = useHistory().push;
   const [personUrl, setPersonUrl] = useState("");
   const { birthday } = props;
+
   useEffect(() => {
     if (birthday?.person_picture_public_id) {
       setPersonUrl(

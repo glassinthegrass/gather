@@ -1,9 +1,17 @@
+const today = new Date();
+const mmddyyyy = String(
+  `${String(today.getMonth() + 1).padStart(2, "0")}-${String(
+    today.getDate()
+  ).padStart(2, "0")}-${String(today.getYear() + 1900)}`
+);
+
 module.exports = {
   getPosts: async (req, res) => {
     const db = req.app.get("db");
-    const { user_id } = req.query;
+    const { user_id,offset } = req.query;
+
     try {
-      const posts = await db.posts.get_post_by_user_id(user_id);
+      const posts = await db.posts.get_post_by_user_id(user_id,offset);
       res.status(200).send(posts);
     } catch (err) {
       res.status(404).send(err);
@@ -11,9 +19,10 @@ module.exports = {
   },
   getPostsByJoinedGroups: async (req, res) => {
     const db = req.app.get("db");
-    const { user_id } = req.query;
+    const { user_id,offset } = req.query;
+
     try {
-      const posts = await db.posts.get_posts_by_joined_group(user_id);
+      const posts = await db.posts.get_posts_by_joined_group(user_id,offset);
       return res.status(200).send(posts);
     } catch (err) {
       console.log(err);
@@ -68,10 +77,54 @@ module.exports = {
   getPostsByPersonId: async (req, res) => {
     const db = req.app.get("db");
     const { person_id } = req.query;
-    console.log(person_id)
+
     try {
       const posts = await db.posts.get_posts_by_person_id(person_id);
       return res.status(200).send(posts);
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  getPostByPostId: async (req, res) => {
+    const db = req.app.get("db");
+    const { post_id } = req.params;
+    try {
+      const [post] = await db.posts.get_post_by_post_id(post_id);
+      return res.status(200).send(post);
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  createPostComment: async (req, res) => {
+    const db = req.app.get("db");
+    const { post_id, user_id, content } = req.query;
+
+    try {
+      const [comment] = await db.posts.create_post_comment(
+        content,
+        "",
+        mmddyyyy
+      );
+      await db.posts.create_comment_post_user(
+        comment.comment_id,
+        post_id,
+        user_id
+        );
+        const [newComment] = await db.posts.get_new_comment(comment.comment_id);
+        console.log(newComment)
+      return res.status(200).send(newComment);
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  getCommentsByPost: async (req, res) => {
+    const db = req.app.get("db");
+    const { post_id } = req.params;
+
+    try {
+      const comments = await db.posts.get_comments_by_post_id(post_id);
+      console.log(comments)
+      return res.status(200).send(comments);
     } catch (err) {
       console.log(err);
     }

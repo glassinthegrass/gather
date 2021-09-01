@@ -14,13 +14,38 @@ let GroupsContainer = styled.section`
   border-radius: 10px;
   background-color: rgb(88, 88, 88,0.1);
 cursor:pointer;
+&:hover {
+background-color:rgb(88,88,88,0.5);
+  color:rgb(252, 142, 52, 0.792);
+}
+&:hover .groupname {
+  color:rgb(88,88,88);
+  border:2px solid rgb(88,88,88,0.3);
+}
+&:active {
+  background-color: rgb(252, 142, 52, 0.792);
+  color: rgb(88, 88, 88);
+}
+&:active .groupname{
+    background-color: white;
+  color:rgb(252, 142, 52, 0.792);
+}
 
   `;
 let GroupName = styled.h6`
   color: rgb(88, 88, 88);
   width: 5rem;
   overflow: hidden;
+  border-radius:50px;
+  padding:1px;
+  border:2px solid rgb(252,219,165);
 `;
+let GroupImage = styled.img`
+border-radius:50%;
+padding:1px;
+border:2px solid rgb(252, 219, 165);
+`
+
 const Groups = (props) => {
   const history = useHistory();
   const { push } = history;
@@ -35,8 +60,8 @@ const Groups = (props) => {
   return (
     <GroupsContainer>
       <div onClick={() => push(`/groups/${group_name}`)}>
-        <img src={url} alt={"group"} />
-        <GroupName>{group_name}</GroupName>
+        <GroupImage className='groupname' src={url} alt={"group"} />
+        <GroupName className='groupname'>{group_name}</GroupName>
       </div>
     </GroupsContainer>
   );

@@ -50,10 +50,13 @@ let Edit = styled.p`
 
 const People = (props) => {
   const [toggle, setToggle] = useState(false);
-
   const push = useHistory().push;
   const [people, setPeople] = useState([]);
+  const [loading,setLoading]=useState(false);
   const { user_id, isLoggedIn } = props.user;
+  
+
+
   useEffect(() => {
     axios
       .get(`/api/people?user_id=${user_id}`)
@@ -69,10 +72,28 @@ const People = (props) => {
       .then((res) => setPeople(res.data))
       .catch((err) => console.log(err));
   };
+
+  
+  const handleAddPerson = (persons) => {
+    setPeople([...people,persons]);
+  };
+  useEffect(() => {
+    if (isLoggedIn === false) {
+      push("/");
+    }
+  }, [isLoggedIn, push]);
+const handleLoading=(newLoading)=>{
+  setLoading(newLoading)
+}
   let mappedPeople = people ? (
     people.map((person, i) => {
+      const personUrl =`https://res.cloudinary.com/glassinthegrass/image/upload/w_200,h_250,g_auto,c_fill,r_5,f_png/` +
+      person.picture_version +
+      "/" +
+      person.picture_public_id 
       return (
         <Person
+          personUrl={personUrl}
           toggle={toggle}
           handleDelete={handleDelete}
           user_id={user_id}
@@ -84,21 +105,13 @@ const People = (props) => {
   ) : (
     <></>
   );
-
-  const handleAddPerson = (persons) => {
-    setPeople(persons);
-  };
-  useEffect(() => {
-    if (isLoggedIn === false) {
-      push("/");
-    }
-  }, [isLoggedIn, push]);
+let editLoading = loading ? <></>:<Edit onClick={handleToggle}>edit people</Edit>
   return (
     <Container>
       <Directions></Directions>
       <PeopleContainer>
-        <CreatePerson creator={user_id} setPeople={handleAddPerson} />
-        <Edit onClick={handleToggle}>edit people</Edit>
+        <CreatePerson handleLoading={handleLoading} loading={loading} creator={user_id} setPeople={handleAddPerson} />
+        {editLoading}
         <PeopleColumn>{mappedPeople}</PeopleColumn>
       </PeopleContainer>
     </Container>

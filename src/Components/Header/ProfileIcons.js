@@ -4,7 +4,7 @@ import Profile from "../../Assets/Profile.png";
 import home from "../../Assets/home.png";
 import people from "../../Assets/people.png";
 import groups from "../../Assets/groups.png";
-import { HeaderIcons,Holding } from './styles';
+import { HeaderIcons,Holding,ProfileMenuBox } from './styles';
 const ProfileIcons =(props)=>{
     const {user_id,profileMenu}=props
     return<>
@@ -21,7 +21,7 @@ const ProfileIcons =(props)=>{
     <Link to={`/profile/${user_id}`}>
       <HeaderIcons src={Profile} alt="" />
     </Link>
-{profileMenu}
+<ProfileMenuBox>{profileMenu}</ProfileMenuBox>
     </Holding>
     </>
 }

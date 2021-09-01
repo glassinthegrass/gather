@@ -1,34 +1,36 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { connect } from "react-redux";
-
 import styled from "styled-components";
+import Loading from "../Loading";
 import GroupCard from "./GroupCard";
+
 let Submit = styled.div`
-width: 18rem;
-height:2rem;
+  width: 18rem;
+  height: 2rem;
   border: 1px solid rgb(88, 88, 88, 0.5);
   font-size: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin:5px;
-  margin-left:-1px;
+  margin: 5px;
+  margin-left: -1px;
   font-family: "Nunito Light";
 
   box-shadow: 10px 0px 13px -12px #897b7b, 0px 7px 13px -7px #000000;
   background-color: rgb(252, 219, 166);
   &:hover {
-    background-color: rgb(88,88,88);
-  color:rgb(252, 142, 52);
-  };
-  &:active{
-    background-color:rgb(252,142,52,0.7);
-    color:rgb(88,88,88);
-  };
-  @media(max-width:600px){
-    width:80%;
+    background-color: rgb(88, 88, 88);
+    color: rgb(252, 142, 52);
   }
+  &:active {
+    background-color: rgb(252, 142, 52, 0.7);
+    color: rgb(88, 88, 88);
+  }
+  @media (max-width: 600px) {
+    width: 80%;
+  }
+ 
 `;
 let Column = styled.div`
   display: flex;
@@ -37,15 +39,15 @@ let Column = styled.div`
 let PageHeader = styled.h1`
   font-size: 50px;
   font-family: "Nunito Black";
-  padding: 3rem;
+  padding: 2rem;
 `;
 let Header = styled.h6`
   font-family: "Nunito";
 `;
 let Label = styled.label`
   font-family: "Nunito";
-  display:flex;
-  flex-direction:column;
+  display: flex;
+  flex-direction: column;
 `;
 let Input = styled.input`
   padding: 5px;
@@ -56,11 +58,15 @@ let Input = styled.input`
 
 let Container = styled.section`
   width: 100vw;
-  min-height: 95vh;
+  min-height: 90vh;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  @media(max-width:500px){
+    justify-content:flex-start;
+
+      }
 `;
 let Box = styled.div`
   display: flex;
@@ -74,25 +80,55 @@ let Box = styled.div`
   background-color: rgb(252, 219, 166);
   border: 1px solid rbg(88, 88, 88);
   border-radius: 10px 10px 10px 10px;
+  @media(max-width:500px){
+    width:80%;
+background-color:rgb(252,219,166,0);
+  }
 `;
+let PreviewImage=styled.img`
 
-let PreviewImage = styled.img`
-  min-height: 10vh;
-  min-width:35vw;
-  max-height:25vh;
-  margin:1rem;
-  padding: 10px;
+min-height: 10vh;
+min-width: 35vw;
+max-height: 25vh;
+
+margin-top:2rem;
+border: 1px dotted rgb(88, 88, 88);
+border-radius: 10px 10px 10px 10px;
+
+&:hover {
+  background-color: rgb(88, 88, 88);
+  color: rgb(252, 142, 52);
+}
+&:active {
+  background-color: rgb(252, 142, 52, 0.7);
+  color: rgb(88, 88, 88);
+}
+@media(max-width:500px){
+max-height:40vh;
+max-width:95vw;
+    }
+`
+let PreviewDiv = styled.div`
+display:flex;
+justify-content:center;
+align-items:center;
+min-height: 30vh;
+width:18rem;
+margin-top:1.5rem;
   border: 1px dotted rgb(88, 88, 88);
   border-radius: 10px 10px 10px 10px;
-
   &:hover {
-    background-color: rgb(88,88,88);
-  color:rgb(252, 142, 52);
-  };
-  &:active{
-    background-color:rgb(252,142,52,0.7);
-    color:rgb(88,88,88);
-  };
+    background-color: rgb(88, 88, 88);
+    color: rgb(252, 142, 52);
+  }
+  &:active {
+    background-color: rgb(252, 142, 52, 0.7);
+    color: rgb(88, 88, 88);
+  }
+  @media(max-width:500px){
+width:100vw;
+      height:35vh;
+      }
 `;
 
 let HiddenInput = styled.input`
@@ -103,23 +139,27 @@ let HiddenInput = styled.input`
   position: absolute;
   z-index: -1;
 `;
+let LoadingBox = styled.div`
+width:5rem;
+height:5rem;
+`
 
 const AddGroup = (props) => {
   const [image, setImage] = useState([]);
   const [imgPreview, setImgPreview] = useState(null);
+  const [loadingToggle,setLoadingToggle]=useState(false)
   const [group_name, setGroup_Name] = useState("");
   const [subject, setSubject] = useState("");
   const [search, setSearch] = useState([]);
   const [newGroup, setNewGroup] = useState(null);
 
-
   const handleImage = (img) => {
-    if(img[0]){
+    if (img[0]) {
       setImage(img[0]);
       setImgPreview(URL.createObjectURL(img[0]));
-    }else{
-      setImage(img[0])
-      setImgPreview(null)
+    } else {
+      setImage(img[0]);
+      setImgPreview(null);
     }
   };
   const handleGroupNameInput = (groupName) => {
@@ -138,6 +178,7 @@ const AddGroup = (props) => {
   };
 
   const handleGroupSubmit = () => {
+    setLoadingToggle(true)
     let fileData = new FormData();
     fileData.append("image", image);
     let config = {
@@ -152,7 +193,10 @@ const AddGroup = (props) => {
         fileData,
         config
       )
-      .then((res) => setNewGroup(res.data))
+      .then((res) => {
+        setLoadingToggle(false);
+        setNewGroup(res.data)
+      })
       .catch((err) => console.log(err));
   };
   let submit =
@@ -164,7 +208,6 @@ const AddGroup = (props) => {
 
   let display = (
     <>
-      {console.log(newGroup)}
       <div>
         <Header>Group Subject</Header>
         <Input
@@ -179,12 +222,13 @@ const AddGroup = (props) => {
           id="single"
         />
         <Label htmlFor="single">
-        <PreviewImage src={imgPreview} alt="" />
+          {loadingToggle? <LoadingBox><Loading/></LoadingBox>: imgPreview?<PreviewImage src={imgPreview} alt=""/>:<PreviewDiv>Upload Hive Photo</PreviewDiv>}
         </Label>
       </Column>
       {submit}
     </>
   );
+
   let existingGroup = search[0]?.group_name ? (
     <>
       <Header>a hive by that name already exists</Header>
@@ -193,9 +237,11 @@ const AddGroup = (props) => {
   ) : (
     <>{display}</>
   );
-  let newGroupView = newGroup ? (<>
-<PageHeader>Hive Created</PageHeader>
-    <GroupCard group={newGroup} />
+  
+  let newGroupView = newGroup ? (
+    <>
+      <PageHeader>Hive Created</PageHeader>
+      <GroupCard group={newGroup} />
     </>
   ) : (
     <>

@@ -9,6 +9,8 @@ import SingleGroup from '../Components/Groups/SingleGroup'
 import AddGroup from '../Components/Groups/AddGroup'
 import People from '../Components/People/People'
 import Birthday from '../Components/People/Birthday'
+import PostPage from '../Components/Posts/PostPage'
+import Loading from '../Components/Loading'
 
 export default(
         <Switch>
@@ -17,10 +19,11 @@ export default(
             <Route path='/groups/:group_name' component={SingleGroup}/>
             <Route path='/add-new-group' component={AddGroup}/>
             <Route path='/all-groups' render={()=><Groups/>}/>
-            <Route path='/birthdays' component={Birthday}/>
             <Route path='/announcements/:announcement_id' component={Announcement}/>
             <Route path='/profile/uploads' component={UploadsProfile}/>
             <Route path='/profile/:user_id' component={Profile}/>
             <Route path ='/people' render={()=><People/>}/>
+            <Route path='/birthdays' component={Birthday}/>
+            <Route path='/posts/:group_name/:username/:post_id' component={PostPage}/>
         </Switch>
 )

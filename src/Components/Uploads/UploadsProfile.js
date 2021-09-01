@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Loading from "../Loading";
 import { connect } from "react-redux";
 import { getUser } from "../../redux/userReducer";
 import axios from "axios";
@@ -99,11 +100,16 @@ width:100%;
 height:100%;
   }
 `;
+let LoadingBox = styled.div`
+width:5rem;
+height:5rem;
+`
 
 const UploadsProfile = (props) => {
   const push = useHistory().push
   const { user_id } = props.user;
   const [response, setResponse] = useState(null);
+  const [loadingToggle,setLoadingToggle] =useState(false)
   const [preview, setPreview] = useState(null);
   const { getUser } = props;
   const [image,setImage]=useState([])
@@ -121,6 +127,7 @@ const UploadsProfile = (props) => {
 
     };
     const handlePhoto = ()=>{
+      setLoadingToggle(true);
       let fileData = new FormData();
       fileData.append("image",image);
 
@@ -134,7 +141,7 @@ const UploadsProfile = (props) => {
     .post(`/api/images/${user_id}`,fileData, config)
     .then(function (res) {
       setResponse(res.data);
-console.log(res.data)
+      setLoadingToggle(false)
     })
     .catch((err) => console.log(err));
     }
@@ -147,9 +154,11 @@ console.log(res.data)
   let picSwitch = preview ? (
     response?<Preview src={response} alt=''/>:<Preview src={preview} alt="" />
   ) : (
-    <PictureInput>SELECT PROFILE PHOTO</PictureInput>
+  <PictureInput>{loadingToggle ? <Loading/> :'SELECT PROFILE PHOTO'}</PictureInput>
   );
+
   let buttonSwitch = response?<><Submit onClick={()=>push(`/profile/${user_id}`)}>To Your Profile</Submit><Submit onClick={()=>push('/home')}>Home</Submit></>:<Submit onClick={()=>handlePhoto()}>Submit</Submit>
+let loadingSwitch  =loadingToggle ?<LoadingBox><Loading/></LoadingBox>:buttonSwitch
   return (
     <Containter>
 
@@ -163,7 +172,7 @@ console.log(res.data)
       <Label htmlFor="single">{picSwitch}</Label>
 
 
-{buttonSwitch}
+{loadingSwitch}
         </UploadContainer>
     </Containter>
 

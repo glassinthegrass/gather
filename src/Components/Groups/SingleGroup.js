@@ -6,6 +6,7 @@ import styled from "styled-components";
 import CreatePost from "./CreatePost";
 import SingleGroupUsers from "./SingleGroupUsers";
 import Posts from "./Posts";
+
 let Follow = styled.div`
   height: 2rem;
   width: 100%;
@@ -57,10 +58,14 @@ let GroupImage = styled.img`
     width: 250px;
     height: 250px;
   }
+
 `;
 let GroupName = styled.h1`
   font-family: "Nunito Black";
-  font-size: 70px;
+  font-size: 60px;
+  @media(min-width:800px){
+    font-size:70px;
+  }
   @media (max-width: 600px) {
     font-size: 45px;
   }
@@ -68,7 +73,7 @@ let GroupName = styled.h1`
 let PostContainer = styled.div`
   display: flex;
   align-items: center;
-  flex-direction: column-reverse;
+  flex-direction: column;
   padding-bottom: 3rem;
 `;
 
@@ -82,6 +87,28 @@ let GroupHeader = styled.header`
     width: 100%;
   }
 `;
+let AddPosts = styled.div`
+  height: 2rem;
+  width: 6rem;
+  font-size: 20px;
+  font-family: "Nunito Black";
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 30px 30px 30px 30px;
+  background-color: rgb(252, 219, 166);
+  box-shadow: 10px 0px 13px -12px #897b7b, 0px 7px 13px -7px #000000;
+  cursor: pointer;
+  &:hover {
+    background-color: rgb(88, 88, 88);
+    color: rgb(252, 142, 52, 0.792);
+  }
+  &:active {
+    background-color: rgb(252, 142, 52, 0.792);
+    color: rgb(88, 88, 88);
+  }
+`;
 
 const SingleGroup = (props) => {
   const history = useHistory(),
@@ -90,12 +117,14 @@ const SingleGroup = (props) => {
   const [posts, setPosts] = useState([]);
   const [people, setPeople] = useState([]);
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState(null);
   const [image, setImage] = useState([]);
   const [postContent, setPostContent] = useState("");
   const [member, setMember] = useState(false);
   const [groupUrl, setGroupUrl] = useState("");
   const { group_name } = props.match.params;
+  const [offset, setOffset] = useState(0);
   const { isLoggedIn, user_id } = props.user;
   const { picture_version, picture_public_id } = group;
 
@@ -111,6 +140,13 @@ const SingleGroup = (props) => {
       .catch((err) => console.log(err));
   }, [group_name]);
 
+  const handleGetMorePosts = () => {
+    setOffset(offset + 10);
+    axios
+      .get(`/api/group-posts?group_name=${group_name}&offset=${offset}`)
+      .then((res) => setPosts([res.data, ...posts].flat()))
+      .catch((err) => console.log(err));
+  };
   let imageCall = useCallback(() => {
     setGroupUrl(
       `https://res.cloudinary.com/glassinthegrass/image/upload/w_400,h_400,c_fill_pad,g_auto,f_auto/${picture_version}/${picture_public_id}`
@@ -138,7 +174,7 @@ const SingleGroup = (props) => {
   }, [group?.group_id, user_id]);
 
   const handleAddPost = (post) => {
-    setPosts([...posts, post]);
+    setPosts([post, ...posts]);
   };
 
   const handleAdd = (group_id, person_id) => {
@@ -151,11 +187,11 @@ const SingleGroup = (props) => {
   };
 
   let mappedPosts = posts.map((post, i) => {
-    console.log(post)
     return (
       <Posts
         key={i}
         post={post}
+        loggedInUser={user_id}
         group_name={group_name}
         group_picture_public_id={picture_public_id}
         group_picture_version={picture_version}
@@ -175,7 +211,9 @@ const SingleGroup = (props) => {
       setPreview(null);
     }
   };
+
   const handleSubmit = () => {
+    setLoading(true);
     let fileData = new FormData();
     fileData.append("image", image);
 
@@ -191,8 +229,14 @@ const SingleGroup = (props) => {
         fileData,
         config
       )
-      .then((res) => handleAddPost(res.data))
-      .catch((err) => console.log(err));
+      .then((res) => {
+        handleAddPost(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
+      });
 
     setPostContent("");
     setImage([]);
@@ -231,24 +275,29 @@ const SingleGroup = (props) => {
       <Container>
         {FollowUnfollow}
         <GroupHeader>
-          {group.creation_date}
           <GroupName>{group.group_name}</GroupName>
           <GroupImage src={groupUrl} alt="" />
         </GroupHeader>
-        <CreatePost
-          preview={preview}
-          postContent={postContent}
-          handlePostContent={handleContent}
-          handleImage={handleImage}
-          handleSubmit={handleSubmit}
-          user={props.user}
-          group={group}
-          posts={posts}
-        />
         <div>
+          <CreatePost
+            loading={loading}
+            preview={preview}
+            postContent={postContent}
+            handlePostContent={handleContent}
+            handleImage={handleImage}
+            handleSubmit={handleSubmit}
+            user={props.user}
+            group={group}
+            posts={posts}
+          />
           <Spacer></Spacer>
         </div>
         <PostContainer>{mappedPosts}</PostContainer>
+        {posts.length % 10 === 0 ? (
+          <AddPosts onClick={() => handleGetMorePosts()}>More</AddPosts>
+        ) : (
+          <AddPosts>All Done</AddPosts>
+        )}
       </Container>
 
       <SingleGroupUsers
@@ -257,8 +306,6 @@ const SingleGroup = (props) => {
         users={users}
         people={people}
       />
-
-      {console.log(member)}
     </>
   );
 };

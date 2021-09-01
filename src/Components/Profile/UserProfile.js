@@ -1,6 +1,8 @@
+
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import bee from "../../Assets/Gather_Line_with_Bee.png";
+import Loading from "../Loading";
 let Bee = styled.img`
   max-height: 35vh;
   position: absolute;
@@ -148,6 +150,13 @@ display:flex;
     color: rgb(88, 88, 88);
   }
 `;
+let LoadingContainer = styled.div`
+width: 150px;
+height: 150px;
+display:flex;
+justify-content:center;
+align-items:center;
+`
 const UserProfile = (props) => {
   const [editToggle, setEditToggle] = useState(false);
   const [showDisplay, setShowDisplay] = useState("none");
@@ -162,9 +171,11 @@ const UserProfile = (props) => {
     newEmail: "",
     password: "",
   });
+  
+  const { profilePicture, user, loggedInUser } = props;
+  const { birthday, creation_date, email, first_name, last_name, } = user;
 
-  const { profilePicture, user, loggedInUser,push } = props;
-  const { birthday, creation_date, email, first_name, last_name } = user;
+  
 
   useEffect(() => {
     if (user.user_id !== loggedInUser.user_id) {
@@ -188,14 +199,15 @@ const UserProfile = (props) => {
       <EditContainer><ProfileEdit onClick={handleEditToggle}>edit</ProfileEdit></EditContainer>
     ) : (
       <></>
-    );
-    let editPicture = editToggle ? <PictureInput onClick={()=>props.push('/profile/uploads')}>change your profile picture</PictureInput>:<ImageContainer src={profilePicture} alt={first_name} />
-  let returnProile = (
+      );
+      let editPicture = editToggle ? <PictureInput onClick={()=>props.push('/profile/uploads')}>change your profile picture</PictureInput>:<ImageContainer src={profilePicture} alt={first_name} />
+      let loadingToggleDisplay = props.loadingToggle ? <LoadingContainer><Loading/></LoadingContainer> :editPicture
+  let returnProile = user?.user_id?(
     <ProfileContainer>
       <ProfileRow>
         <div>
           <ProfileTitle>profile picture</ProfileTitle>
-          {editPicture}
+        {loadingToggleDisplay}
         </div>
 
         <TextContainer>
@@ -267,7 +279,7 @@ const UserProfile = (props) => {
 
       {edit}
     </ProfileContainer>
-  );
+  ):(<></>)
 
   return (
     <Container>

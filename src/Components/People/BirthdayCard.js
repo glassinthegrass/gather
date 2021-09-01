@@ -34,7 +34,10 @@ let GroupPicture = styled.img`
   height: 20px;
   width: 20px;
 `;
-let PersonPicture = styled.img``;
+let PersonPicture = styled.img`
+width:400px;
+height:250px;
+`;
 
 const BirthdayCard = (props) => {
   const { birthdays, idx } = props;

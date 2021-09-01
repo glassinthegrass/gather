@@ -31,15 +31,16 @@ height:2rem;
 padding:1rem;
 display:flex;
 justify-content:space-around;
-background-color:rgb(252, 142, 52);
+
 z-index:3;
+background-color: rgb(242, 145, 50);
 @media(min-width:601px){
   display:none;
 }
 `
 const App = (props) => {
   const { user, logoutUser } = props;
-  const{picture_public_id,picture_version}=user;
+  const{picture_public_id,picture_version,isLoggedIn}=user;
   const [menuToggle, setMenuToggle] = useState(false);
   const [darkToggle, setDarkToggle] = useState(false);
   const [profilePicture, setProfilePicture] = useState("");
@@ -65,30 +66,31 @@ const App = (props) => {
     <></>
   );
 
+const bottomHeaderSwitch=isLoggedIn?(<BottomHeader><ProfileIcons user_id={user.user_id} profileMenu={<ProfileMenuMover><ProfileMenu url={profilePicture} logout={props.logoutUser} push={push} darkToggle={darkToggle} handleDarkToggle={handleDarkToggle} user_id={user.user_id} /></ProfileMenuMover>}/></BottomHeader>):(<></>)
   const mainView = (
     <>
-      <Header id='top'
-      profileMenu={<ProfileMenu url={profilePicture} logout={props.logoutUser} push={push} darkToggle={darkToggle} handleDarkToggle={handleDarkToggle} user_id={user.user_id} />}
-      profilePicture={profilePicture}
-        logout={logoutUser}
-        darkToggle={darkToggle}
-        handleDarkToggle={handleDarkToggle}
-        push={push}
-        handleMenuToggle={handleMenuToggle}
-        user={user}
-      />
+<Header id='top'
+  profileMenu={<ProfileMenu url={profilePicture} logout={props.logoutUser} push={push} darkToggle={darkToggle} handleDarkToggle={handleDarkToggle} user_id={user.user_id} />}
+  profilePicture={profilePicture}
+    logout={logoutUser}
+    darkToggle={darkToggle}
+    handleDarkToggle={handleDarkToggle}
+    push={push}
+    handleMenuToggle={handleMenuToggle}
+    user={user}
+  />
       <MainHolder>
         {MainRoutes}
         {menuSwitch}
       </MainHolder>
-<BottomHeader><ProfileIcons user_id={user.user_id} profileMenu={<ProfileMenuMover><ProfileMenu url={profilePicture} logout={props.logoutUser} push={push} darkToggle={darkToggle} handleDarkToggle={handleDarkToggle} user_id={user.user_id} /></ProfileMenuMover>}/></BottomHeader>
+{bottomHeaderSwitch}
     </>
   );
 
   const darkMode = darkToggle ? <DarkMode>{mainView}</DarkMode> : mainView;
 
   return <div className="App">{darkMode}</div>;
-};
+}
 const mapStateToProps = (reduxState) => {
   return reduxState.userReducer;
 };

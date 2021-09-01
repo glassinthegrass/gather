@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useHistory, Link } from "react-router-dom";
+import { useHistory} from "react-router-dom";
 import { connect } from "react-redux";
 import { loginUser, registerUser } from "../../redux/userReducer.js";
 
@@ -12,7 +12,8 @@ import {
   LoginToggle,
   RegisterToggle,
   Bee,
-  Title
+  Title,
+  Error
 } from "./styles.js";
 import bee from '../../Assets/Gather_Line_with_Bee.png'
 
@@ -21,6 +22,8 @@ import bee from '../../Assets/Gather_Line_with_Bee.png'
 const Login = (props) => {
   const [loginUser, setLoginUser] = useState("");
   const [newUser, setNewUser] = useState("");
+  const [loginErrorMessage, setLoginErrorMessage] = useState("");
+  const [registerErrorMessage, setRegisterErrorMessage] = useState("");
   const [toggle, setToggle] = useState({
     nullToggle: true,
     loginToggle: false,
@@ -28,15 +31,22 @@ const Login = (props) => {
   });
   const history = useHistory(),
       { push } = history;
-  const { user } = props;
-  const { pathname } = props.history.location.pathname;
+  const { user } = props,
+  {loginError,registerError,isLoggedIn}=user
 
+  const { pathname } = props.history.location.pathname;
+useEffect(()=>{
+  loginError?setLoginErrorMessage('Something Went Wrong. Please Try Again'):setLoginErrorMessage('');
+},[loginError]);
+useEffect(()=>{
+  registerError?setRegisterErrorMessage('Something Went Wrong. Please Try Again'):setRegisterErrorMessage('');
+},[registerError]);
 
   useEffect(() => {
-    if (user?.isLoggedIn) {
+    if (isLoggedIn===true) {
       push("/home");
     }
-  }, [user.isLoggedIn, pathname, push]);
+  }, [isLoggedIn, pathname, push]);
 
   const handleLogin = () => {
     props.loginUser(loginUser.email, loginUser.password);
@@ -50,7 +60,8 @@ const Login = (props) => {
       newUser.password
     );
   };
-
+ let loginErrorDisplay=loginError?<Error>{loginErrorMessage}</Error>:<></>
+ let registerErrorDisplay=registerError?<Error>{registerErrorMessage}</Error>:<></>
   let loginWindow = (
     <>
       <Input
@@ -65,6 +76,7 @@ const Login = (props) => {
         type="text"
         placeholder="Enter password"
       />
+{loginErrorDisplay}
       <Submit onClick={() => handleLogin()}>Submit</Submit>
     </>
   );
@@ -109,8 +121,9 @@ const Login = (props) => {
         type="text"
         placeholder="Please verify your password"
       />
+      {registerErrorDisplay}
       {props.user.isRegistered ? (
-        <Link to="/profile/uploads">Next</Link>
+<Submit onClick={()=>push("/profile/uploads")}>Next</Submit>
       ) : (
         <Submit onClick={() => handleRegister()}>Submit</Submit>
       )}
@@ -165,9 +178,9 @@ const Login = (props) => {
     <Window>
       <div>
         <p>A place for friends to...</p>
+        <Bee src={bee} alt=''/>
         <Box>
           <Title>Gather</Title>
-        <Bee src={bee} alt=''/>
           {windowToggle}
         </Box>
         <ToggleBox>
@@ -177,7 +190,7 @@ const Login = (props) => {
           </RegisterToggle>
         </ToggleBox>
       </div>
-
+{console.log(props)}
     </Window>
   );
 };

@@ -1,11 +1,14 @@
 import axios from "axios";
 import React, { useState } from "react";
 import styled from "styled-components";
+import Loading from "../Loading";
 
 let Container = styled.section`
-  width: 100%;
+width: 100%;
   background-color: rgb(252, 219, 166);
   padding: 5px;
+  display:flex;
+justify-content:center;
 `;
 let Row = styled.div`
   display: flex;
@@ -13,7 +16,6 @@ let Row = styled.div`
   align-items: flex-start;
   text-align: left;
   width:100%;
-
 `;
 let Column = styled.div`
   display: flex;
@@ -23,7 +25,6 @@ let TextInput = styled.input`
   width:70%;
   font-family: "Nunito Light";
   padding:3px;
-
 `;
 
 let Title = styled.h6`
@@ -100,6 +101,13 @@ width:100%;
 display:flex;
 flex-direction:column;
 `
+let LoadingBox = styled.div`
+display:flex;
+justify-content:center;
+align-items:center;
+height:4rem;
+width:4rem;
+`
 const CreatePerson = (props) => {
   const [image, setImage] = useState([]);
   const [preview, setPreview] = useState(null);
@@ -116,6 +124,7 @@ const CreatePerson = (props) => {
   };
 
   const handleSubmit = () => {
+    props.handleLoading(true)
     let fileData = new FormData();
     fileData.append("image", image);
     let config = {
@@ -130,72 +139,79 @@ const CreatePerson = (props) => {
         fileData,
         config
       )
-      .then((res) => props.setPeople(res.data))
+      .then((res) => {
+        props.setPeople(res.data);
+      props.handleLoading(false);
+      setImage([])
+      setPreview(null)
+      setPerson({})
+      })
       .catch((err) => console.log(err));
   };
-  let imgSwitch = preview ? (
+  let imgSwitch = preview? (
     <PreviewImage src={preview} alt="" />
   ) : (
     <PreviewDiv>Select A Photo</PreviewDiv>
   );
+  const loadingSwitch = props.loading ? <LoadingBox><Loading/></LoadingBox>:<Column>
+
+  <Headline>Add A Person</Headline>
+  <Row>
+    <HiddenInput
+      onChange={(e) => handleImage(e.target.files)}
+      type="file"
+      id="single"
+    />
+    <Label htmlFor="single">{imgSwitch}</Label>
+    <Column>
+      <FirstRow>
+        <Column>
+          <Title>name</Title>
+          <Row>
+            <TextInput
+              onChange={(e) =>
+                setPerson({ ...person, first_name: e.target.value })
+              }
+              placeholder="First Name"
+            ></TextInput>{" "}
+            <TextInput
+              onChange={(e) =>
+                setPerson({ ...person, last_name: e.target.value })
+              }
+              placeholder="Last Name"
+            ></TextInput>
+          </Row>
+        </Column>
+        <Column>
+          <Title>birthday</Title>
+          <TextInput
+            type="date"
+            onChange={(e) =>
+              setPerson({ ...person, birthday: e.target.value })
+            }
+            placeholder="MM-DD-YYYY"
+          ></TextInput>
+        </Column>
+        <Column>
+          <Title>interest</Title>
+          <TextInput
+            onChange={(e) =>
+              setPerson({ ...person, message: e.target.value })
+            }
+            placeholder="What do they like?"
+          ></TextInput>
+        </Column>
+      </FirstRow>
+      <Row>
+        <div></div>
+        <Submit onClick={() => handleSubmit()}>Submit</Submit>
+      </Row>
+    </Column>
+  </Row>
+</Column>; 
   return (
     <Container>
-      <Column>
-
-        <Headline>Add A Person</Headline>
-        <Row>
-          <HiddenInput
-            onChange={(e) => handleImage(e.target.files)}
-            type="file"
-            id="single"
-          />
-          <Label htmlFor="single">{imgSwitch}</Label>
-          <Column>
-            <FirstRow>
-              <Column>
-                <Title>name</Title>
-                <Row>
-                  <TextInput
-                    onChange={(e) =>
-                      setPerson({ ...person, first_name: e.target.value })
-                    }
-                    placeholder="First Name"
-                  ></TextInput>{" "}
-                  <TextInput
-                    onChange={(e) =>
-                      setPerson({ ...person, last_name: e.target.value })
-                    }
-                    placeholder="Last Name"
-                  ></TextInput>
-                </Row>
-              </Column>
-              <Column>
-                <Title>birthday</Title>
-                <TextInput
-                  type="date"
-                  onChange={(e) =>
-                    setPerson({ ...person, birthday: e.target.value })
-                  }
-                  placeholder="MM-DD-YYYY"
-                ></TextInput>
-              </Column>
-              <Column>
-                <Title>interest</Title>
-                <TextInput
-                  onChange={(e) =>
-                    setPerson({ ...person, message: e.target.value })
-                  }
-                  placeholder="What do they like?"
-                ></TextInput>
-              </Column>
-            </FirstRow>
-            <Row>
-              <div></div>
-              <Submit onClick={() => handleSubmit()}>Submit</Submit>
-            </Row>
-          </Column>
-        </Row>
-      </Column>
+      {loadingSwitch}
     </Container>
   );
 };

@@ -24,15 +24,16 @@ border:3px solid rgb(88,88,88,0.7);
 border-radius:25px 25px 25px 25px;
 background-color:rgb(252, 142, 52, 0.792);
 padding:10px;
-width:10rem;
-margin-top:10px;
+
 margin:10px;
+margin-left:20px;
+margin-right:20px;
 display:flex;
 justify-content:center;
 align-items:center;
 align-content:center;
-width:125px;
-height:125px;
+width:150px;
+height:150px;
 &:hover{
   border:3px solid rgb(88,88,88);
   }
@@ -47,18 +48,18 @@ height:125px;
   &:active #text{
     color:rgb(252,142,52,0.792);
   }
-  @media(max-width:599px){
-    width:170px;
-    height:170px;
+  @media(max-width:600px){
+    width:100px;
+    height:100px;
     font-size:10px;
-
-    margin-left:14px;
-    margin-right:14px;
+    margin-left:9px;
+    margin-right:9px;
   }
   @media(min-width:900px){
-    width:225px;
-    height:225px;
-    
+    width:200px;
+    height:200px;
+    margin-left:23px;
+    margin-right:23px;
   }
   `
 let AddGroupText = styled.h1`
@@ -67,15 +68,26 @@ justify-content:center;
 align-content:center;
 align-items:center;
 font-family:'Nunito Black';
-font-size:10em;
+font-size:14em;
 color:rgb(88,88,88,0.3);
-margin-top:-8px;
-margin-left:3px;
-width:100%;
-height:100%;
+margin-top:-5px;
+width:7rem;
+height:7rem;
 &:hover{
-  color:rgb(88,88,88,0.7)
+  color:rgb(88,88,88,0.7);
+  transform:scale(1.2);
   }
+  @media(min-width:900px){
+    width:10rem;
+    height:10rem;
+    font-size:18em;
+  }
+  @media(max-width:600px){
+    width:5rem;
+    height:5rem;
+    font-size:12em;
+  }
+
 `
 let Toggles = styled.div`
 border:1px solid rgb(88,88,88,0.5);
@@ -101,7 +113,7 @@ color:rgb(252, 142, 52, 0.792);
   background-color:rgb(252,142,52,0.792);
   color:rgb(88,88,88);
 };
-@media(max-width:599px){
+@media(max-width:600px){
   font-size:15px;
   font-family:'Nunito Semibold';
 }
@@ -137,10 +149,7 @@ z-index:1;
 `
 let MapWrapTwo = styled(MapWrap)`
 border:0px;
-
 align-items:flex-start;
-
-
 `
 const GroupsView = (props) => {
   const push =useHistory().push

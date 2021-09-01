@@ -18,6 +18,7 @@ const ProfileMenu =(props)=>{
     <ProfileLink onClick={()=>props.logout()}>
       Logout
     </ProfileLink>
+
   </Profile>
 }
 export default ProfileMenu

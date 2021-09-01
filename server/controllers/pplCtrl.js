@@ -71,6 +71,10 @@ module.exports = {
               picture_public_id,
               version
             );
+            newPerson.picture_public_id=picture_public_id
+            newPerson.picture_version=version
+            newPerson.profile_picture_url=profile_picture_url
+            return res.status(200).send(newPerson);
           }
           if (error) {
             console.log(error);
@@ -79,8 +83,6 @@ module.exports = {
         }
       );
 
-      const sentPerson = await db.people.get_all_people(creator);
-      return res.status(200).send(sentPerson);
     } catch (err) {
       console.log(err);
       return res.sendStatus(404);

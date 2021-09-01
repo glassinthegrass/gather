@@ -1,4 +1,10 @@
 const cloudinary = require("cloudinary").v2;
+const today = new Date();
+const mmddyyyy = String(
+  `${String(today.getMonth() + 1).padStart(2, "0")}-${String(
+    today.getDate()
+  ).padStart(2, "0")}-${String(today.getYear() + 1900)}`
+);
 
 module.exports = {
   uploadProfileImages: async (req, res) => {
@@ -18,8 +24,8 @@ module.exports = {
           fetch_format: "auto",
           width: 600,
           height: 600,
-          crop: "fill",
-          gravity: "face",
+          crop: "fill_pad",
+          gravity: "auto",
           quality: "auto",
         },
         use_filename: true,
@@ -54,7 +60,7 @@ module.exports = {
     if (req.files?.image) {
       try {
         const { path } = req.files.image;
-        const [post] = await db.posts.create_post(post_content, null);
+        const [post] = await db.posts.create_post(post_content, null, mmddyyyy);
 
         if (post) {
           await db.posts.create_person_user_post_entry(
@@ -91,29 +97,30 @@ module.exports = {
                 picture_version,
                 picture_public_id
               );
+              newPost.post_picture_version = picture_version;
+              newPost.post_picture_public_id = picture_public_id;
+              newPost.post_picture_url = url;
+              return res.status(200).send(newPost);
             }
             if (error) {
               console.log(error);
               return res.status(404);
             }
           }
-          
         );
-        const posts = await db.posts.get_posts_by_person_id(person_id)
-        return res.status(200).send(posts)
       } catch (err) {
         console.log(err);
       }
     } else {
       try {
-        let [post] = await db.posts.create_post(post_content, null);
+        let [post] = await db.posts.create_post(post_content, null,mmddyyyy);
         await db.posts.create_person_user_post_entry(
           person_id,
           user_id,
           post.post_id
         );
-        const posts = await db.posts.get_posts_by_person_id(person_id)
-        return res.status(200).send(posts)
+        const [newPost] = await db.posts.get_birthday_post(post.post_id);
+        return res.status(200).send(newPost);
       } catch (err) {
         console.log(err);
       }

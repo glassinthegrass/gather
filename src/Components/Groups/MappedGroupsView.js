@@ -5,10 +5,10 @@ import styled from "styled-components";
 let Container = styled.section`
   display: flex;
   justify-content: center;
-  width: 10rem; 
+  width: 13.5rem; 
   
-  @media(max-width:599px){
-    width:14rem;
+  @media(max-width:600px){
+    width:9rem;
   }
   @media(min-width:900px){
     width:17rem;
@@ -20,20 +20,20 @@ let GroupImage = styled.img`
   background-color: rgb(252, 142, 52, 0.792);
   padding: 10px;
   margin: 10px;
-  width: 125px;
-  height: 125px;
+  width: 150px;
+  height: 150px;
   cursor:pointer;
   &:hover {
     border: 3px solid rgb(88, 88, 88);
   }
-  @media(max-width:599px){
-    width:170px;
-    height:170px;
+  @media(max-width:600px){
+    width:100px;
+    height:100px;
 
   }
   @media(min-width:900px){
-    width:225px;
-    height:225px;
+    width:200px;
+    height:200px;
   }
 `;
 
@@ -42,13 +42,16 @@ position: absolute;
 margin-top: 3rem;
 z-index: 1;
 font-family: "Nunito Black";
+font-size:18px;
 color: rgb(247, 242, 234);
 text-shadow: -1.5px 0 black, 0 1.5px black, 1.5px 0 black, 0 -1.5px black;
 cursor:pointer;
 text-wrap:wrap;
 @media(max-width:600px){
-  font-size:20px;
-
+  font-size:14px;
+}
+@media(min-width:900px){
+  font-size:22px;
 }
 `;
 let Options = styled.div`
@@ -56,32 +59,28 @@ let Options = styled.div`
   position: absolute;
   z-index: 2;
 
-  margin-left: 90px;
+  margin-left: 110px;
+  margin-top: 5px;
   display:flex;
   flex-direction:column;
   align-items:center;
-  margin-top: 10px;
-  font-size: 20px;
+  justify-content:center;
+  font-size: 35px;
   color: rgb(252, 142, 52, 0.792);
   padding: 5px;
   text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   cursor:context-menu;
-  &: hover {
-    font-size: 25px;
-  }
 
-  @media(max-width:599px){
-font-size:30px;
-    margin-left:125px;
-    margin-top:10px;
-    &:hover{
-      font-size:40px;
-    }
-  }
+  @media(max-width:600px){
+    font-size:26px;
+margin-bottom:-10px;
+    margin-left:70px;
+
   @media(min-width:900px){
     margin-left:185px;
     margin-top:15px;
     font-size:30px;
+    
   }
 `;
 let OptionBox = styled.div`
@@ -96,6 +95,14 @@ let OptionBox = styled.div`
   font-size: 10px;
   background-color: rgb(88, 88, 88, 0.7);
   cursor:pointer;
+  
+  &:hover {
+    background-color: rgb(252, 219, 166);
+  }
+  &:active {
+    background-color: rgb(252, 142, 52, 0.792);
+    color: rgb(88, 88, 88);
+  }
 `;
 const MappedGroupsView = (props) => {
   const [toggle, setToggle] = useState(false);

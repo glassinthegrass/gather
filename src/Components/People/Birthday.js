@@ -64,6 +64,7 @@ margin-top:2rem;
 const Birthday = (props) => {
   const { isLoggedIn, user_id } = props.user;
   const [birthdays, setBirthdays] = useState([]);
+  const [loading,setLoading]=useState(false)
   const [posts, setPosts] = useState([]);
   const [idx, setIdx] = useState(0);
   const [image, setImage] = useState([]);
@@ -93,6 +94,7 @@ const push =useHistory().push
   }, [isLoggedIn, idx,birthdays]);
 
   const handleSubmit = () => {
+    setLoading(true)
     let fileData = new FormData();
     fileData.append("image", image);
     let config = {
@@ -107,7 +109,10 @@ const push =useHistory().push
         fileData,
         config
       )
-      .then((res) => setPosts(res.data))
+      .then((res) => {
+        setPosts([...posts,res.data])
+        setLoading(false)
+      })
       .catch((err) => console.log(err));
   };
   const handleContent = (content) => {
@@ -166,6 +171,7 @@ const push =useHistory().push
       <Arrow className='arrow' onClick={handleIncrease}>{'>'}</Arrow>
       </Row>
       <CreatePost
+      loading={loading}
         handleContent={handleContent}
         handleImage={handleImage}
         handleSubmit={handleSubmit}

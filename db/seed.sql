@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS comment_post_user;
+DROP TABLE IF EXISTS comment;
 DROP TABLE IF EXISTS paragraphs;
 DROP TABLE IF EXISTS groups_announcements_users;
 DROP TABLE IF EXISTS announcements;
@@ -149,6 +151,23 @@ CREATE TABLE paragraphs(
     FOREIGN KEY(announcement_id) REFERENCES announcements(announcement_id),
     paragraph_content text,
     creation_date DATE NOT NULL DEFAULT CURRENT_DATE
+);
+
+CREATE TABLE comment(
+    comment_id SERIAL PRIMARY KEY,
+    comment_content VARCHAR(500),
+    comment_url text,
+    creation_date text
+);
+
+CREATE TABLE comment_post_user(
+    cpu_id SERIAL PRIMARY KEY,
+    comment_id INT,
+    FOREIGN KEY(comment_id) REFERENCES comment(comment_id),
+    post_id INT,
+    FOREIGN KEY (post_id) REFERENCES post(post_id),
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
 INSERT INTO users(first_name,last_name,email,hash,username,picture_version,picture_public_id)

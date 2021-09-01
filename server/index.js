@@ -54,6 +54,7 @@ cloudinary.config({
 //views
 app.get("/api/home/:user_id", viewsCtrl.getHomeView);
 app.get("/api/group/:group_name", viewsCtrl.getGroupView);
+app.get('/api/group-posts',viewsCtrl.getGroupPosts)
 //cloudinary;
 app.post("/api/images/:user_id", cloudinaryCtrl.uploadProfileImages);
 
@@ -80,11 +81,15 @@ app.delete("/api/people", pplCtrl.deletePerson);
 app.get("/api/posts", postCtrl.getPosts);
 app.get("/api/home-posts", postCtrl.getPostsByJoinedGroups);
 app.get(`/api/birthday-post`, postCtrl.getPostsByPersonId);
+app.get(`/api/post/:post_id`, postCtrl.getPostByPostId);
 app.post("/api/birthday-post", cloudinaryCtrl.addBirthdayPost);
 app.post("/api/groupPosts/:group_id/user/:user_id", groupCtrl.createGroupPost);
 app.put("/api/posts/:post_id", postCtrl.editPost);
 app.delete("/api/posts/:post_id", postCtrl.deletePost);
 
+//comments
+app.get(`/api/comments/:post_id`, postCtrl.getCommentsByPost);
+app.post(`/api/post-comment`, postCtrl.createPostComment);
 //groups
 app.get("/api/groups/all", groupCtrl.getAllGroups);
 app.get("/api/groups", groupCtrl.searchGroups);

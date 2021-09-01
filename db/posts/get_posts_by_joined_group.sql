@@ -3,4 +3,6 @@ join groups gp ON gp.group_id = gpu.group_id
 join post po ON po.post_id= gpu.post_id
 join users us ON us.user_id = gpu.user_id
 join groups_users gu ON gu.group_id = gpu.group_id
-where gu.user_id = $1;
+where gu.user_id = $1
+ORDER BY gpu.post_id desc
+LIMIT 10 OFFSET $2;

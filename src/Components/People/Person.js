@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+
 import styled from "styled-components";
 
 let PersonContainer = styled.section`
@@ -64,8 +64,7 @@ let Info = styled.p`
   }
 `;
 const Person = (props) => {
-  const{handleDelete,toggle,user_id}=props
-  const[confirm,setConfirm]=useState(false)
+  const{handleDelete,toggle,user_id,personUrl,person}=props
   const {
     birthday,
     creation_date,
@@ -80,7 +79,7 @@ let edit = toggle?<Delete onClick={()=>handleDelete(person_id,user_id)}>delete</
 
   return (
     <PersonContainer>
-      <Picture src={picture_url} alt="" />
+      <Picture src={personUrl} alt="" />
 
       <Column>
         <Title>Name</Title>

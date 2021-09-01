@@ -7,12 +7,12 @@ width:100vw;
 min-height:90vh;
 `
 const UserPosts = (props) => {
-  const { posts } = props;
+  const { posts,loggedInUser } = props;
 
   let mappedPosts = posts ? (
     posts.map((post, i) => {
       return (
-        <Posts key={i} post={post} group_name={post.group_name} group_picture_public_id={post.group_picture_public_id} group_picture_version={post.group_picture_version} />
+        <Posts key={i} post={post} loggedInUser={loggedInUser} group_name={post.group_name} group_picture_public_id={post.group_picture_public_id} group_picture_version={post.group_picture_version} />
       );
     })
   ) : (
