@@ -1,6 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400&display=swap");
-
-@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700;800;900&display=swap');
 .App {
   background: url('./Assets/Gather_honeycombs.png') no-repeat center center fixed;
   background-size:cover;
@@ -25,5 +23,9 @@ details {
 
 html {
   height: 100%;
-  font-family: "Nunito", sans-serif;
+  font-family: 'Nunito', sans-serif;
+}
+body{
+  height:100%;
+  font-family: 'Nunito', sans-serif;
 }
