@@ -45,11 +45,6 @@ cloudinary.config({
   api_secret: API_SECRET,
 });
 
-app.use(express.static(__dirname + "/../build"));
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../build/index.html"));
-});
-
 //endpoints
 //views
 app.get("/api/home/:user_id", viewsCtrl.getHomeView);
@@ -134,6 +129,10 @@ app.post(
   friendCtrl.acceptFriendRequest
 );
 
+app.use(express.static(__dirname + "/../build"));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../build/index.html"));
+});
 massive({
   connectionString: CONNECTION_STRING,
   ssl: {

@@ -51,9 +51,9 @@ const Login = (props) => {
   }, [registerError]);
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (isLoggedIn===true) {
       push("/home");
-    }
+    }else{push('/')}
   }, [isLoggedIn, push]);
   const handleLoginEmail = (email) => {
     let newEmail = "";

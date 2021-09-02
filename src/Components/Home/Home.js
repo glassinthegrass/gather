@@ -11,7 +11,7 @@ const Home = (props) => {
   const history = useHistory();
   const { push } = history;
 
-  const [groups, setGroups] = useState(null);
+  const [groups, setGroups] = useState([]);
   const [posts, setPosts] = useState([]);
   const [birthdays, setBirthdays] = useState([]);
   const [loadingToggle, setLoadingToggle] = useState(true);
@@ -29,19 +29,22 @@ const Home = (props) => {
       }
     }
   }, 10000);
+  useEffect(() => {
+    if (isLoggedIn === false) {
+      push("/");
+    }
+  }, [isLoggedIn, push]);
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (user_id) {
       axios
         .get(`/api/home/${user_id}`)
         .then((res) => {
           setGroups(res.data);
         })
         .catch((err) => console.log(err));
-    } else {
-      push("/");
     }
-  }, [isLoggedIn, user_id, push]);
+  }, [user_id]);
 
   useEffect(() => {
     if (offsetToggle) {
@@ -57,40 +60,35 @@ const Home = (props) => {
   }, [offsetToggle, offset, user_id, posts]);
 
   useEffect(() => {
-    if (isLoggedIn === true) {
+    if (user_id) {
       axios
         .get(`/api/birthday?user_id=${user_id}`)
         .then((res) => setBirthdays(res.data))
         .catch((err) => console.log(err));
     }
-  }, [isLoggedIn, user_id]);
+  }, [user_id]);
 
   const handleMorePosts = () => {
     setOffsetToggle(true);
   };
-  const mappedGroups = groups ? (
-    groups.map((group, i) => {
-      return <Groups group={group} key={i} />;
-    })
-  ) : (
-    <></>
-  );
-  let mappedPosts = posts[0] ? (
-    posts.map((post, i) => {
-      return (
-        <Posts
-          key={i}
-          post={post}
-          loggedInUser={user_id}
-          group_name={post.group_name}
-          group_picture_public_id={post.group_picture_public_id}
-          group_picture_version={post.group_picture_version}
-        />
-      );
-    })
-  ) : (
-    <></>
-  );
+
+  const mappedGroups = groups.map((group, i) => {
+    return <Groups group={group} key={i} />;
+  });
+
+  let mappedPosts = posts.map((post, i) => {
+    return (
+      <Posts
+        key={i}
+        post={post}
+        loggedInUser={user_id}
+        group_name={post.group_name}
+        group_picture_public_id={post.group_picture_public_id}
+        group_picture_version={post.group_picture_version}
+      />
+    );
+  });
+
   const handleLoading = () => {
     setInterval(() => {
       setLoadingToggle(false);
@@ -112,7 +110,9 @@ const Home = (props) => {
 
   return (
     <HomeDiv>
-      {/* {loadingDisplay} */}
+      {console.log(props)}
+      {console.log(groups)}
+
       <Box>
         <Title>Your Hives</Title>
         <GroupsDiv>{mappedGroups}</GroupsDiv>

@@ -7,11 +7,11 @@ const Groups = (props) => {
   const { push } = history;
   const { group_name, picture_version, picture_public_id } = props.group;
 
-  const url =
+  const url = picture_version?
     `https://res.cloudinary.com/glassinthegrass/image/upload/w_60,h_60,c_fill,r_max,g_auto,f_auto/` +
     picture_version +
     "/" +
-    picture_public_id;
+    picture_public_id:'';
 
   return (
     <GroupsContainer>
