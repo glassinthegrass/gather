@@ -14,7 +14,12 @@ const UploadsProfile = (props) => {
   const [preview, setPreview] = useState(null);
   const { getUser } = props;
   const [image, setImage] = useState([]);
-
+  console.log(props)
+useEffect(()=>{
+if(!user_id){
+  push('/')
+}
+})
   const handleFile = (img) => {
     if (img[0]) {
       setImage(img[0]);

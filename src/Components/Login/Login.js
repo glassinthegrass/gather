@@ -51,9 +51,11 @@ const Login = (props) => {
   }, [registerError]);
 
   useEffect(() => {
-    if (isLoggedIn===true) {
+    if (isLoggedIn === true) {
       push("/home");
-    }else{push('/')}
+    } else {
+      push("/");
+    }
   }, [isLoggedIn, push]);
   const handleLoginEmail = (email) => {
     let newEmail = "";
@@ -118,7 +120,7 @@ const Login = (props) => {
           handleLoginKeyPress(e);
         }}
         value={loginUser?.password}
-        type="text"
+        type="password"
         placeholder="Enter password"
       />
       {loginErrorDisplay}
@@ -155,7 +157,7 @@ const Login = (props) => {
       <Input
         onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
         className="registerInput"
-        type="text"
+        type="password"
         placeholder="Enter a password"
       />
       <Input
@@ -164,7 +166,7 @@ const Login = (props) => {
         }
         onKeyPress={(e) => handleRegisterKeyPress(e)}
         className="registerInput"
-        type="text"
+        type="password"
         placeholder="Please verify your password"
       />
       {registerErrorDisplay}
