@@ -1,9 +1,15 @@
-import React from 'react';
+import React from "react";
+import logo from "../Assets/BeeLogoFull.png";
+import styled, { keyframes } from "styled-components";
 
-import hex from '../Assets/BeePiecesWing.png'
-import logo from '../Assets/BeeLogoFull.png'
-
-import styled,{keyframes} from 'styled-components';
+const Loading = () => {
+  return (
+    <HexContainer>
+      <Hex src={logo} alt="" />
+    </HexContainer>
+  );
+};
+export default Loading;
 
 let spin = keyframes`
 0% {
@@ -11,7 +17,7 @@ let spin = keyframes`
     50%{transform:roatate(180deg) scale(1);}
   100%{
     transform: rotate(360deg) scale(0.8);}
-`
+`;
 let colorChange = keyframes`
 0%{background-color:blue;transform:scale(0.9);}
 10%{background-color:red;}
@@ -24,27 +30,18 @@ let colorChange = keyframes`
 80%{background-color:gold;}
 90%{background-color:darkgoldenrod;}
 100%{background-color:rgb(88,88,88);transform:scale(0.9);}
-`
+`;
 let Hex = styled.img`
-width:100%;
-height:100%;
-animation:${spin} 1s infinite linear;
- `
- let HexContainer= styled.div`
- display:flex;
- justify-content:center;
- align-items:center;
-height:100%;
-width:100%;
- border-radius:50%;
- animation:${colorChange} 1s infinite linear;
- `
- 
-const Loading =()=>{
-    return(
-        <HexContainer>
-        <Hex src={logo} alt=''/>
-        </HexContainer>
-        )
-}
-export default Loading;
+  width: 100%;
+  height: 100%;
+  animation: ${spin} 1s infinite linear;
+`;
+let HexContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+  animation: ${colorChange} 1s infinite linear;
+`;

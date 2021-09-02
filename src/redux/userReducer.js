@@ -14,7 +14,7 @@ export const getUser = (user_id) => {
     .get(`/api/profile/${user_id}`)
     .then((res) => res.data)
     .catch((err) => console.log(err));
-    user.error=false
+  user.error = false;
   return {
     type: GET_USER,
     payload: user,
@@ -25,10 +25,12 @@ export const loginUser = (email, password) => {
   let login = axios
     .post("/auth/login", { email, password })
     .then((res) => {
-      return {...res.data}
+      return { ...res.data };
     })
-    .catch((err) => {let error= {isLoggedIn:false,loginError:true}
-    return error});
+    .catch((err) => {
+      let error = { isLoggedIn: false, loginError: true };
+      return error;
+    });
   return {
     type: LOGIN_USER,
     payload: login,
@@ -51,10 +53,12 @@ export const registerUser = (
       password,
     })
     .then((res) => {
-      return {...res.data,error:false}})
-    .catch((err) => {let error = {registerError:true}
-  return error
-  });
+      return { ...res.data, error: false };
+    })
+    .catch((err) => {
+      let error = { registerError: true };
+      return error;
+    });
   return {
     type: LOGIN_USER,
     payload: register,
@@ -100,7 +104,7 @@ export default function reducer(state = initialState, action) {
       if (!action.payload) {
         return {
           ...state,
-          user: {isLoggedIn:false,loginError:true}
+          user: { isLoggedIn: false, loginError: true },
         };
       }
       return {

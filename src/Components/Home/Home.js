@@ -7,6 +7,133 @@ import styled, { keyframes } from "styled-components";
 import Posts from "../Groups/Posts";
 import Birthdays from "./Birthdays";
 
+const Home = (props) => {
+  const history = useHistory();
+  const { push } = history;
+
+  const [groups, setGroups] = useState(null);
+  const [posts, setPosts] = useState([]);
+  const [birthdays, setBirthdays] = useState([]);
+  const [loadingToggle, setLoadingToggle] = useState(true);
+  const [offset, setOffset] = useState(0);
+  const [offsetToggle, setOffsetToggle] = useState(true);
+  const [idx, setIdx] = useState(0);
+  const { user_id, isLoggedIn } = props.user;
+
+  setInterval(() => {
+    if (birthdays[0]) {
+      if (idx < birthdays.length - 1) {
+        setIdx(idx + 1);
+      } else {
+        setIdx(0);
+      }
+    }
+  }, 10000);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      axios
+        .get(`/api/home/${user_id}`)
+        .then((res) => {
+          setGroups(res.data);
+        })
+        .catch((err) => console.log(err));
+    } else {
+      push("/");
+    }
+  }, [isLoggedIn, user_id, push]);
+
+  useEffect(() => {
+    if (offsetToggle) {
+      setOffsetToggle(false);
+      axios
+        .get(`/api/home-posts?user_id=${user_id}&offset=${offset}`)
+        .then((res) => {
+          setPosts([...posts, res.data].flat());
+        })
+        .catch((err) => console.log(err));
+      setOffset(offset + 10);
+    }
+  }, [offsetToggle, offset, user_id, posts]);
+
+  useEffect(() => {
+    if (isLoggedIn === true) {
+      axios
+        .get(`/api/birthday?user_id=${user_id}`)
+        .then((res) => setBirthdays(res.data))
+        .catch((err) => console.log(err));
+    }
+  }, [isLoggedIn, user_id]);
+
+  const handleMorePosts = () => {
+    setOffsetToggle(true);
+  };
+  const mappedGroups = groups ? (
+    groups.map((group, i) => {
+      return <Groups group={group} key={i} />;
+    })
+  ) : (
+    <></>
+  );
+  let mappedPosts = posts[0] ? (
+    posts.map((post, i) => {
+      return (
+        <Posts
+          key={i}
+          post={post}
+          loggedInUser={user_id}
+          group_name={post.group_name}
+          group_picture_public_id={post.group_picture_public_id}
+          group_picture_version={post.group_picture_version}
+        />
+      );
+    })
+  ) : (
+    <></>
+  );
+  const handleLoading = () => {
+    setInterval(() => {
+      setLoadingToggle(false);
+    }, 1000);
+  };
+
+  useEffect(() => {
+    if (loadingToggle === true) {
+      handleLoading();
+    }
+  }, [loadingToggle]);
+
+  let gotAllPosts =
+    posts.length % 10 === 0 ? (
+      <AddPosts onClick={() => handleMorePosts()}>More</AddPosts>
+    ) : (
+      <AddPosts>All Done</AddPosts>
+    );
+
+  return (
+    <HomeDiv>
+      {/* {loadingDisplay} */}
+      <Box>
+        <Title>Your Hives</Title>
+        <GroupsDiv>{mappedGroups}</GroupsDiv>
+        <Announce>
+          <Birthdays birthday={birthdays[idx]} />
+        </Announce>
+        <Spacer></Spacer>
+        <PostContainer>{mappedPosts}</PostContainer>
+        <Spacer></Spacer>
+        {gotAllPosts}
+        <Spacer></Spacer>
+      </Box>
+    </HomeDiv>
+  );
+};
+const mapStateToProps = (reduxState) => {
+  return reduxState.userReducer;
+};
+
+export default connect(mapStateToProps)(Home);
+
 export const fadeIn = keyframes`
 0% {opacity:0;}
 70%{opacity:0;}
@@ -87,124 +214,3 @@ let AddPosts = styled.div`
     color: rgb(88, 88, 88);
   }
 `;
-const Home = (props) => {
-  const history = useHistory();
-  const { push } = history;
-  const [groups, setGroups] = useState(null);
-  const [posts, setPosts] = useState([]);
-  const [birthdays, setBirthdays] = useState([]);
-  const [loadingToggle, setLoadingToggle] = useState(true);
-  const [offset, setOffset] = useState(0);
-  const [offsetToggle, setOffsetToggle] = useState(true);
-  const [idx, setIdx] = useState(0);
-  const { user_id, isLoggedIn } = props.user;
-
-  setInterval(() => {
-    if (birthdays[1]) {
-      if (idx < birthdays.length - 1) {
-        setIdx(idx + 1);
-      } else {
-        setIdx(0);
-      }
-    }
-  }, 10000);
-
-  useEffect(() => {
-    if (isLoggedIn === true) {
-      axios
-        .get(`/api/home/${user_id}`)
-        .then((res) => {
-          setGroups(res.data);
-        })
-        .catch((err) => console.log(err));
-    } else {
-      push("/");
-    }
-  }, [isLoggedIn, user_id, push]);
-
-  useEffect(() => {
-    if (offsetToggle) {
-      setOffsetToggle(false);
-      axios
-        .get(`/api/home-posts?user_id=${user_id}&offset=${offset}`)
-        .then((res) => {
-          setPosts([...posts, res.data].flat());
-        })
-        .catch((err) => console.log(err));
-      setOffset(offset + 10);
-    }
-  }, [offsetToggle, offset, user_id, posts]);
-
-  useEffect(() => {
-    if (isLoggedIn === true) {
-      axios
-        .get(`/api/birthday?user_id=${user_id}`)
-        .then((res) => setBirthdays(res.data))
-        .catch((err) => console.log(err));
-    }
-  }, [isLoggedIn, user_id]);
-
-  const handleMorePosts = () => {
-    setOffsetToggle(true);
-
-  };
-  const mappedGroups = groups ? (
-    groups.map((group, i) => {
-      return <Groups group={group} key={i} />;
-    })
-  ) : (
-    <></>
-  );
-  let mappedPosts = posts[0] ? (
-    posts.map((post, i) => {
-      return (
-        <Posts
-          key={i}
-          post={post}
-          loggedInUser={user_id}
-          group_name={post.group_name}
-          group_picture_public_id={post.group_picture_public_id}
-          group_picture_version={post.group_picture_version}
-        />
-      );
-    })
-  ) : (
-    <></>
-  );
-  const handleLoading = () => {
-    setInterval(() => {
-      setLoadingToggle(false);
-    }, 1000);
-  };
-
-  useEffect(() => {
-    if (loadingToggle === true) {
-      handleLoading();
-    }
-  }, [loadingToggle]);
-
-let gotAllPosts= posts.length%10===0?<AddPosts onClick={() => handleMorePosts()}>More</AddPosts>:<AddPosts>All Done</AddPosts>;
-
-  return (
-    <HomeDiv>
-      {/* {loadingDisplay} */}
-      <Box>
-        <Title>Your Hives</Title>
-        <GroupsDiv>{mappedGroups}</GroupsDiv>
-        <Announce>
-          <Birthdays birthday={birthdays[idx]} />
-        </Announce>
-        <Spacer></Spacer>
-        <PostContainer>{mappedPosts}</PostContainer>
-        <Spacer></Spacer>
-        {gotAllPosts}
-        <Spacer></Spacer>
-      </Box>
-    </HomeDiv>
-  );
-};
-const mapStateToProps = (reduxState) => {
-  return reduxState.userReducer;
-};
-
-export default connect(mapStateToProps)(Home);

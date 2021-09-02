@@ -1,13 +1,49 @@
 import styled from "styled-components";
 import Loading from "../Loading";
 
+const CreatePost = (props) => {
+  const { preview, handleImage, handlePostContent, handleSubmit, postContent } =
+    props;
+  let picSwitch = preview ? (
+    <Preview src={preview} alt="" />
+  ) : (
+    <PictureInput>UPLOAD PHOTO</PictureInput>
+  );
+
+  let loadingSwitch = props.loading ? (
+    <LoadingBox>
+      <Loading />
+    </LoadingBox>
+  ) : (
+    <>
+      <Label htmlFor="single">{picSwitch}</Label>
+      <Row>
+        <TextInput
+          value={postContent}
+          type="text"
+          onChange={(e) => handlePostContent(e.target.value)}
+        ></TextInput>
+        <Submit onClick={() => handleSubmit()}>Submit</Submit>
+      </Row>
+      <div>
+        <HiddenInput
+          type="file"
+          id="single"
+          onChange={(e) => handleImage(e.target.files)}
+        />
+      </div>
+    </>
+  );
+  return <Container>{loadingSwitch}</Container>;
+};
+export default CreatePost;
 let Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 
-padding-top:1rem;
+  padding-top: 1rem;
 `;
 let TextInput = styled.textarea`
   width: 90%;
@@ -108,40 +144,3 @@ let LoadingBox = styled.div`
   align-items: center;
   z-index: 2;
 `;
-const CreatePost = (props) => {
-  const { preview, handleImage, handlePostContent, handleSubmit, postContent } =
-    props;
-  let picSwitch = preview ? (
-    <Preview src={preview} alt="" />
-  ) : (
-    <PictureInput>UPLOAD PHOTO</PictureInput>
-  );
-
-  let loadingSwitch = props.loading ? (
-    <LoadingBox>
-      <Loading />
-    </LoadingBox>
-  ) : (
-    <>
-
-      <Label htmlFor="single">{picSwitch}</Label>
-      <Row>
-        <TextInput
-          value={postContent}
-          type="text"
-          onChange={(e) => handlePostContent(e.target.value)}
-        ></TextInput>
-        <Submit onClick={() => handleSubmit()}>Submit</Submit>
-      </Row>
-      <div>
-        <HiddenInput
-          type="file"
-          id="single"
-          onChange={(e) => handleImage(e.target.files)}
-        />
-      </div>
-    </>
-  );
-  return <Container>{loadingSwitch}</Container>;
-};
-export default CreatePost;

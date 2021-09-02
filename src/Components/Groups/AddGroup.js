@@ -5,6 +5,153 @@ import styled from "styled-components";
 import Loading from "../Loading";
 import GroupCard from "./GroupCard";
 
+const AddGroup = (props) => {
+  const [image, setImage] = useState([]);
+  const [imgPreview, setImgPreview] = useState(null);
+  const [loadingToggle, setLoadingToggle] = useState(false);
+  const [groupName, setGroupName] = useState("");
+  const [subject, setSubject] = useState("");
+  const [search, setSearch] = useState([]);
+  const [newGroup, setNewGroup] = useState(null);
+
+  const handleImage = (img) => {
+    if (img[0]) {
+      setImage(img[0]);
+      setImgPreview(URL.createObjectURL(img[0]));
+    } else {
+      setImage(img[0]);
+      setImgPreview(null);
+    }
+  };
+  const handleGroupNameInput = (groupName) => {
+    let newGroup = "";
+    for (let i = 0; i < groupName.length; i++) {
+      if (groupName[i] !== " ") {
+        newGroup += groupName[i];
+      }
+    }
+
+    if (groupName.length > 3) {
+      axios
+        .get(`/api/groups?searchQuery=${newGroup}`)
+        .then((res) => {
+          setSearch(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      setSearch([]);
+    }
+    if (groupName.length < 20) {
+      setGroupName(newGroup);
+    }
+  };
+  const handleSubjectInput = (sub) => {
+    setSubject(sub);
+  };
+
+  const handleGroupSubmit = () => {
+    setLoadingToggle(true);
+    let fileData = new FormData();
+    fileData.append("image", image);
+    let config = {
+      header: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    axios
+      .post(
+        `/api/groups?user_id=${props.user.user_id}&group_name=${groupName}&subject=${subject}`,
+        fileData,
+        config
+      )
+      .then((res) => {
+        setLoadingToggle(false);
+        setNewGroup(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
+  let submit =
+    search.length === 0 && groupName.length >= 3 && imgPreview !== null ? (
+      <Submit onClick={() => handleGroupSubmit()}>Click to Submit!</Submit>
+    ) : (
+      <></>
+    );
+
+  let display = (
+    <>
+      <div>
+        <Header>Group Subject</Header>
+        <Input
+          onChange={(e) => handleSubjectInput(e.target.value)}
+          placeholder="tv-sports-youtube"
+        />
+      </div>
+      <Column>
+        <HiddenInput
+          onChange={(e) => handleImage(e.target.files)}
+          type="file"
+          id="single"
+        />
+        <Label htmlFor="single">
+          {loadingToggle ? (
+            <LoadingBox>
+              <Loading />
+            </LoadingBox>
+          ) : imgPreview ? (
+            <PreviewImage src={imgPreview} alt="" />
+          ) : (
+            <PreviewDiv>Upload Hive Photo</PreviewDiv>
+          )}
+        </Label>
+      </Column>
+      {submit}
+    </>
+  );
+
+  let existingGroup = search[0]?.group_name ? (
+    <>
+      <Header>a hive by that name already exists</Header>
+      <GroupCard group={search[0]} />
+    </>
+  ) : (
+    <>{display}</>
+  );
+
+  let newGroupView = newGroup ? (
+    <>
+      <PageHeader>Hive Created</PageHeader>
+      <GroupCard group={newGroup} />
+    </>
+  ) : (
+    <>
+      <PageHeader>create a hive</PageHeader>
+
+      <div>
+        <Header>Group Name</Header>
+        <Input
+          value={groupName}
+          placeholder="type here"
+          onChange={(e) => handleGroupNameInput(e.target.value)}
+        />
+      </div>
+      {existingGroup}
+    </>
+  );
+  return (
+    <Container>
+      <Box>{newGroupView}</Box>
+    </Container>
+  );
+};
+
+const mapStateToProps = (reduxState) => {
+  return reduxState.userReducer;
+};
+
+export default connect(mapStateToProps)(AddGroup);
 let Submit = styled.div`
   width: 18rem;
   height: 2rem;
@@ -140,151 +287,3 @@ let LoadingBox = styled.div`
   width: 5rem;
   height: 5rem;
 `;
-
-const AddGroup = (props) => {
-  const [image, setImage] = useState([]);
-  const [imgPreview, setImgPreview] = useState(null);
-  const [loadingToggle, setLoadingToggle] = useState(false);
-  const [groupName, setGroupName] = useState("");
-  const [subject, setSubject] = useState("");
-  const [search, setSearch] = useState([]);
-  const [newGroup, setNewGroup] = useState(null);
-
-  const handleImage = (img) => {
-    if (img[0]) {
-      setImage(img[0]);
-      setImgPreview(URL.createObjectURL(img[0]));
-    } else {
-      setImage(img[0]);
-      setImgPreview(null);
-    }
-  };
-  const handleGroupNameInput = (groupName) => {
-    let newGroup = "";
-    for (let i = 0; i < groupName.length; i++) {
-      if (groupName[i] !== " ") {
-        newGroup += groupName[i];
-      }
-    }
-
-    if (groupName.length > 3) {
-      axios
-        .get(`/api/groups?searchQuery=${newGroup}`)
-        .then((res) => {
-          setSearch(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      setSearch([]);
-    }
-if(groupName.length <20){
-  setGroupName(newGroup);
-}
-  };
-  const handleSubjectInput = (sub) => {
-    setSubject(sub);
-  };
-
-  const handleGroupSubmit = () => {
-    setLoadingToggle(true);
-    let fileData = new FormData();
-    fileData.append("image", image);
-    let config = {
-      header: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
-
-    axios
-      .post(
-        `/api/groups?user_id=${props.user.user_id}&group_name=${groupName}&subject=${subject}`,
-        fileData,
-        config
-      )
-      .then((res) => {
-        setLoadingToggle(false);
-        setNewGroup(res.data);
-      })
-      .catch((err) => console.log(err));
-  };
-  let submit =
-    search.length === 0 && groupName.length >= 3 && imgPreview !== null ? (
-      <Submit onClick={() => handleGroupSubmit()}>Click to Submit!</Submit>
-    ) : (
-      <></>
-    );
-
-  let display = (
-    <>
-      <div>
-        <Header>Group Subject</Header>
-        <Input
-          onChange={(e) => handleSubjectInput(e.target.value)}
-          placeholder="tv-sports-youtube"
-        />
-      </div>
-      <Column>
-        <HiddenInput
-          onChange={(e) => handleImage(e.target.files)}
-          type="file"
-          id="single"
-        />
-        <Label htmlFor="single">
-          {loadingToggle ? (
-            <LoadingBox>
-              <Loading />
-            </LoadingBox>
-          ) : imgPreview ? (
-            <PreviewImage src={imgPreview} alt="" />
-          ) : (
-            <PreviewDiv>Upload Hive Photo</PreviewDiv>
-          )}
-        </Label>
-      </Column>
-      {submit}
-    </>
-  );
-
-  let existingGroup = search[0]?.group_name ? (
-    <>
-      <Header>a hive by that name already exists</Header>
-      <GroupCard group={search[0]} />
-    </>
-  ) : (
-    <>{display}</>
-  );
-
-  let newGroupView = newGroup ? (
-    <>
-      <PageHeader>Hive Created</PageHeader>
-      <GroupCard group={newGroup} />
-    </>
-  ) : (
-    <>
-      <PageHeader>create a hive</PageHeader>
-
-      <div>
-        <Header>Group Name</Header>
-        <Input
-          value={groupName}
-          placeholder="type here"
-          onChange={(e) => handleGroupNameInput(e.target.value)}
-        />
-      </div>
-      {existingGroup}
-    </>
-  );
-  return (
-    <Container>
-      <Box>{newGroupView}</Box>
-    </Container>
-  );
-};
-
-const mapStateToProps = (reduxState) => {
-  return reduxState.userReducer;
-};
-
-export default connect(mapStateToProps)(AddGroup);

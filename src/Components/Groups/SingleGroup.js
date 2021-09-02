@@ -8,141 +8,6 @@ import SingleGroupUsers from "./SingleGroupUsers";
 import Posts from "./Posts";
 import { fadeIn } from "../Home/Home";
 
-let Follow = styled.div`
-  height: 2rem;
-  width: 100%;
-  background-color: rgb(252, 142, 52);
-  font-family: "Nunito SemiBold";
-  display: flex;
-  align-items: flex-end;
-  padding: 1px;
-  color: rgb(88, 88, 88);
-  cursor: pointer;
-  &:hover {
-    color: rgb(252, 142, 52);
-    background-color: rgb(88, 88, 88);
-  }
-  &:active {
-    background-color: rgb(252, 142, 52);
-  }
-`;
-let Unfollow = styled(Follow)`
-  background-color: rgb(88, 88, 88);
-  color: rgb(252, 142, 52);
-  &:hover {
-    color: rgb(88, 88, 88);
-    background-color: rgb(252, 142, 52);
-  }
-  &:active {
-    background-color: rgb(88, 88, 88);
-  }
-`;
-let Spacer = styled.div`
-  height: 25px;
-  width: 100%;
-`;
-let Container = styled.section`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-
-  @media (max-width: 600px) {
-    justify-content: flex-start;
-  }
-`;
-let GroupImage = styled.img`
-  width: 400px;
-  height: 400px;
-  @media (max-width: 600px) {
-    width: 250px;
-    height: 250px;
-  }
-`;
-let GroupName = styled.h1`
-  font-family: "Nunito Black";
-  font-size: 60px;
-  @media (min-width: 800px) {
-    font-size: 70px;
-  }
-  @media (max-width: 600px) {
-    font-size: 45px;
-  }
-`;
-let GroupSubject = styled.p`
-  font-family: "Nunito Light";
-  font-size: 14px;
-`;
-let PostContainer = styled.div`
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  padding-bottom: 3rem;
-`;
-
-let GroupHeader = styled.header`
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  width: 90%;
-  background-color: rgb(252, 219, 166);
-  @media (max-width: 600px) {
-    width: 100%;
-  }
-`;
-let AddPosts = styled.div`
-  height: 2rem;
-  width: 6rem;
-  font-size: 20px;
-  font-family: "Nunito Black";
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 30px 30px 30px 30px;
-  background-color: rgb(252, 219, 166);
-  box-shadow: 10px 0px 13px -12px #897b7b, 0px 7px 13px -7px #000000;
-  cursor: pointer;
-  &:hover {
-    background-color: rgb(88, 88, 88);
-    color: rgb(252, 142, 52, 0.792);
-  }
-  &:active {
-    background-color: rgb(252, 142, 52, 0.792);
-    color: rgb(88, 88, 88);
-  }
-`;
-let Back = styled.div`
-  position: fixed;
-  display: flex;
-  font-family: "Nunito Black";
-  align-items: center;
-  justify-content: center;
-  margin-right: 92vw;
-  margin-top: -3.5rem;
-  z-index: 5;
-  font-size: 30px;
-  cursor: pointer;
-  border-radius: 3px;
-  background-color: rgb(88, 88, 88);
-  color: rgb(252, 142, 52);
-  @media (max-width: 600px) {
-    margin-top: -2.2rem;
-    margin-right: 87vw;
-  }
-  &:hover {
-    color: rgb(88, 88, 88);
-    background-color: white;
-  }
-`;
-const Fade = styled.div`
-  display: flex;
-  width: 100vw;
-  min-height: 92vh;
-  animation: ${fadeIn} 0.5s linear;
-`;
-
 const SingleGroup = (props) => {
   const history = useHistory(),
     { push, goBack } = history;
@@ -365,3 +230,138 @@ const mapStateToProps = (reduxState) => {
 };
 
 export default connect(mapStateToProps)(SingleGroup);
+
+let Follow = styled.div`
+  height: 2rem;
+  width: 100%;
+  background-color: rgb(252, 142, 52);
+  font-family: "Nunito SemiBold";
+  display: flex;
+  align-items: flex-end;
+  padding: 1px;
+  color: rgb(88, 88, 88);
+  cursor: pointer;
+  &:hover {
+    color: rgb(252, 142, 52);
+    background-color: rgb(88, 88, 88);
+  }
+  &:active {
+    background-color: rgb(252, 142, 52);
+  }
+`;
+let Unfollow = styled(Follow)`
+  background-color: rgb(88, 88, 88);
+  color: rgb(252, 142, 52);
+  &:hover {
+    color: rgb(88, 88, 88);
+    background-color: rgb(252, 142, 52);
+  }
+  &:active {
+    background-color: rgb(88, 88, 88);
+  }
+`;
+let Spacer = styled.div`
+  height: 25px;
+  width: 100%;
+`;
+let Container = styled.section`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+
+  @media (max-width: 600px) {
+    justify-content: flex-start;
+  }
+`;
+let GroupImage = styled.img`
+  width: 400px;
+  height: 400px;
+  @media (max-width: 600px) {
+    width: 250px;
+    height: 250px;
+  }
+`;
+let GroupName = styled.h1`
+  font-family: "Nunito Black";
+  font-size: 60px;
+  @media (min-width: 800px) {
+    font-size: 70px;
+  }
+  @media (max-width: 600px) {
+    font-size: 45px;
+  }
+`;
+let GroupSubject = styled.p`
+  font-family: "Nunito Light";
+  font-size: 14px;
+`;
+let PostContainer = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding-bottom: 3rem;
+`;
+
+let GroupHeader = styled.header`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 90%;
+  background-color: rgb(252, 219, 166);
+  @media (max-width: 600px) {
+    width: 100%;
+  }
+`;
+let AddPosts = styled.div`
+  height: 2rem;
+  width: 6rem;
+  font-size: 20px;
+  font-family: "Nunito Black";
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 30px 30px 30px 30px;
+  background-color: rgb(252, 219, 166);
+  box-shadow: 10px 0px 13px -12px #897b7b, 0px 7px 13px -7px #000000;
+  cursor: pointer;
+  &:hover {
+    background-color: rgb(88, 88, 88);
+    color: rgb(252, 142, 52, 0.792);
+  }
+  &:active {
+    background-color: rgb(252, 142, 52, 0.792);
+    color: rgb(88, 88, 88);
+  }
+`;
+let Back = styled.div`
+  position: fixed;
+  display: flex;
+  font-family: "Nunito Black";
+  align-items: center;
+  justify-content: center;
+  margin-right: 92vw;
+  margin-top: -3.5rem;
+  z-index: 5;
+  font-size: 30px;
+  cursor: pointer;
+  border-radius: 3px;
+  background-color: rgb(88, 88, 88);
+  color: rgb(252, 142, 52);
+  @media (max-width: 600px) {
+    margin-top: -2.2rem;
+    margin-right: 87vw;
+  }
+  &:hover {
+    color: rgb(88, 88, 88);
+    background-color: white;
+  }
+`;
+const Fade = styled.div`
+  display: flex;
+  width: 100vw;
+  min-height: 92vh;
+  animation: ${fadeIn} 0.5s linear;
+`;

@@ -3,28 +3,151 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Loading from "../Loading";
 
+const CreatePerson = (props) => {
+  const [image, setImage] = useState([]);
+  const [preview, setPreview] = useState(null);
+  const [person, setPerson] = useState({
+    first_name: "",
+    last_name: "",
+    birthday: "",
+    message: "",
+  });
+
+  const handleImage = (img) => {
+    if (img[0]) {
+      setImage(img[0]);
+      setPreview(URL.createObjectURL(img[0]));
+    } else {
+      setImage([]);
+      setPreview(null);
+    }
+  };
+
+  const handleSubmit = () => {
+    props.handleLoading(true);
+    let fileData = new FormData();
+    fileData.append("image", image);
+    let config = {
+      header: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    axios
+      .post(
+        `/api/people?first_name=${person.first_name}&last_name=${person.last_name}&birthday=${person.birthday}&message=${person.message}&creator=${props.creator}`,
+        fileData,
+        config
+      )
+      .then((res) => {
+        props.setPeople(res.data);
+        props.handleLoading(false);
+        setImage([]);
+        setPreview(null);
+        setPerson({});
+      })
+      .catch((err) => console.log(err));
+  };
+  let imgSwitch = preview ? (
+    <PreviewImage src={preview} alt="" />
+  ) : (
+    <PreviewDiv>Select A Photo</PreviewDiv>
+  );
+  const loadingSwitch = props.loading ? (
+    <LoadingBox>
+      <Loading />
+    </LoadingBox>
+  ) : (
+    <Column>
+      <Headline>Add A Person</Headline>
+      <Row>
+        <HiddenInput
+          onChange={(e) => handleImage(e.target.files)}
+          type="file"
+          id="single"
+        />
+        <Label htmlFor="single">{imgSwitch}</Label>
+        <Column>
+          <FirstRow>
+            <Column>
+              <Title>name</Title>
+              <Row>
+                <TextInput
+                  onChange={(e) =>
+                    setPerson({ ...person, first_name: e.target.value })
+                  }
+                  placeholder="First Name"
+                ></TextInput>{" "}
+                <TextInput
+                  onChange={(e) =>
+                    setPerson({ ...person, last_name: e.target.value })
+                  }
+                  placeholder="Last Name"
+                ></TextInput>
+              </Row>
+            </Column>
+            <Column>
+              <Title>birthday</Title>
+              <TextInput
+                type="date"
+                onChange={(e) =>
+                  setPerson({ ...person, birthday: e.target.value })
+                }
+                placeholder="MM-DD-YYYY"
+              ></TextInput>
+            </Column>
+            <Column>
+              <Title>interest</Title>
+              <TextInput
+                onChange={(e) =>
+                  setPerson({ ...person, message: e.target.value })
+                }
+                placeholder="What do they like?"
+              ></TextInput>
+            </Column>
+          </FirstRow>
+          <Row>
+            <div></div>
+            {preview &&
+            person?.first_name.length >= 2 &&
+            person?.last_name.length >= 2 &&
+            person?.birthday ? (
+              <Submit onClick={() => handleSubmit()}>Submit</Submit>
+            ) : (
+              <></>
+            )}
+          </Row>
+        </Column>
+      </Row>
+    </Column>
+  );
+  return <Container>{loadingSwitch}</Container>;
+};
+
+export default CreatePerson;
+
 let Container = styled.section`
-width: 100%;
+  width: 100%;
   background-color: rgb(252, 219, 166);
   padding: 5px;
-  display:flex;
-justify-content:center;
+  display: flex;
+  justify-content: center;
 `;
 let Row = styled.div`
   display: flex;
-  justify-content:center;
+  justify-content: center;
   align-items: flex-start;
   text-align: left;
-  width:100%;
+  width: 100%;
 `;
 let Column = styled.div`
   display: flex;
   flex-direction: column;
 `;
 let TextInput = styled.input`
-  width:70%;
+  width: 70%;
   font-family: "Nunito Light";
-  padding:3px;
+  padding: 3px;
 `;
 
 let Title = styled.h6`
@@ -36,11 +159,11 @@ let Headline = styled.h1`
   font-family: "Nunito";
 `;
 let PreviewImage = styled.img`
-max-height: 8rem;
+  max-height: 8rem;
 
-padding: 10px;
-border: 1px dotted rgb(88, 88, 88);
-border-radius: 10px 10px 10px 10px;
+  padding: 10px;
+  border: 1px dotted rgb(88, 88, 88);
+  border-radius: 10px 10px 10px 10px;
 `;
 let PreviewDiv = styled.div`
 height: 8rem;
@@ -97,126 +220,14 @@ let Submit = styled.div`
   cursor: pointer;
 `;
 let FirstRow = styled.div`
-width:100%;
-display:flex;
-flex-direction:column;
-`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`;
 let LoadingBox = styled.div`
-display:flex;
-justify-content:center;
-align-items:center;
-height:4rem;
-width:4rem;
-`
-const CreatePerson = (props) => {
-  const [image, setImage] = useState([]);
-  const [preview, setPreview] = useState(null);
-  const [person, setPerson] = useState({first_name:'',
-last_name:'',
-birthday:'',
-message:''});
-
-  const handleImage = (img) => {
-    if (img[0]) {
-      setImage(img[0]);
-      setPreview(URL.createObjectURL(img[0]));
-    } else {
-      setImage([]);
-      setPreview(null);
-    }
-  };
-
-  const handleSubmit = () => {
-    props.handleLoading(true)
-    let fileData = new FormData();
-    fileData.append("image", image);
-    let config = {
-      header: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
-
-    axios
-      .post(
-        `/api/people?first_name=${person.first_name}&last_name=${person.last_name}&birthday=${person.birthday}&message=${person.message}&creator=${props.creator}`,
-        fileData,
-        config
-      )
-      .then((res) => {
-        props.setPeople(res.data);
-      props.handleLoading(false);
-      setImage([])
-      setPreview(null)
-      setPerson({})
-      })
-      .catch((err) => console.log(err));
-  };
-  let imgSwitch = preview? (
-    <PreviewImage src={preview} alt="" />
-  ) : (
-    <PreviewDiv>Select A Photo</PreviewDiv>
-  );
-  const loadingSwitch = props.loading ? <LoadingBox><Loading/></LoadingBox>:<Column>
-
-  <Headline>Add A Person</Headline>
-  <Row>
-    <HiddenInput
-      onChange={(e) => handleImage(e.target.files)}
-      type="file"
-      id="single"
-    />
-    <Label htmlFor="single">{imgSwitch}</Label>
-    <Column>
-      <FirstRow>
-        <Column>
-          <Title>name</Title>
-          <Row>
-            <TextInput
-              onChange={(e) =>
-                setPerson({ ...person, first_name: e.target.value })
-              }
-              placeholder="First Name"
-            ></TextInput>{" "}
-            <TextInput
-              onChange={(e) =>
-                setPerson({ ...person, last_name: e.target.value })
-              }
-              placeholder="Last Name"
-            ></TextInput>
-          </Row>
-        </Column>
-        <Column>
-          <Title>birthday</Title>
-          <TextInput
-            type="date"
-            onChange={(e) =>
-              setPerson({ ...person, birthday: e.target.value })
-            }
-            placeholder="MM-DD-YYYY"
-          ></TextInput>
-        </Column>
-        <Column>
-          <Title>interest</Title>
-          <TextInput
-            onChange={(e) =>
-              setPerson({ ...person, message: e.target.value })
-            }
-            placeholder="What do they like?"
-          ></TextInput>
-        </Column>
-      </FirstRow>
-      <Row>
-        <div></div>
-       {preview && person?.first_name.length>=2&&person?.last_name.length>=2 && person?.birthday? <Submit onClick={() => handleSubmit()}>Submit</Submit>:<></>}
-      </Row>
-    </Column>
-  </Row>
-</Column>; 
-  return (
-    <Container>
-      {loadingSwitch}
-    </Container>
-  );
-};
-
-export default CreatePerson;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 4rem;
+  width: 4rem;
+`;

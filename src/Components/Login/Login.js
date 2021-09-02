@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import { loginUser, registerUser } from "../../redux/userReducer.js";
 
@@ -13,95 +13,115 @@ import {
   RegisterToggle,
   Bee,
   Title,
-  Error
+  Error,
 } from "./styles.js";
-import bee from '../../Assets/Gather_Line_with_Bee.png'
-
-
+import bee from "../../Assets/Gather_Line_with_Bee.png";
 
 const Login = (props) => {
-  const [loginUser, setLoginUser] = useState({email:'',password:''});
-  const [newUser, setNewUser] = useState({username:'',email:'',password:'',passwordTwo:'',first_name:'',last_name:''});
+  const [loginUser, setLoginUser] = useState({ email: "", password: "" });
+  const [newUser, setNewUser] = useState({
+    username: "",
+    email: "",
+    password: "",
+    passwordTwo: "",
+    first_name: "",
+    last_name: "",
+  });
   const [loginErrorMessage, setLoginErrorMessage] = useState("");
-  const [loginEmailMessage, setLoginEmailMessage] = useState("");
   const [registerErrorMessage, setRegisterErrorMessage] = useState("");
   const [toggle, setToggle] = useState({
     nullToggle: true,
     loginToggle: false,
     registerToggle: false,
   });
-  const history = useHistory(),
-      { push } = history;
+  const history = useHistory();
+  const { push } = history;
   const { user } = props,
-  {loginError,registerError,isLoggedIn}=user
-
-  const { pathname } = props.history.location.pathname;
-useEffect(()=>{
-  loginError?setLoginErrorMessage('Something Went Wrong. Please Try Again'):setLoginErrorMessage('');
-},[loginError]);
-useEffect(()=>{
-  registerError?setRegisterErrorMessage('Something Went Wrong. Please Try Again'):setRegisterErrorMessage('');
-},[registerError]);
+    { loginError, registerError, isLoggedIn } = user;
 
   useEffect(() => {
-    if (isLoggedIn===true) {
+    loginError
+      ? setLoginErrorMessage("Something Went Wrong. Please Try Again")
+      : setLoginErrorMessage("");
+  }, [loginError]);
+  useEffect(() => {
+    registerError
+      ? setRegisterErrorMessage("Something Went Wrong. Please Try Again")
+      : setRegisterErrorMessage("");
+  }, [registerError]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
       push("/home");
     }
-  }, [isLoggedIn, pathname, push]);
-const handleLoginEmail = (email)=>{
-  let newEmail= '';
-  for(let i = 0; i<email.length;i++){
-    if(email[i]!==' '){
-newEmail+= email[i]
-  }
-}
-setLoginUser({ ...loginUser, email: newEmail })
-}
-const handleLogin = () => {
-  props.loginUser(loginUser.email, loginUser.password);
-};
-const handleLoginPassword = (password)=>{
-  let newPassword= '';
-  for(let i = 0; i<password.length;i++){
-    if(password[i]!==' '){
-newPassword+= password[i]
-  }
-}
-setLoginUser({...loginUser,password:newPassword})
-}
-const handleLoginKeyPress=(e)=>{
-if(e.key==='Enter'){
-  handleLogin()
-}
-}
+  }, [isLoggedIn, push]);
+  const handleLoginEmail = (email) => {
+    let newEmail = "";
+    for (let i = 0; i < email.length; i++) {
+      if (email[i] !== " ") {
+        newEmail += email[i];
+      }
+    }
+    setLoginUser({ ...loginUser, email: newEmail });
+  };
+  const handleLogin = () => {
+    props.loginUser(loginUser.email, loginUser.password);
+  };
+  const handleLoginPassword = (password) => {
+    let newPassword = "";
+    for (let i = 0; i < password.length; i++) {
+      if (password[i] !== " ") {
+        newPassword += password[i];
+      }
+    }
+    setLoginUser({ ...loginUser, password: newPassword });
+  };
+  const handleLoginKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleLogin();
+    }
+  };
+  const handleRegisterKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleRegister();
+    }
+  };
   const handleRegister = () => {
     props.registerUser(
       newUser.first_name,
       newUser.last_name,
-    newUser.username,
+      newUser.username,
       newUser.email,
       newUser.password
     );
   };
- let loginErrorDisplay=loginError?<Error>{loginErrorMessage}</Error>:<></>
- let registerErrorDisplay=registerError?<Error>{registerErrorMessage}</Error>:<></>
+  let loginErrorDisplay = loginError ? (
+    <Error>{loginErrorMessage}</Error>
+  ) : (
+    <></>
+  );
+  let registerErrorDisplay = registerError ? (
+    <Error>{registerErrorMessage}</Error>
+  ) : (
+    <></>
+  );
   let loginWindow = (
     <>
       <Input
         onChange={(e) => handleLoginEmail(e.target.value)}
-value={loginUser?.email}
+        value={loginUser?.email}
         placeholder="Enter email"
       />
       <Input
-        onChange={(e) =>
-              handleLoginPassword(e.target.value)
-        }
-        onKeyPress={(e)=>{handleLoginKeyPress(e)}}
+        onChange={(e) => handleLoginPassword(e.target.value)}
+        onKeyPress={(e) => {
+          handleLoginKeyPress(e);
+        }}
         value={loginUser?.password}
         type="text"
         placeholder="Enter password"
       />
-{loginErrorDisplay}
+      {loginErrorDisplay}
       <Submit onClick={() => handleLogin()}>Submit</Submit>
     </>
   );
@@ -109,18 +129,17 @@ value={loginUser?.email}
   let registerWindow = (
     <>
       <Input
-        onChange={(e) => setNewUser({ ...newUser, username: e.target.value })} onKeyPress={(e)=>console.log(e)}
+        onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}
         className="registerInput"
         type="text"
         placeholder="Pick a username!"
       />
-        <Input
-          onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
-          
-          className="registerInput"
-          type="text"
-          placeholder="What's your email?"
-        />
+      <Input
+        onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+        className="registerInput"
+        type="text"
+        placeholder="What's your email?"
+      />
       <Input
         onChange={(e) => setNewUser({ ...newUser, first_name: e.target.value })}
         className="registerInput"
@@ -143,13 +162,14 @@ value={loginUser?.email}
         onChange={(e) =>
           setNewUser({ ...newUser, passwordTwo: e.target.value })
         }
+        onKeyPress={(e) => handleRegisterKeyPress(e)}
         className="registerInput"
         type="text"
         placeholder="Please verify your password"
       />
       {registerErrorDisplay}
       {props.user.isRegistered ? (
-<Submit onClick={()=>push("/profile/uploads")}>Next</Submit>
+        <Submit onClick={() => push("/profile/uploads")}>Next</Submit>
       ) : (
         <Submit onClick={() => handleRegister()}>Submit</Submit>
       )}
@@ -204,7 +224,7 @@ value={loginUser?.email}
     <Window>
       <div>
         <p>A place for friends to...</p>
-        <Bee src={bee} alt=''/>
+        <Bee src={bee} alt="" />
         <Box>
           <Title>Gather</Title>
           {windowToggle}
@@ -216,7 +236,6 @@ value={loginUser?.email}
           </RegisterToggle>
         </ToggleBox>
       </div>
-{console.log(loginUser)}
     </Window>
   );
 };

@@ -1,6 +1,43 @@
 import React from "react";
 import styled from "styled-components";
 import Loading from "../Loading";
+
+const CreatePost = (props) => {
+  const { preview, handleSubmit, loading, handleImage, handleContent } = props;
+
+  let picSwitch = preview ? (
+    <Preview src={preview} alt="" />
+  ) : (
+    <PictureInput>UPLOAD PHOTO</PictureInput>
+  );
+  let loadingSwitch = loading ? (
+    <LoadingBox>
+      <Loading />
+    </LoadingBox>
+  ) : (
+    <>
+      <Label htmlFor="single">{picSwitch}</Label>
+      <Row>
+        <TextInput
+          onChange={(e) => handleContent(e.target.value)}
+          placeholder="Type your Birthday Message!"
+        ></TextInput>
+        <Submit onClick={() => handleSubmit()}>Submit</Submit>
+      </Row>
+    </>
+  );
+  return (
+    <Container>
+      <HiddenInput
+        onChange={(e) => handleImage(e.target.files)}
+        type="file"
+        id="single"
+      />
+      {loadingSwitch}
+    </Container>
+  );
+};
+export default CreatePost;
 let Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -111,37 +148,3 @@ let LoadingBox = styled.div`
   width: 3rem;
   height: 3rem;
 `;
-const CreatePost = (props) => {
-  const { preview, handleSubmit, loading, handleImage, handleContent } = props;
-
-  let picSwitch = preview ? (
-    <Preview src={preview} alt="" />
-  ) : (
-    <PictureInput>UPLOAD PHOTO</PictureInput>
-  );
-  let loadingSwitch = loading ? (
-    <LoadingBox>
-      <Loading />
-    </LoadingBox>
-  ) : (<>
-    <Label htmlFor="single">{picSwitch}</Label>
-      <Row>
-        <TextInput
-          onChange={(e) => handleContent(e.target.value)}
-          placeholder="Type your Birthday Message!"
-        ></TextInput>
-        <Submit onClick={() => handleSubmit()}>Submit</Submit>
-      </Row></>
-  );
-  return (
-    <Container>
-      <HiddenInput
-        onChange={(e) => handleImage(e.target.files)}
-        type="file"
-        id="single"
-      />
-      {loadingSwitch}
-    </Container>
-  );
-};
-export default CreatePost;
