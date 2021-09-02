@@ -11,7 +11,7 @@ let Bee = styled.img`
   transform: rotate(100deg);
   z-index: 1;
   @media(max-width:600px){
-margin-top:30.5rem;
+margin-top:29.2rem;
 margin-left:-0.3rem;
 transform:rotate(23deg);
 width:10rem;
