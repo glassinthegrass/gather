@@ -1,5 +1,8 @@
-.App {
+*{
   @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700;800;900&display=swap');
+  font-family: 'Nunito', sans-serif;
+}
+.App {
   background: url('./Assets/Gather_honeycombs.png') no-repeat center center fixed;
   background-size:cover;
   text-align: center;

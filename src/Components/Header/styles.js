@@ -103,12 +103,14 @@ export let ProfileLink = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: "Nunito Light";
+  font-family: "Nunito Light", sans-serif;
+  font-weight:200;
   font-size: 20px;
   z-index: 3;
   cursor: pointer;
   background-color: rgb(88, 88, 88);
   color: rgb(252, 142, 52, 0.792);
+
   &:hover {
     background-color: rgb(252, 219, 166);
   }
@@ -137,7 +139,7 @@ export let Gather = styled.h1`
   position: absolute;
   font-size: 30px;
   color: rgb(88, 88, 88);
-  font-family: "Nunito Black";
+  font-family: "Nunito Black", sans-serif;
   margin-top: -1.4rem;
   margin-left: 2.5rem;
   @media (max-width: 600px) {
