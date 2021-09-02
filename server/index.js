@@ -4,7 +4,7 @@ const app = express();
 const session = require("express-session");
 const formData = require("express-form-data");
 const massive = require("massive");
-// const path = require("path");
+const path = require("path");
 const {
   SERVER_PORT,
   CONNECTION_STRING,
@@ -44,17 +44,17 @@ cloudinary.config({
   api_key: API_KEY,
   api_secret: API_SECRET,
 });
-// console.log(cloudinary.url('sample'))
-// app.use(express.static(__dirname+ "/../build"));
-// app.get("*", (req,res)=>{
-//     res.sendFile(path.join(__dirname, "../build/index.html"));
-// });
+
+app.use(express.static(__dirname + "/../build"));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../build/index.html"));
+});
 
 //endpoints
 //views
 app.get("/api/home/:user_id", viewsCtrl.getHomeView);
 app.get("/api/group/:group_name", viewsCtrl.getGroupView);
-app.get('/api/group-posts',viewsCtrl.getGroupPosts)
+app.get("/api/group-posts", viewsCtrl.getGroupPosts);
 //cloudinary;
 app.post("/api/images/:user_id", cloudinaryCtrl.uploadProfileImages);
 
@@ -72,7 +72,7 @@ app.delete("/auth/logout", authCtrl.logout);
 app.get("/api/people", pplCtrl.getPeople);
 app.get("/api/people/:person_id", pplCtrl.getPerson);
 app.get("/api/searchpeople", pplCtrl.personSearch);
-app.get("/api/person/groups",pplCtrl.getGroups)
+app.get("/api/person/groups", pplCtrl.getGroups);
 app.get("/api/groupedpeople", pplCtrl.getPeopleGrouped);
 app.post("/api/people", pplCtrl.createPerson);
 app.put("/api/people/:person_id", pplCtrl.updatePerson);
@@ -103,7 +103,7 @@ app.put(
   "/api/groups/:group_id/person/:person_id",
   groupCtrl.deletePersonFromGroup
 );
-app.put("/api/person-groups",groupCtrl.deleteGroupFromPerson)
+app.put("/api/person-groups", groupCtrl.deleteGroupFromPerson);
 app.delete("/api/groups", groupCtrl.deleteUserFromGroup);
 app.delete("/api/delete-group", groupCtrl.deleteGroup);
 
