@@ -110,9 +110,6 @@ const Home = (props) => {
 
   return (
     <HomeDiv>
-      {console.log(props)}
-      {console.log(groups)}
-
       <Box>
         <Title>Your Hives</Title>
         <GroupsDiv>{mappedGroups}</GroupsDiv>
