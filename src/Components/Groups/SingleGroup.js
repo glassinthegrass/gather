@@ -6,6 +6,8 @@ import styled from "styled-components";
 import CreatePost from "./CreatePost";
 import SingleGroupUsers from "./SingleGroupUsers";
 import Posts from "./Posts";
+import {fadeIn} from '../Home/Home'
+
 
 let Follow = styled.div`
   height: 2rem;
@@ -45,8 +47,8 @@ let Container = styled.section`
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  width: 100vw;
-  min-height: 92vh;
+width:100%;
+
   @media (max-width: 600px) {
     justify-content: flex-start;
   }
@@ -70,6 +72,10 @@ let GroupName = styled.h1`
     font-size: 45px;
   }
 `;
+let GroupSubject= styled.p`
+font-family:'Nunito Light';
+font-size:14px;
+`
 let PostContainer = styled.div`
   display: flex;
   align-items: center;
@@ -109,10 +115,40 @@ let AddPosts = styled.div`
     color: rgb(88, 88, 88);
   }
 `;
+let Back= styled.div`
+position:fixed;
+display:flex;
+font-family:'Nunito Black';
+align-items:center;
+justify-content:center;
+margin-right:92vw;
+margin-top:-3.5rem;
+z-index:5;
+font-size:30px;
+cursor:pointer;
+border-radius:3px;
+background-color:rgb(88,88,88);
+color:rgb(252, 142, 52);
+@media(max-width:600px){
+  margin-top:-2.2rem;
+  margin-right:87vw;
+}
+&:hover{
+  color:rgb(88,88,88);
+  background-color:white;
+}
+
+`
+const Fade = styled.div`
+display:flex;
+width:100vw;
+min-height:92vh;
+animation:${fadeIn} 0.5s linear;
+`
 
 const SingleGroup = (props) => {
   const history = useHistory(),
-    { push } = history;
+    { push,goBack } = history;
   const [group, setGroup] = useState({});
   const [posts, setPosts] = useState([]);
   const [people, setPeople] = useState([]);
@@ -148,9 +184,11 @@ const SingleGroup = (props) => {
       .catch((err) => console.log(err));
   };
   let imageCall = useCallback(() => {
-    setGroupUrl(
-      `https://res.cloudinary.com/glassinthegrass/image/upload/w_400,h_400,c_fill_pad,g_auto,f_auto/${picture_version}/${picture_public_id}`
-    );
+    if(picture_version){
+      setGroupUrl(
+        `https://res.cloudinary.com/glassinthegrass/image/upload/w_400,h_400,c_fill_pad,g_auto,f_auto/${picture_version}/${picture_public_id}`
+      );
+    }
   }, [picture_version, picture_public_id]);
 
   let redirect = useCallback(() => {
@@ -185,6 +223,10 @@ const SingleGroup = (props) => {
       .then((res) => setPeople(res.data))
       .catch((err) => console.log(err));
   };
+  const handleDelete=(group_id,person_id)=>{
+    axios.put(`/api/groups/${group_id}/person/${person_id}`).then(res=>setPeople(res.data)).catch(err=>console.log(err))
+
+  }
 
   let mappedPosts = posts.map((post, i) => {
     return (
@@ -270,12 +312,15 @@ const SingleGroup = (props) => {
   ) : (
     <Follow onClick={() => handleJoin()}>follow</Follow>
   );
+
   return (
-    <>
+    <Fade>
+    <Back onClick={()=>goBack(1)}>{'<<<'}</Back>
       <Container>
         {FollowUnfollow}
         <GroupHeader>
           <GroupName>{group.group_name}</GroupName>
+          <GroupSubject>{'('}{group?.subject}{')'}</GroupSubject>
           <GroupImage src={groupUrl} alt="" />
         </GroupHeader>
         <div>
@@ -301,12 +346,14 @@ const SingleGroup = (props) => {
       </Container>
 
       <SingleGroupUsers
+      handleDelete={handleDelete}
         handleAdd={handleAdd}
         group={group}
         users={users}
         people={people}
+        loggedInUser={user_id}
       />
-    </>
+    </Fade>
   );
 };
 

@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import bee from '../../Assets/Gather_Line_with_Bee.png'
 import { useHistory } from "react-router-dom";
-
+import {fadeIn} from '../Home/Home'
 import styled from "styled-components";
 import MappedGroupsView from "./MappedGroupsView";
 
@@ -100,7 +100,7 @@ margin:5px;
 align-items:center;
 border-radius:10px;
 font-family:'Nunito Light';
-z-index:1;
+z-index:4;
 font-size:20px;
 box-shadow: 10px 0px 13px -12px #897b7b, 0px 7px 13px -7px #000000;
 background-color: rgb(252, 219, 166);
@@ -140,7 +140,8 @@ align-content:center;
 let MapWrap = styled.div`
 display:flex;
 justify-content:center;
-max-width:90%;
+width:90%;
+min-height:90%;
 border:3px solid rgb(88,88,88,0.50);
 border-radius:10px 10px 10px 10px;
 flex-wrap:wrap;
@@ -150,10 +151,20 @@ z-index:1;
 let MapWrapTwo = styled(MapWrap)`
 border:0px;
 align-items:flex-start;
+animation:${fadeIn} 0.5s linear;
+`
+let Input = styled.input`
+width:30%;
+height:1.5rem;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:10px;
 `
 const GroupsView = (props) => {
   const push =useHistory().push
   const [groups, setGroups] = useState([]);
+
 const {user,loggedInUser}=props
 
 
@@ -185,6 +196,7 @@ const MappedGroups = groups? groups.map((group,i)=>{
 
           <MapWrap><Row>
 <Toggles onClick={props.handleAll}>all groups</Toggles> <Toggles onClick={props.handleUserGroups}>followed groups</Toggles></Row>
+<Input placeholder='Search for a hive' onChange={(e)=>props.handleGroupSearch(e.target.value)}/>
           <MapWrapTwo>
             <AddGroup onClick={()=>push('/add-new-group')}><AddGroupText id='text'>+</AddGroupText></AddGroup>
 

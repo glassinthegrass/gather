@@ -96,12 +96,14 @@ module.exports = {
   searchGroups: async (req, res) => {
     const db = req.app.get("db");
     const { searchQuery } = req.query;
-    try {
-      const searchResults = await db.groups.check_new_group_name(searchQuery);
+    if (searchQuery !== "" || searchQuery !== " ") {
+      try {
+        const searchResults = await db.groups.check_new_group_name(searchQuery);
 
-      return res.status(200).send(searchResults);
-    } catch (err) {
-      console.log(err);
+        return res.status(200).send(searchResults);
+      } catch (err) {
+        console.log(err);
+      }
     }
   },
   addPersonToGroup: async (req, res) => {
@@ -128,15 +130,31 @@ module.exports = {
   deletePersonFromGroup: async (req, res) => {
     const db = req.app.get("db");
     const { person_id, group_id } = req.params;
+
     try {
       const [person] = await db.people.get_person(person_id);
       if (!person) {
         return res.status(409).send({ message: "person does not exist." });
       } else {
         await db.groups.delete_person_from_group(person_id, group_id);
-        return res.status(200).send(person);
+        const people = await db.groups.get_people_grouped(group_id);
+
+        return res.status(200).send(people);
       }
     } catch (err) {
+      return res.sendStatus(404);
+    }
+  },
+  deleteGroupFromPerson: async (req, res) => {
+    const db = req.app.get("db");
+    const { group_id,person_id } = req.query;
+    try {
+      await db.groups.delete_person_from_group(person_id, group_id);
+      const groups = await db.people.get_groups_by_person_id(person_id);
+      console.log(groups);
+      return res.status(200).send(groups);
+    } catch (err) {
+      console.log(err)
       return res.sendStatus(404);
     }
   },
@@ -184,7 +202,7 @@ module.exports = {
     if (req.files?.image) {
       try {
         const { path } = req.files.image;
-        const [post] = await db.posts.create_post(post_content, null,mmddyyyy);
+        const [post] = await db.posts.create_post(post_content, null, mmddyyyy);
 
         if (post) {
           await db.posts.create_group_post_user(
@@ -235,7 +253,7 @@ module.exports = {
       }
     } else {
       try {
-        let [post] = await db.posts.create_post(post_content, null,mmddyyyy);
+        let [post] = await db.posts.create_post(post_content, null, mmddyyyy);
         await db.posts.create_group_post_user(group_id, post.post_id, user_id);
         const [newPost] = await db.posts.get_post_by_post_id(post.post_id);
         return res.status(200).send(newPost);

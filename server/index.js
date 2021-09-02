@@ -72,7 +72,8 @@ app.delete("/auth/logout", authCtrl.logout);
 app.get("/api/people", pplCtrl.getPeople);
 app.get("/api/people/:person_id", pplCtrl.getPerson);
 app.get("/api/searchpeople", pplCtrl.personSearch);
-app.get("api/groupedpeople", pplCtrl.getPeopleGrouped);
+app.get("/api/person/groups",pplCtrl.getGroups)
+app.get("/api/groupedpeople", pplCtrl.getPeopleGrouped);
 app.post("/api/people", pplCtrl.createPerson);
 app.put("/api/people/:person_id", pplCtrl.updatePerson);
 app.delete("/api/people", pplCtrl.deletePerson);
@@ -102,6 +103,7 @@ app.put(
   "/api/groups/:group_id/person/:person_id",
   groupCtrl.deletePersonFromGroup
 );
+app.put("/api/person-groups",groupCtrl.deleteGroupFromPerson)
 app.delete("/api/groups", groupCtrl.deleteUserFromGroup);
 app.delete("/api/delete-group", groupCtrl.deleteGroup);
 

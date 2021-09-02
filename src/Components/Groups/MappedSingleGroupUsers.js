@@ -21,6 +21,7 @@ color: rgb(252, 142, 52, 0.792);
 `;
 export let UserContainer = styled.div`
   display: flex;
+  justify-content:
   padding-left:5px;
   cursor:pointer;
   width:100%;

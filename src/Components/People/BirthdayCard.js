@@ -29,6 +29,7 @@ let Column = styled.div`
   flex-direction: column;
   align-items: center;
   z-index: 2;
+  cursor:pointer;
 `;
 let GroupPicture = styled.img`
   height: 20px;
@@ -36,12 +37,12 @@ let GroupPicture = styled.img`
 `;
 let PersonPicture = styled.img`
 width:400px;
-height:250px;
+height:400px;
 `;
 
 const BirthdayCard = (props) => {
-  const { birthdays, idx } = props;
-  let personUrl = `https://res.cloudinary.com/glassinthegrass/image/upload/w_400,h_250,c_pad,f_auto/co_rgb:ffff00,l_text:Nunito_20_bold_letter_spacing_2:!!Happy Birthday!!/fl_layer_apply,g_south,y_20/${birthdays[idx]?.person_picture_version}/${birthdays[idx]?.person_picture_public_id}`;
+  const { birthdays, idx,push } = props;
+  let personUrl = birthdays[idx]?.person_picture_public_id ?`https://res.cloudinary.com/glassinthegrass/image/upload/w_400,h_400,c_pad,f_auto/co_rgb:ffff00,l_text:Nunito_20_bold_letter_spacing_2:!!Happy Birthday!!/fl_layer_apply,g_south,y_20/${birthdays[idx]?.person_picture_version}/${birthdays[idx]?.person_picture_public_id}`:birthdays[idx]?.person_picture_url;
   let groupUrl = `https://res.cloudinary.com/glassinthegrass/image/upload/w_50,h_50,c_fill_pad,g_auto,f_auto/${birthdays[idx]?.group_picture_version}/${birthdays[idx]?.group_picture_public_id}`;
 
   return (
@@ -54,7 +55,7 @@ const BirthdayCard = (props) => {
       <PersonPicture src={personUrl} alt="" />
       <Row>
         <Info>Person shared from</Info>
-        <Column>
+        <Column onClick={()=>push(`/groups/${birthdays[idx]?.group_name}`)}>
           <GroupPicture src={groupUrl} alt="" />
           <GroupInfo>{birthdays[idx]?.group_name}</GroupInfo>
         </Column>

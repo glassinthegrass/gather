@@ -111,7 +111,10 @@ width:4rem;
 const CreatePerson = (props) => {
   const [image, setImage] = useState([]);
   const [preview, setPreview] = useState(null);
-  const [person, setPerson] = useState({});
+  const [person, setPerson] = useState({first_name:'',
+last_name:'',
+birthday:'',
+message:''});
 
   const handleImage = (img) => {
     if (img[0]) {
@@ -204,7 +207,7 @@ const CreatePerson = (props) => {
       </FirstRow>
       <Row>
         <div></div>
-        <Submit onClick={() => handleSubmit()}>Submit</Submit>
+       {preview && person?.first_name.length>=2&&person?.last_name.length>=2 && person?.birthday? <Submit onClick={() => handleSubmit()}>Submit</Submit>:<></>}
       </Row>
     </Column>
   </Row>

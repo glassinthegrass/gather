@@ -17,6 +17,16 @@ module.exports = {
       res.sendStatus(404);
     }
   },
+  getGroups: async (req, res) => {
+    const db = req.app.get("db");
+    const { person_id } = req.query;
+    try {
+      const groups = await db.people.get_groups_by_person_id(person_id);
+      return res.status(200).send(groups);
+    } catch (err) {
+      console.log(err);
+    }
+  },
   personSearch: async (req, res) => {
     const db = req.app.get("db");
     const { inquery } = req.query;
@@ -71,9 +81,9 @@ module.exports = {
               picture_public_id,
               version
             );
-            newPerson.picture_public_id=picture_public_id
-            newPerson.picture_version=version
-            newPerson.profile_picture_url=profile_picture_url
+            newPerson.picture_public_id = picture_public_id;
+            newPerson.picture_version = version;
+            newPerson.profile_picture_url = profile_picture_url;
             return res.status(200).send(newPerson);
           }
           if (error) {
@@ -82,7 +92,6 @@ module.exports = {
           }
         }
       );
-
     } catch (err) {
       console.log(err);
       return res.sendStatus(404);

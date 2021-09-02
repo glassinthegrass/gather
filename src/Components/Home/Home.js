@@ -7,7 +7,7 @@ import styled, { keyframes } from "styled-components";
 import Posts from "../Groups/Posts";
 import Birthdays from "./Birthdays";
 
-const fadeIn = keyframes`
+export const fadeIn = keyframes`
 0% {opacity:0;}
 70%{opacity:0;}
 100%{opacity:100;}
@@ -58,7 +58,7 @@ let PostContainer = styled.div`
 let Box = styled.div`
   width: 100%;
   height: 100%;
-  animation: ${fadeIn} 0.5s linear;
+  animation: ${fadeIn} 0.6s linear;
   animation-iteration-count: 1;
   display: flex;
   flex-direction: column;

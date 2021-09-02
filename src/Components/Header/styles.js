@@ -128,11 +128,15 @@ width:30px;
 z-index:3;
 `
 export let LogoContainer = styled.div`
+position:absolute;
 display:flex;
 justify-content:flex-start;
 align-items:center;
-
-
+margin-right:75vw;
+@media(max-width:600px){
+  margin-right:65vw;
+  margin-top:-10px;
+}
 `
 export let Gather = styled.h1`
 position:absolute;
@@ -191,6 +195,7 @@ export let MiniGather = styled(Gather)`
 display:none;
 font-size:20px;
 margin-top:16px;
+
 animation:${slide} 0.36s ease-in;
 animation-iteration-count:1;
 `

@@ -20,9 +20,10 @@ import bee from '../../Assets/Gather_Line_with_Bee.png'
 
 
 const Login = (props) => {
-  const [loginUser, setLoginUser] = useState("");
-  const [newUser, setNewUser] = useState("");
+  const [loginUser, setLoginUser] = useState({email:'',password:''});
+  const [newUser, setNewUser] = useState({username:'',email:'',password:'',passwordTwo:'',first_name:'',last_name:''});
   const [loginErrorMessage, setLoginErrorMessage] = useState("");
+  const [loginEmailMessage, setLoginEmailMessage] = useState("");
   const [registerErrorMessage, setRegisterErrorMessage] = useState("");
   const [toggle, setToggle] = useState({
     nullToggle: true,
@@ -47,10 +48,32 @@ useEffect(()=>{
       push("/home");
     }
   }, [isLoggedIn, pathname, push]);
-
-  const handleLogin = () => {
-    props.loginUser(loginUser.email, loginUser.password);
-  };
+const handleLoginEmail = (email)=>{
+  let newEmail= '';
+  for(let i = 0; i<email.length;i++){
+    if(email[i]!==' '){
+newEmail+= email[i]
+  }
+}
+setLoginUser({ ...loginUser, email: newEmail })
+}
+const handleLogin = () => {
+  props.loginUser(loginUser.email, loginUser.password);
+};
+const handleLoginPassword = (password)=>{
+  let newPassword= '';
+  for(let i = 0; i<password.length;i++){
+    if(password[i]!==' '){
+newPassword+= password[i]
+  }
+}
+setLoginUser({...loginUser,password:newPassword})
+}
+const handleLoginKeyPress=(e)=>{
+if(e.key==='Enter'){
+  handleLogin()
+}
+}
   const handleRegister = () => {
     props.registerUser(
       newUser.first_name,
@@ -65,14 +88,16 @@ useEffect(()=>{
   let loginWindow = (
     <>
       <Input
-        onChange={(e) => setLoginUser({ ...loginUser, email: e.target.value })}
-        type="text"
+        onChange={(e) => handleLoginEmail(e.target.value)}
+value={loginUser?.email}
         placeholder="Enter email"
       />
       <Input
         onChange={(e) =>
-          setLoginUser({ ...loginUser, password: e.target.value })
+              handleLoginPassword(e.target.value)
         }
+        onKeyPress={(e)=>{handleLoginKeyPress(e)}}
+        value={loginUser?.password}
         type="text"
         placeholder="Enter password"
       />
@@ -84,13 +109,14 @@ useEffect(()=>{
   let registerWindow = (
     <>
       <Input
-        onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}
+        onChange={(e) => setNewUser({ ...newUser, username: e.target.value })} onKeyPress={(e)=>console.log(e)}
         className="registerInput"
         type="text"
         placeholder="Pick a username!"
       />
         <Input
           onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+          
           className="registerInput"
           type="text"
           placeholder="What's your email?"
@@ -190,7 +216,7 @@ useEffect(()=>{
           </RegisterToggle>
         </ToggleBox>
       </div>
-{console.log(props)}
+{console.log(loginUser)}
     </Window>
   );
 };

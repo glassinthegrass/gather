@@ -34,18 +34,22 @@ border-radius:10px 10px 10px 10px;
 background-color: 
 rgb(88,88,88,0.2);
 color:
-rgb(252, 219, 165,0.5);
-
+rgb(252, 219, 165,0.4);
+cursor:pointer;
+&:hover{
+  color:
+rgb(252, 219, 165);
+}
 `
 let Row = styled.div`
 position:absolute;
 display:flex;
 flex-direction:row;
 min-height:42vh;
-
 justify-content:space-around;
 align-items:center;
-width:20rem;
+width:33rem;
+margin-top:5rem;
 &:hover .arrow{
   display:flex;
 }
@@ -165,7 +169,7 @@ const push =useHistory().push
 
 
 <Column>
-      <BirthdayCard birthdays={birthdays} idx={idx}/>
+      <BirthdayCard push={push} birthdays={birthdays} idx={idx}/>
 <Row>
       <Arrow className='arrow' onClick={handleDecrease}>{'<'}</Arrow>
       <Arrow className='arrow' onClick={handleIncrease}>{'>'}</Arrow>

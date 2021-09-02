@@ -30,7 +30,6 @@ let Submit = styled.div`
   @media (max-width: 600px) {
     width: 80%;
   }
- 
 `;
 let Column = styled.div`
   display: flex;
@@ -63,10 +62,9 @@ let Container = styled.section`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  @media(max-width:500px){
-    justify-content:flex-start;
-
-      }
+  @media (max-width: 500px) {
+    justify-content: flex-start;
+  }
 `;
 let Box = styled.div`
   display: flex;
@@ -80,41 +78,40 @@ let Box = styled.div`
   background-color: rgb(252, 219, 166);
   border: 1px solid rbg(88, 88, 88);
   border-radius: 10px 10px 10px 10px;
-  @media(max-width:500px){
-    width:80%;
-background-color:rgb(252,219,166,0);
+  @media (max-width: 500px) {
+    width: 80%;
+    background-color: rgb(252, 219, 166, 0);
   }
 `;
-let PreviewImage=styled.img`
+let PreviewImage = styled.img`
+  min-height: 10vh;
+  min-width: 35vw;
+  max-height: 25vh;
 
-min-height: 10vh;
-min-width: 35vw;
-max-height: 25vh;
+  margin-top: 2rem;
+  border: 1px dotted rgb(88, 88, 88);
+  border-radius: 10px 10px 10px 10px;
 
-margin-top:2rem;
-border: 1px dotted rgb(88, 88, 88);
-border-radius: 10px 10px 10px 10px;
-
-&:hover {
-  background-color: rgb(88, 88, 88);
-  color: rgb(252, 142, 52);
-}
-&:active {
-  background-color: rgb(252, 142, 52, 0.7);
-  color: rgb(88, 88, 88);
-}
-@media(max-width:500px){
-max-height:40vh;
-max-width:95vw;
-    }
-`
+  &:hover {
+    background-color: rgb(88, 88, 88);
+    color: rgb(252, 142, 52);
+  }
+  &:active {
+    background-color: rgb(252, 142, 52, 0.7);
+    color: rgb(88, 88, 88);
+  }
+  @media (max-width: 500px) {
+    max-height: 40vh;
+    max-width: 95vw;
+  }
+`;
 let PreviewDiv = styled.div`
-display:flex;
-justify-content:center;
-align-items:center;
-min-height: 30vh;
-width:18rem;
-margin-top:1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 30vh;
+  width: 18rem;
+  margin-top: 1.5rem;
   border: 1px dotted rgb(88, 88, 88);
   border-radius: 10px 10px 10px 10px;
   &:hover {
@@ -125,10 +122,10 @@ margin-top:1.5rem;
     background-color: rgb(252, 142, 52, 0.7);
     color: rgb(88, 88, 88);
   }
-  @media(max-width:500px){
-width:100vw;
-      height:35vh;
-      }
+  @media (max-width: 500px) {
+    width: 100vw;
+    height: 35vh;
+  }
 `;
 
 let HiddenInput = styled.input`
@@ -140,15 +137,15 @@ let HiddenInput = styled.input`
   z-index: -1;
 `;
 let LoadingBox = styled.div`
-width:5rem;
-height:5rem;
-`
+  width: 5rem;
+  height: 5rem;
+`;
 
 const AddGroup = (props) => {
   const [image, setImage] = useState([]);
   const [imgPreview, setImgPreview] = useState(null);
-  const [loadingToggle,setLoadingToggle]=useState(false)
-  const [group_name, setGroup_Name] = useState("");
+  const [loadingToggle, setLoadingToggle] = useState(false);
+  const [groupName, setGroupName] = useState("");
   const [subject, setSubject] = useState("");
   const [search, setSearch] = useState([]);
   const [newGroup, setNewGroup] = useState(null);
@@ -163,22 +160,35 @@ const AddGroup = (props) => {
     }
   };
   const handleGroupNameInput = (groupName) => {
-    setGroup_Name(groupName);
-    axios
-      .get(`/api/groups?searchQuery=${groupName}`)
-      .then((res) => {
-        setSearch(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    let newGroup = "";
+    for (let i = 0; i < groupName.length; i++) {
+      if (groupName[i] !== " ") {
+        newGroup += groupName[i];
+      }
+    }
+
+    if (groupName.length > 3) {
+      axios
+        .get(`/api/groups?searchQuery=${newGroup}`)
+        .then((res) => {
+          setSearch(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      setSearch([]);
+    }
+if(groupName.length <20){
+  setGroupName(newGroup);
+}
   };
   const handleSubjectInput = (sub) => {
     setSubject(sub);
   };
 
   const handleGroupSubmit = () => {
-    setLoadingToggle(true)
+    setLoadingToggle(true);
     let fileData = new FormData();
     fileData.append("image", image);
     let config = {
@@ -189,18 +199,18 @@ const AddGroup = (props) => {
 
     axios
       .post(
-        `/api/groups?user_id=${props.user.user_id}&group_name=${group_name}&subject=${subject}`,
+        `/api/groups?user_id=${props.user.user_id}&group_name=${groupName}&subject=${subject}`,
         fileData,
         config
       )
       .then((res) => {
         setLoadingToggle(false);
-        setNewGroup(res.data)
+        setNewGroup(res.data);
       })
       .catch((err) => console.log(err));
   };
   let submit =
-    search.length === 0 && group_name.length >= 3 && imgPreview !== null ? (
+    search.length === 0 && groupName.length >= 3 && imgPreview !== null ? (
       <Submit onClick={() => handleGroupSubmit()}>Click to Submit!</Submit>
     ) : (
       <></>
@@ -222,7 +232,15 @@ const AddGroup = (props) => {
           id="single"
         />
         <Label htmlFor="single">
-          {loadingToggle? <LoadingBox><Loading/></LoadingBox>: imgPreview?<PreviewImage src={imgPreview} alt=""/>:<PreviewDiv>Upload Hive Photo</PreviewDiv>}
+          {loadingToggle ? (
+            <LoadingBox>
+              <Loading />
+            </LoadingBox>
+          ) : imgPreview ? (
+            <PreviewImage src={imgPreview} alt="" />
+          ) : (
+            <PreviewDiv>Upload Hive Photo</PreviewDiv>
+          )}
         </Label>
       </Column>
       {submit}
@@ -237,7 +255,7 @@ const AddGroup = (props) => {
   ) : (
     <>{display}</>
   );
-  
+
   let newGroupView = newGroup ? (
     <>
       <PageHeader>Hive Created</PageHeader>
@@ -250,6 +268,7 @@ const AddGroup = (props) => {
       <div>
         <Header>Group Name</Header>
         <Input
+          value={groupName}
           placeholder="type here"
           onChange={(e) => handleGroupNameInput(e.target.value)}
         />

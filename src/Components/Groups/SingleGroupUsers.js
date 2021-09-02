@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState} from "react";
 import styled from "styled-components";
 import MappedSingleGroupPeople from "./MappedSingleGroupPeople";
 import MappedSingleGroupUsers from "./MappedSingleGroupUsers";
@@ -27,7 +27,7 @@ let Title = styled.h1`
     background-color: rgb(252, 142, 52, 0.792);
     color: rgb(88, 88, 88);
   }
-  @media(max-width:500px){
+  @media(max-width:600px){
     font-size:10px;
     color:rgb(88,88,88);
   }
@@ -67,14 +67,23 @@ let Add = styled.div`
   }
 `;
 let SubHead = styled.p`
-  font-size: 8px;
+font-size: 8px;
 `;
 
 const SingleGroupUser = (props) => {
   const [toggle, setToggle] = useState(false);
   const [toggleTwo, setToggleTwo] = useState(true);
-  const [search, setSearch] = useState([]);
+  const [edit,setEdit]=useState(false)
 
+  const [search, setSearch] = useState([]);
+  const{group,handleDelete}=props,
+  {group_id}=group
+  const handleEdit=()=>{
+    edit?setEdit(!edit):setEdit(!edit)
+  }
+
+
+  
   let mappedUsers = props.users ? (
     props.users.map((user, i) => {
       return <MappedSingleGroupUsers key={i} user={user} />;
@@ -83,9 +92,9 @@ const SingleGroupUser = (props) => {
     <></>
   );
 
-  let mappedPeople = props.people ? (
+  let mappedPeople = props.people[0] ? (
     props.people.map((person, i) => {
-      return <MappedSingleGroupPeople key={i} person={person} />;
+      return <MappedSingleGroupPeople key={i} person={person} edit={edit} loggedInUser={props.loggedInUser} handleDelete={handleDelete} group_id={group_id} />;
     })
   ) : (
     <></>
@@ -121,17 +130,21 @@ const SingleGroupUser = (props) => {
   );
 
   const toggleSearch = toggleTwo ? (
-    <Add onClick={() => setToggleTwo(!toggleTwo)}>Search Your People </Add>
+    <Title onClick={() => setToggleTwo(!toggleTwo)}>Search Your People </Title>
   ) : (
     searchDisplay
   );
+  const editToggle = edit?(<Title onClick={handleEdit}>Done</Title>):(<Title onClick={handleEdit}>Edit</Title>)
   const toggledPeopleUsers = toggle ? (
     <>
       <Title onClick={() => setToggle(!toggle)}>
         Hive People<SubHead>{"(Click Me)"}</SubHead>
       </Title>
       {mappedPeople}
+      <>
       {toggleSearch}
+      {editToggle}
+      </>
     </>
   ) : (
     <>

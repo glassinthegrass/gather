@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { getUser } from "../../redux/userReducer";
@@ -82,10 +82,35 @@ let AddPosts = styled.div`
     color: rgb(88, 88, 88);
   }
 `;
+let Back= styled.div`
+position:fixed;
+display:flex;
+font-family:'Nunito Black';
+align-items:center;
+justify-content:center;
+margin-right:92vw;
+margin-top:-3.5rem;
+z-index:5;
+font-size:30px;
+cursor:pointer;
+border-radius:3px;
+background-color:rgb(88,88,88);
+color:rgb(252, 142, 52);
+@media(max-width:600px){
+  margin-top:-2.2rem;
+  margin-right:87vw;
+}
+&:hover{
+  color:rgb(88,88,88);
+  background-color:white;
+}
+
+`
 const Profile = (props) => {
   let loggedInUser = props.user;
 
-  const push = useHistory().push;
+  const history = useHistory(),
+  {push,goBack}=history;
   const { user_id } = props.match.params;
   const [user, setUser] = useState({});
   const [posts, setPosts] = useState([]);
@@ -157,6 +182,7 @@ setPosts([])
       );
     }
   }, [picture_version, picture_public_id]);
+
   const handleOffsetPosts = () => {
     setOffsetToggle(true);
   };
@@ -195,6 +221,7 @@ setPosts([])
 
   return (
     <Container>
+      <Back onClick={()=>goBack(1)}>{'<<<'}</Back>
       <Spacer></Spacer>
       <ProfileContainer>
         <UserProfile
