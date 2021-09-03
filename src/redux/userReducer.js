@@ -40,16 +40,16 @@ export const loginUser = (email, password) => {
 export const registerUser = (
   first_name,
   last_name,
-  email,
   username,
+  email,
   password
 ) => {
   let register = axios
     .post("/auth/register", {
       first_name,
       last_name,
-      email,
       username,
+      email,
       password,
     })
     .then((res) => {
