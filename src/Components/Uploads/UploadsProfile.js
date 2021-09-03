@@ -8,7 +8,8 @@ import { useHistory } from "react-router-dom";
 
 const UploadsProfile = (props) => {
   const push = useHistory().push;
-  const { user_id } = props.user;
+  const { user } = props,
+  {user_id,isRegistered,first_name,email}=user;
   const [response, setResponse] = useState(null);
   const [loadingToggle, setLoadingToggle] = useState(false);
   const [preview, setPreview] = useState(null);
@@ -19,7 +20,15 @@ useEffect(()=>{
 if(!user_id){
   push('/')
 }
-})
+},[user_id,push])
+  useEffect(()=>{
+    if(isRegistered){
+  
+
+        let sent= axios.post(`/api/email?first_name=${first_name}&email=${email}`).then(res=>res.data)
+        console.log(sent)
+    }
+  })
   const handleFile = (img) => {
     if (img[0]) {
       setImage(img[0]);
