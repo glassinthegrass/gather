@@ -51,7 +51,8 @@ let Container = styled.section`
 `;
 let Text = styled.p`
   padding: 10px;
-  font-family: "Nunito";
+  font-family: 'Nunito', sans-serif;
+  font-weight: 400;
   font-size: 12px;
   text-align: left;
 `;

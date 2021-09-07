@@ -146,17 +146,17 @@ let Column = styled.div`
 `;
 let TextInput = styled.input`
   width: 70%;
-  font-family: "Nunito Light";
+  font-weight: 300;
   padding: 3px;
 `;
 
 let Title = styled.h6`
-  font-family: "Nunito Light";
+font-weight: 300;
   font-size: 15px;
 `;
 let Headline = styled.h1`
   font-size: 20px;
-  font-family: "Nunito";
+  font-weight: 400;
 `;
 let PreviewImage = styled.img`
   max-height: 8rem;
@@ -174,6 +174,7 @@ text-align: center;
 border: 1px dotted rgb(88, 88, 88);
 border-radius: 10px 10px 10px 10px;
 font-size: 18px;
+font-weight: 400;
 padding:10px;
 cursor:pointer;
 margin:5px;
@@ -204,7 +205,8 @@ let HiddenInput = styled.input`
 `;
 
 let Label = styled.label`
-  font-family: "Nunito";
+  font-family: "Nunito",sans-serif;
+  font-weight: 400;
   display: flex;
   font-size: 10px;
   flex-direction: column;
@@ -217,6 +219,7 @@ let Submit = styled.div`
   padding: 5px;
   margin: 5px;
   font-family: "Nunito";
+  font-weight: 400;
   cursor: pointer;
 `;
 let FirstRow = styled.div`

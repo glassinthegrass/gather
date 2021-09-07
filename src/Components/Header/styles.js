@@ -26,7 +26,8 @@ export let HeaderSpacer = styled.div`
 export const Arrow = styled.div`
   float: left;
   padding: 10px;
-  font-family: "Nunito Black";
+  font-family: "Nunito";
+  font-weight: 800;
   font-size: 30px;
   color: rgb(88, 88, 88);
   &:hover {
@@ -41,7 +42,7 @@ export const GreetingContainer = styled.section`
 `;
 
 export const Greeting = styled.h1`
-  font-family: "Nunito";
+font-weight:400;
 `;
 let Hover = keyframes`
 0%{transform:scale(0.9);}
@@ -103,8 +104,8 @@ export let ProfileLink = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: "Nunito Light", sans-serif;
-  font-weight:200;
+  font-family: "Nunito", sans-serif;
+  font-weight:300;
   font-size: 20px;
   z-index: 3;
   cursor: pointer;
@@ -139,7 +140,7 @@ export let Gather = styled.h1`
   position: absolute;
   font-size: 30px;
   color: rgb(88, 88, 88);
-  font-family: "Nunito Black", sans-serif;
+
   margin-top: -1.4rem;
   margin-left: 2.5rem;
   @media (max-width: 600px) {

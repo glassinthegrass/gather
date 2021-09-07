@@ -51,7 +51,8 @@ let TextInput = styled.textarea`
   outline: none;
   resize: none;
   overflow: auto;
-  font-family: "Nunito Light";
+  font-family: 'Nunito', sans-serif;
+  font-weight: 300;
   text-align: left;
 `;
 let HiddenInput = styled.input`
@@ -64,7 +65,8 @@ let HiddenInput = styled.input`
 `;
 
 let Label = styled.label`
-  font-family: "Nunito";
+font-family: 'Nunito', sans-serif;
+  font-weight: 400;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -81,7 +83,8 @@ let PictureInput = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: "Nunito Light";
+  font-family: 'Nunito', sans-serif;
+  font-weight: 300;
   box-shadow: 10px 0px 13px -12px #897b7b, 0px 7px 13px -7px #000000;
   background-color: rgb(252, 219, 166);
   &:hover {
@@ -103,7 +106,8 @@ let Submit = styled.div`
   justify-content: center;
   align-items: center;
   margin-left: -1px;
-  font-family: "Nunito Light";
+  font-family: 'Nunito', sans-serif;
+  font-weight: 300;
   background-color: rgb(252, 219, 166);
   &:hover {
     background-color: rgb(88, 88, 88);
@@ -122,7 +126,8 @@ let Preview = styled.img`
   justify-content: center;
   align-items: center;
   border-radius: 10px 10px 0px 0px;
-  font-family: "Nunito Light";
+  font-family: 'Nunito', sans-serif;
+  font-weight: 300;
 
   box-shadow: 10px 0px 13px -12px #897b7b, 0px 7px 13px -7px #000000;
   background-color: rgb(88, 88, 88);

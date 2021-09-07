@@ -235,7 +235,8 @@ let Follow = styled.div`
   height: 2rem;
   width: 100%;
   background-color: rgb(252, 142, 52);
-  font-family: "Nunito SemiBold";
+  font-family: 'Nunito', sans-serif;
+  font-weight: 600;
   display: flex;
   align-items: flex-end;
   padding: 1px;
@@ -284,7 +285,8 @@ let GroupImage = styled.img`
   }
 `;
 let GroupName = styled.h1`
-  font-family: "Nunito Black";
+font-family: 'Nunito', sans-serif;
+  font-weight: 900;
   font-size: 60px;
   @media (min-width: 800px) {
     font-size: 70px;
@@ -294,7 +296,8 @@ let GroupName = styled.h1`
   }
 `;
 let GroupSubject = styled.p`
-  font-family: "Nunito Light";
+font-family: 'Nunito', sans-serif;
+  font-weight: 300;
   font-size: 14px;
 `;
 let PostContainer = styled.div`
@@ -318,7 +321,8 @@ let AddPosts = styled.div`
   height: 2rem;
   width: 6rem;
   font-size: 20px;
-  font-family: "Nunito Black";
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
   margin-bottom: 10px;
   display: flex;
   justify-content: center;
@@ -339,7 +343,8 @@ let AddPosts = styled.div`
 let Back = styled.div`
   position: fixed;
   display: flex;
-  font-family: "Nunito Black";
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
   align-items: center;
   justify-content: center;
   margin-right: 92vw;

@@ -83,7 +83,8 @@ let Container = styled.section`
 `;
 let Spacer = styled.div`
   height: 3rem;
-  font-family: "Nunito Black";
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
   font-size: 20px;
   display: flex;
 

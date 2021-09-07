@@ -95,7 +95,7 @@ let Picture = styled.img`
 let Delete = styled.div`
   width: 100%;
   z-index: 1;
-  font-family: "Nunito";
+  font-weight: 400;
   font-size: 20px;
   display: flex;
   justify-content: flex-end;
@@ -119,16 +119,16 @@ let Delete = styled.div`
 `;
 let Title = styled.h6`
   font-size: 10px;
-  font-family: "Nunito Light";
+  font-weight: 300;
   @media (max-width: 600px) {
-    font-family: "Nunito SemiBold";
+    font-weight: 600;
   }
 `;
 let Info = styled.p`
   font-size: 16px;
-  font-family: "Nunito";
+  font-weight: 400;
   @media (max-width: 600px) {
-    font-family: "Nunito Light";
+    font-weight: 200;
     font-size: 12px;
   }
 `;

@@ -30,7 +30,8 @@ let GroupsContainer = styled.section`
   align-contents: center;
   margin: 2px;
   padding: 5px;
-  font-family: "Nunito Light";
+  font-family: 'Nunito', sans-serif;
+  font-weight: 300;
   font-size: 10px;
   border: 1px dotted rgb(88, 88, 88, 0.5);
   border-radius: 10px;
@@ -48,7 +49,8 @@ let GroupsContainer = styled.section`
     color: rgb(88, 88, 88);
   }
   &:active .groupname {
-    font-family: "Nunito SemiBold";
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
     color: rgb(88, 88, 88);
   }
 `;

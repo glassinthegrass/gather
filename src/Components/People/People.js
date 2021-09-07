@@ -138,7 +138,7 @@ let Directions = styled.div`
 
 let Edit = styled.p`
   width: 98%;
-  font-family: "Nunito";
+  font-weight: 400;
   text-align: right;
   padding-right: 1rem;
   cursor: pointer;
@@ -158,9 +158,9 @@ let Ol = styled.ol`
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: "Nunito Black";
+  font-weight: 900;
 `;
 let Li = styled.li`
-  font-family: "Nunito Light";
+font-weight: 300;
   padding: 1px;
 `;

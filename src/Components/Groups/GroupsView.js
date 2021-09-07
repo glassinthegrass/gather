@@ -106,7 +106,7 @@ border:3px solid rgb(88,88,88,0.7);
 border-radius:25px 25px 25px 25px;
 background-color:rgb(252, 142, 52, 0.792);
 padding:10px;
-
+font-weight: 400;
 margin:10px;
 margin-left:20px;
 margin-right:20px;
@@ -149,7 +149,8 @@ let AddGroupText = styled.h1`
   justify-content: center;
   align-content: center;
   align-items: center;
-  font-family: "Nunito Black";
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
   font-size: 14em;
   color: rgb(88, 88, 88, 0.3);
   margin-top: -5px;
@@ -174,13 +175,14 @@ let Toggles = styled.div`
   border: 1px solid rgb(88, 88, 88, 0.5);
   width: 50%;
   height: 30px;
-  font-size: 8px;
+
   display: flex;
   justify-content: center;
   margin: 5px;
   align-items: center;
   border-radius: 10px;
-  font-family: "Nunito Light";
+  font-family: 'Nunito', sans-serif;
+  font-weight: 300;
   z-index: 4;
   font-size: 20px;
   box-shadow: 10px 0px 13px -12px #897b7b, 0px 7px 13px -7px #000000;
@@ -196,7 +198,8 @@ let Toggles = styled.div`
   }
   @media (max-width: 600px) {
     font-size: 15px;
-    font-family: "Nunito Semibold";
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
   }
 `;
 let Spacer = styled.div`
@@ -206,7 +209,8 @@ let Spacer = styled.div`
   justify-content: center;
   align-items: center;
   align-content: center;
-  font-family: "Nunito SemiBold";
+  font-family: 'Nunito', sans-serif;
+  font-weight: 600;
 `;
 let Container = styled.section`
   display: flex;

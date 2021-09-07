@@ -39,11 +39,13 @@ let Container = styled.div`
   border-radius: 10px 10px 10px 10px;
 `;
 let Info = styled.p`
-  font-family: "Nunito";
+  font-family: "Nunito",sans-serif;
+  font-weight: 400;
   font-size: 14px;
   padding: 5px;
 `;
 let GroupInfo = styled(Info)`
+font-weight: 400;
   font-size: 8px;
 `;
 let Row = styled.div`

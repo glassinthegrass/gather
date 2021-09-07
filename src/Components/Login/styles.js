@@ -12,8 +12,8 @@ export const Window = styled.div`
   align-content: center;
   min-height: 90vh;
   width: 100vw;
+  font-weight: 400;
 
-  font-family: "Nunito Black";
   z-index: 1;
   animation: ${fadeIn} 1s linear;
 `;
@@ -45,6 +45,7 @@ export const Input = styled.input`
   margin-left: 10%;
   box-shadow: 10px 0px 13px -7px #897b7b, 0px 7px 13px -7px #000000;
   border-radius: 10px 10px 10px 10px;
+  font-weight: 400;
   font-size: 10px;
   z-index: 1;
 `;
@@ -55,7 +56,8 @@ export const Submit = styled.h1`
   align-items: center;
   margin: 5%;
   margin-left: 20%;
-  font-family: "Nunito Light";
+  font-family: "Nunito", sans-serif;
+  font-weight: 300;
   background-color: rgb(252, 219, 166);
   border: 1px solid rgb(88, 88, 88);
   box-shadow: 10px 0px 13px -7px #897b7b, 0px 7px 13px -7px #000000;
@@ -84,7 +86,8 @@ export const LoginToggle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: "Nunito Light";
+  font-family: "Nunito", sans-serif;
+  font-weight: 300;
   font-size: 20px;
   box-shadow: 10px 0px 13px -12px #897b7b, 0px 7px 13px -7px #000000;
   cursor: pointer;
@@ -144,6 +147,8 @@ export let Title = styled.h1`
   padding: 10px;
   z-index: 1;
   margin: 10px;
+  font-family:'Nunito', sans-serif;
+  font-weight: 900;
   text-shadow: -1px -1px 0 rgb(246, 243, 235), 1px -1px 0 rgb(246, 243, 235),
     -1px 1px 0 rgb(246, 243, 235), 1px 1px 0 rgb(246, 243, 235);
 `;

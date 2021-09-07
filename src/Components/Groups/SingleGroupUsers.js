@@ -106,7 +106,8 @@ const SingleGroupUser = (props) => {
 export default SingleGroupUser;
 
 let Title = styled.h1`
-  font-family: "Nunito Black";
+font-family: 'Nunito', sans-serif;
+  font-weight: 900;
   border: 1px solid rgb(88, 88, 88, 0.5);
   width: 100%;
   height: 30px;
@@ -153,7 +154,8 @@ let Add = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: "Nunito Light";
+  font-family: 'Nunito', sans-serif;
+  font-weight: 300;
   font-size: 20px;
   z-index: 3;
   cursor: pointer;

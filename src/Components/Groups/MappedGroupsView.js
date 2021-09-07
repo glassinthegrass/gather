@@ -131,7 +131,8 @@ let GroupName = styled.h6`
   position: absolute;
   margin-top: 3rem;
   z-index: 1;
-  font-family: "Nunito Black";
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
   font-size: 18px;
   color: rgb(247, 242, 234);
   text-shadow: -1.5px 0 black, 0 1.5px black, 1.5px 0 black, 0 -1.5px black;
@@ -145,7 +146,8 @@ let GroupName = styled.h6`
   }
 `;
 let Options = styled.div`
-  font-family: "Nunito Black";
+font-family: 'Nunito', sans-serif;
+  font-weight: 900;
   position: absolute;
   z-index: 2;
 

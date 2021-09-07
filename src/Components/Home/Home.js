@@ -146,7 +146,8 @@ const HomeDiv = styled.div`
   width: 100vw;
   min-height: 95vh;
   z-index: 1;
-  font-family: "Nunito Black";
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
 `;
 
 let GroupsDiv = styled.div`
@@ -161,8 +162,8 @@ let GroupsDiv = styled.div`
 let Title = styled.div`
   background-color: rgb(252, 219, 165);
   width: 100%;
-  font-family: "Nunito Black", sans-serif;
-  font-weight:800;
+  font-family: "Nunito", sans-serif;
+  font-weight:900;
   border-bottom: 0.5px dotted rgb(88, 88, 88, 0.5);
   z-index: 1;
 `;
@@ -194,7 +195,8 @@ let AddPosts = styled.div`
   height: 2rem;
   width: 6rem;
   font-size: 20px;
-  font-family: "Nunito Black";
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
   margin-bottom: 10px;
   display: flex;
   justify-content: center;

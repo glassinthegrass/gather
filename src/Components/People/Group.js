@@ -71,14 +71,14 @@ let Name = styled.p`
   display: flex;
   align-items: center;
   padding: 5px;
-  font-family: "Nunito";
+  font-weight: 400;
   font-size: 15px;
   @media (max-width: 600px) {
     font-size: 10px;
   }
 `;
 let Options = styled.div`
-  font-family: "Nunito Black";
+font-weight: 900;
   z-index: 2;
 
   display: flex;
@@ -115,6 +115,7 @@ let OptionBox = styled.div`
   margin-left: -120px;
   border: 1px solid white;
   font-size: 10px;
+  font-weight: 400;
   background-color: rgb(252, 219, 166);
   cursor: pointer;
 

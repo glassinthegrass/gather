@@ -175,7 +175,7 @@ let Submit = styled.div`
   justify-content: center;
   align-items: center;
   padding: 5px;
-  font-family: "Nunito Light";
+  font-weight: 300;
   cursor: pointer;
   background-color: rgb(88, 88, 88);
   color: rgb(252, 142, 52);
@@ -194,7 +194,7 @@ let PictureInput = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: "Nunito SemiBold";
+  font-weight: 600;
   box-shadow: 10px 0px 13px -12px #897b7b, 0px 7px 13px -7px #000000;
   background-color: rgb(252, 219, 166);
   &:hover {
@@ -209,7 +209,6 @@ let PictureInput = styled.div`
 let Container = styled.section`
   display: flex;
   justify-content: center;
-
   width: 100vw;
   z-index: 1;
 `;
@@ -254,7 +253,7 @@ let TextContainer = styled.section`
   z-index: 1;
 `;
 let ProfileTitle = styled.h4`
-  font-family: "Nunito Black";
+font-weight: 900;
   font-size: 20px;
   padding: 2px;
   background-color: rgb(252, 219, 166);
@@ -262,7 +261,7 @@ let ProfileTitle = styled.h4`
 `;
 
 let ProfileText = styled.h1`
-  font-family: "Nunito Light";
+font-weight: 300;
   background-color: rgb(252, 219, 166);
   z-index: 1;
 `;
@@ -275,7 +274,7 @@ let EditContainer = styled.div`
 let ProfileEdit = styled.h1`
   z-index: 1;
   width: 2.5rem;
-  font-family: "Nunito";
+  font-weight: 400;
   font-size: 20px;
   display: flex;
   align-items: center;

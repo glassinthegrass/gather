@@ -173,7 +173,7 @@ let PostToggle = styled.h1`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: "Nunito Light";
+  font-weight: 300;
   font-size: 20px;
   z-index: 1;
   box-shadow: 10px 0px 13px -12px #897b7b, 0px 7px 13px -7px #000000;
@@ -213,7 +213,7 @@ let AddPosts = styled.div`
   height: 2rem;
   width: 6rem;
   font-size: 20px;
-  font-family: "Nunito Black";
+  font-weight: 900;
   margin-bottom: 10px;
   display: flex;
   justify-content: center;
@@ -234,7 +234,7 @@ let AddPosts = styled.div`
 let Back = styled.div`
   position: fixed;
   display: flex;
-  font-family: "Nunito Black";
+  font-weight: 900;
   align-items: center;
   justify-content: center;
   margin-right: 92vw;

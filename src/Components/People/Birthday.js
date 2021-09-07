@@ -156,7 +156,8 @@ let Arrow = styled.div`
   align-items: center;
   width: 5rem;
   height: 5rem;
-  font-family: "Nunito Black";
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
   font-size: 80px;
   border-radius: 10px 10px 10px 10px;
   background-color: rgb(88, 88, 88, 0.2);

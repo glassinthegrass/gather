@@ -41,7 +41,8 @@ let BirthdayContainer = styled.div`
 
 let HighText = styled.p`
   display: flex;
-  font-family: "Nunito";
+  font-family: 'Nunito', sans-serif;
+  font-weight: 400;
   font-size: 15px;
   color: rgb(88, 88, 88);
   align-items: flex-end;
@@ -50,7 +51,8 @@ let HighText = styled.p`
 
 let LowText = styled.p`
   display: flex;
-  font-family: "Nunito";
+  font-family: 'Nunito', sans-serif;
+  font-weight: 400;
   font-size: 15px;
   color: rgb(88, 88, 88);
   white-space: nowrap;

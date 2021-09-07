@@ -82,6 +82,6 @@ let PostComment = styled.div`
   margin: 2rem;
   padding: 2rem;
   border-radius: 10px;
-
+  font-weight: 400;
   border-radius: 10px;
 `;
