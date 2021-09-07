@@ -205,7 +205,7 @@ let HiddenInput = styled.input`
 `;
 
 let Label = styled.label`
-  font-family: "Nunito",sans-serif;
+
   font-weight: 400;
   display: flex;
   font-size: 10px;
@@ -218,7 +218,7 @@ let Submit = styled.div`
   background-color: rgb(88, 88, 88, 0.8);
   padding: 5px;
   margin: 5px;
-  font-family: "Nunito";
+
   font-weight: 400;
   cursor: pointer;
 `;

@@ -149,7 +149,7 @@ let AddGroupText = styled.h1`
   justify-content: center;
   align-content: center;
   align-items: center;
-  font-family: 'Nunito', sans-serif;
+
   font-weight: 900;
   font-size: 14em;
   color: rgb(88, 88, 88, 0.3);
@@ -181,7 +181,7 @@ let Toggles = styled.div`
   margin: 5px;
   align-items: center;
   border-radius: 10px;
-  font-family: 'Nunito', sans-serif;
+
   font-weight: 300;
   z-index: 4;
   font-size: 20px;
@@ -198,7 +198,7 @@ let Toggles = styled.div`
   }
   @media (max-width: 600px) {
     font-size: 15px;
-    font-family: 'Nunito', sans-serif;
+
     font-weight: 600;
   }
 `;
@@ -209,7 +209,7 @@ let Spacer = styled.div`
   justify-content: center;
   align-items: center;
   align-content: center;
-  font-family: 'Nunito', sans-serif;
+
   font-weight: 600;
 `;
 let Container = styled.section`

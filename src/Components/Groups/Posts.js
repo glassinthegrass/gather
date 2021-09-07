@@ -170,7 +170,7 @@ let PostContent = styled.p`
   max-width: 80%;
   margin-left: 10%;
   margin-right: 10%;
-  font-family: 'Nunito', sans-serif;
+
   font-weight: 300;
 `;
 let CreationDate = styled(PostContent)`
@@ -206,7 +206,7 @@ let GroupPicture = styled.img`
   z-index: 1;
 `;
 let GroupName = styled(UserName)`
-font-family: 'Nunito', sans-serif;
+
   font-weight: 300;
   font-size: 10px;
   margin-right: -10px;
@@ -236,7 +236,7 @@ let Input = styled.input`
   outline: none;
   resize: none;
   overflow: auto;
-  font-family: 'Nunito', sans-serif;
+
   font-weight: 300;
   font-size: 12px;
   margin-left: 5%;
@@ -254,7 +254,7 @@ let Submit = styled.div`
   margin-top: 0.5%;
   cursor: pointer;
   background-color: rgb(252, 219, 165);
-  font-family: 'Nunito', sans-serif;
+
   font-weight: 300;
   font-size: 10px;
   display: flex;

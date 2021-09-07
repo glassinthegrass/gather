@@ -59,7 +59,6 @@ const App = (props) => {
   const mainView = (
     <>
       <Header
-        id="top"
         profileMenu={
           <ProfileMenu
             url={profilePicture}
@@ -85,13 +84,26 @@ const App = (props) => {
 
   const darkMode = darkToggle ? <DarkMode>{mainView}</DarkMode> : mainView;
 
-  return <div className="App">{darkMode}</div>;
+  return <AppBox className="App">{darkMode}</AppBox>;
 };
 const mapStateToProps = (reduxState) => {
   return reduxState.userReducer;
 };
 
 export default connect(mapStateToProps, { logoutUser, getUser })(App);
+let AppBox = styled.div`
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+font-family: Nunito, Roboto,  sans-serif;
+background: url('./Assets/Gather_honeycombs.png') no-repeat center center fixed;
+background-size:cover;
+text-align: center;
+display:flex;
+flex-direction: column;
+min-height:100vh;
+width:100vw;
+z-index:0
+`
 let MainHolder = styled.div`
   display: flex;
   justify-content: center;

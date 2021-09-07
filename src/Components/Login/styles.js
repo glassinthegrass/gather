@@ -56,7 +56,7 @@ export const Submit = styled.h1`
   align-items: center;
   margin: 5%;
   margin-left: 20%;
-  font-family: "Nunito", sans-serif;
+
   font-weight: 300;
   background-color: rgb(252, 219, 166);
   border: 1px solid rgb(88, 88, 88);
@@ -86,7 +86,7 @@ export const LoginToggle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: "Nunito", sans-serif;
+
   font-weight: 300;
   font-size: 20px;
   box-shadow: 10px 0px 13px -12px #897b7b, 0px 7px 13px -7px #000000;
@@ -147,7 +147,7 @@ export let Title = styled.h1`
   padding: 10px;
   z-index: 1;
   margin: 10px;
-  font-family:'Nunito', sans-serif;
+
   font-weight: 900;
   text-shadow: -1px -1px 0 rgb(246, 243, 235), 1px -1px 0 rgb(246, 243, 235),
     -1px 1px 0 rgb(246, 243, 235), 1px 1px 0 rgb(246, 243, 235);

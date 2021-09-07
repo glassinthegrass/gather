@@ -3,6 +3,8 @@ import styled, { keyframes } from "styled-components";
 export const StyledHeader = styled.header`
   position: sticky;
   top: 0;
+
+  font-weight:400;
   display: flex;
   height: 2.5rem;
   justify-content: center;
@@ -26,7 +28,7 @@ export let HeaderSpacer = styled.div`
 export const Arrow = styled.div`
   float: left;
   padding: 10px;
-  font-family: "Nunito";
+
   font-weight: 800;
   font-size: 30px;
   color: rgb(88, 88, 88);
@@ -42,6 +44,7 @@ export const GreetingContainer = styled.section`
 `;
 
 export const Greeting = styled.h1`
+
 font-weight:400;
 `;
 let Hover = keyframes`
@@ -104,8 +107,8 @@ export let ProfileLink = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: "Nunito", sans-serif;
-  font-weight:300;
+
+  font-weight:400;
   font-size: 20px;
   z-index: 3;
   cursor: pointer;
@@ -138,6 +141,8 @@ export let LogoContainer = styled.div`
 `;
 export let Gather = styled.h1`
   position: absolute;
+
+  font-weight:900;
   font-size: 30px;
   color: rgb(88, 88, 88);
 

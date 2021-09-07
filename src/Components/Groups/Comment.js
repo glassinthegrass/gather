@@ -34,7 +34,7 @@ let Img = styled.img`
 `;
 let CommentText = styled.p`
   font-size: 14px;
-  font-family: 'Nunito', sans-serif;
+
   font-weight: 300;
   border-radius: 10px;
   padding: 5px;

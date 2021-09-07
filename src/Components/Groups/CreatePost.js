@@ -51,7 +51,7 @@ let TextInput = styled.textarea`
   outline: none;
   resize: none;
   overflow: auto;
-  font-family: 'Nunito', sans-serif;
+
   font-weight: 300;
   text-align: left;
 `;

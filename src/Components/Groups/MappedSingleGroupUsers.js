@@ -26,7 +26,7 @@ export default MappedSingleGroupUsers;
 export let Container = styled.section`
   display: flex;
   justify-content: flex-start;
-  font-family: 'Nunito', sans-serif;
+
   font-weight: 600;
   align-items: center;
   padding: 2px;
