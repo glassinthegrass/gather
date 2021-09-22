@@ -1,19 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
+import { userContext } from "../../userContext";
 import Loading from "../Loading";
-import { connect } from "react-redux";
-import { getUser } from "../../redux/userReducer";
 import axios from "axios";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 
 const UploadsProfile = (props) => {
   const push = useHistory().push;
-  const { user } = props,
-  {user_id,isRegistered,first_name,email}=user;
+  const [user,setUser]=useContext(userContext);
+  const {user_id,isRegistered,first_name,email}=user;
   const [response, setResponse] = useState(null);
   const [loadingToggle, setLoadingToggle] = useState(false);
   const [preview, setPreview] = useState(null);
-  const { getUser } = props;
   const [image, setImage] = useState([]);
   console.log(props)
 useEffect(()=>{
@@ -54,16 +52,14 @@ if(!user_id){
     axios
       .post(`/api/images/${user_id}`, fileData, config)
       .then(function (res) {
-        setResponse(res.data);
+        setUser(res.data)
+        console.log(res.data)
+        setResponse(res.data.profile_picture_url);
         setLoadingToggle(false);
       })
       .catch((err) => console.log(err));
   };
-  useEffect(() => {
-    if (response) {
-      getUser(user_id);
-    }
-  }, [user_id, response, getUser]);
+
 
   let picSwitch = preview ? (
     response ? (
@@ -96,6 +92,7 @@ if(!user_id){
   );
   return (
     <Containter>
+      {console.log(response)}
       <UploadContainer>
         <HiddenInput
           type="file"
@@ -106,15 +103,13 @@ if(!user_id){
 
         {loadingSwitch}
       </UploadContainer>
+      {console.log(user)}
     </Containter>
   );
 };
 
-const mapStateToProps = (reduxState) => {
-  return reduxState.userReducer;
-};
+export default UploadsProfile
 
-export default connect(mapStateToProps, { getUser })(UploadsProfile);
 let HiddenInput = styled.input`
   width: 0.1px;
   height: 0.1px;

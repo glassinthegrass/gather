@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
+import { userContext } from "../../userContext";
 import axios from "axios";
 import Groups from "./Groups";
 import { useHistory } from "react-router";
-import { connect } from "react-redux";
+
 import styled, { keyframes } from "styled-components";
 import Posts from "../Groups/Posts";
 import Birthdays from "./Birthdays";
@@ -10,7 +11,7 @@ import Birthdays from "./Birthdays";
 const Home = (props) => {
   const history = useHistory();
   const { push } = history;
-
+const [postsToggle,setPostsToggle]=useState(false)
   const [groups, setGroups] = useState([]);
   const [posts, setPosts] = useState([]);
   const [birthdays, setBirthdays] = useState([]);
@@ -18,7 +19,8 @@ const Home = (props) => {
   const [offset, setOffset] = useState(0);
   const [offsetToggle, setOffsetToggle] = useState(true);
   const [idx, setIdx] = useState(0);
-  const { user_id, isLoggedIn } = props.user;
+  const [user] = useContext(userContext)
+   const { user_id, isLoggedIn } = user;
 
   setInterval(() => {
     if (birthdays[0]) {
@@ -29,6 +31,7 @@ const Home = (props) => {
       }
     }
   }, 10000);
+
   useEffect(() => {
     if (isLoggedIn === false) {
       push("/");
@@ -36,7 +39,7 @@ const Home = (props) => {
   }, [isLoggedIn, push]);
 
   useEffect(() => {
-    if (user_id) {
+    if (isLoggedIn) {
       axios
         .get(`/api/home/${user_id}`)
         .then((res) => {
@@ -44,7 +47,7 @@ const Home = (props) => {
         })
         .catch((err) => console.log(err));
     }
-  }, [user_id]);
+  }, [isLoggedIn,user_id]);
 
   useEffect(() => {
     if (offsetToggle) {
@@ -53,6 +56,9 @@ const Home = (props) => {
         .get(`/api/home-posts?user_id=${user_id}&offset=${offset}`)
         .then((res) => {
           setPosts([...posts, res.data].flat());
+          if(res.data.length % 10!==0){
+            setPostsToggle(true)
+          }
         })
         .catch((err) => console.log(err));
       setOffset(offset + 10);
@@ -60,13 +66,13 @@ const Home = (props) => {
   }, [offsetToggle, offset, user_id, posts]);
 
   useEffect(() => {
-    if (user_id) {
+    if (isLoggedIn) {
       axios
         .get(`/api/birthday?user_id=${user_id}`)
         .then((res) => setBirthdays(res.data))
         .catch((err) => console.log(err));
     }
-  }, [user_id]);
+  }, [isLoggedIn,user_id]);
 
   const handleMorePosts = () => {
     setOffsetToggle(true);
@@ -102,10 +108,10 @@ const Home = (props) => {
   }, [loadingToggle]);
 
   let gotAllPosts =
-    posts.length % 10 === 0 ? (
+      postsToggle ?(
+      <AddPosts>That's it!</AddPosts>
+      ) : (
       <AddPosts onClick={() => handleMorePosts()}>More</AddPosts>
-    ) : (
-      <AddPosts>All Done</AddPosts>
     );
 
   return (
@@ -117,19 +123,17 @@ const Home = (props) => {
           <Birthdays birthday={birthdays[idx]} />
         </Announce>
         <Spacer></Spacer>
-        <PostContainer>{mappedPosts}</PostContainer>
+        <PostContainer onScroll={(e)=>console.log(e.target)}>{mappedPosts}</PostContainer>
         <Spacer></Spacer>
         {gotAllPosts}
         <Spacer></Spacer>
       </Box>
+      {console.log(user)}
     </HomeDiv>
   );
 };
-const mapStateToProps = (reduxState) => {
-  return reduxState.userReducer;
-};
 
-export default connect(mapStateToProps)(Home);
+export default Home;
 
 export const fadeIn = keyframes`
 0% {opacity:0;}
@@ -163,7 +167,7 @@ let Title = styled.div`
   background-color: rgb(252, 219, 165);
   width: 100%;
 
-  font-weight:900;
+  font-weight: 900;
   border-bottom: 0.5px dotted rgb(88, 88, 88, 0.5);
   z-index: 1;
 `;
@@ -180,6 +184,7 @@ let Announce = styled.div`
 let PostContainer = styled.div`
   display: flex;
   flex-direction: column;
+
 `;
 let Box = styled.div`
   width: 100%;

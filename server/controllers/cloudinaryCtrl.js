@@ -44,7 +44,11 @@ module.exports = {
             picture_public_id,
             version
           );
-          return res.status(200).send(profile_picture_url);
+          user.profile_picture_url=profile_picture_url
+          user.picture_public_id=picture_public_id
+          user.picture_version= version
+          user.isLoggedIn=true
+          return res.status(200).send(user);
         }
         if (error) {
           console.log(error);

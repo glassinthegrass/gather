@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useContext, useState } from "react";
+import { userContext } from "../../userContext";
 import { useHistory } from "react-router-dom";
-import { connect } from "react-redux";
-import { loginUser, registerUser } from "../../redux/userReducer.js";
+import bee from "../../Assets/Gather_Line_with_Bee.png";
 
 import {
   ToggleBox,
@@ -15,9 +15,10 @@ import {
   Title,
   Error,
 } from "./styles.js";
-import bee from "../../Assets/Gather_Line_with_Bee.png";
+import axios from "axios";
 
 const Login = (props) => {
+  const [user, setUser] = useContext(userContext);
   const [loginUser, setLoginUser] = useState({ email: "", password: "" });
   const [newUser, setNewUser] = useState({
     username: "",
@@ -27,28 +28,15 @@ const Login = (props) => {
     first_name: "",
     last_name: "",
   });
-  const [loginErrorMessage, setLoginErrorMessage] = useState("");
-  const [registerErrorMessage, setRegisterErrorMessage] = useState("");
   const [toggle, setToggle] = useState({
     nullToggle: true,
     loginToggle: false,
     registerToggle: false,
   });
+  const [emailError, setEmailError] = useState("");
   const history = useHistory();
   const { push } = history;
-  const { user } = props,
-    { loginError, registerError, isLoggedIn } = user;
-
-  useEffect(() => {
-    loginError
-      ? setLoginErrorMessage("Something Went Wrong. Please Try Again")
-      : setLoginErrorMessage("");
-  }, [loginError]);
-  useEffect(() => {
-    registerError
-      ? setRegisterErrorMessage("Something Went Wrong. Please Try Again")
-      : setRegisterErrorMessage("");
-  }, [registerError]);
+  const { isLoggedIn } = user;
 
   useEffect(() => {
     if (isLoggedIn === true) {
@@ -58,17 +46,26 @@ const Login = (props) => {
     }
   }, [isLoggedIn, push]);
   const handleLoginEmail = (email) => {
-    let newEmail = "";
-    for (let i = 0; i < email.length; i++) {
-      if (email[i] !== " ") {
-        newEmail += email[i];
-      }
-    }
-    setLoginUser({ ...loginUser, email: newEmail });
+    setEmailError("");
+    setLoginUser({ ...loginUser, email: email });
   };
   const handleLogin = () => {
-    props.loginUser(loginUser.email, loginUser.password);
+    let emailReg = new RegExp(/^\S+@\S+\.\S+$/, "ig");
+    if (emailReg.test(loginUser.email)) {
+      const { email, password } = loginUser;
+      axios
+        .post("/auth/login", { email, password })
+        .then((res) => {
+          setUser(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      setEmailError("Email is not valid");
+    }
   };
+
   const handleLoginPassword = (password) => {
     let newPassword = "";
     for (let i = 0; i < password.length; i++) {
@@ -89,29 +86,29 @@ const Login = (props) => {
     }
   };
   const handleRegister = () => {
-    props.registerUser(
-      newUser.first_name,
-      newUser.last_name,
-      newUser.username,
-      newUser.email,
-      newUser.password
-    );
+    const { first_name, last_name, username, email, password } = newUser;
+    axios
+      .post("/auth/register", {
+        first_name,
+        last_name,
+        username,
+        email,
+        password,
+      })
+      .then((res) => {
+        setUser(res.data);
+      })
+      .catch((err) => {
+        return console.log(err);
+      });
+    props.registerUser();
   };
-  let loginErrorDisplay = loginError ? (
-    <Error>{loginErrorMessage}</Error>
-  ) : (
-    <></>
-  );
-  let registerErrorDisplay = registerError ? (
-    <Error>{registerErrorMessage}</Error>
-  ) : (
-    <></>
-  );
+
   let loginWindow = (
     <>
+      <Error>{emailError}</Error>
       <Input
         onChange={(e) => handleLoginEmail(e.target.value)}
-        value={loginUser?.email}
         placeholder="Enter email"
       />
       <Input
@@ -119,11 +116,10 @@ const Login = (props) => {
         onKeyPress={(e) => {
           handleLoginKeyPress(e);
         }}
-        value={loginUser?.password}
         type="password"
         placeholder="Enter password"
       />
-      {loginErrorDisplay}
+
       <Submit onClick={() => handleLogin()}>Submit</Submit>
     </>
   );
@@ -169,8 +165,8 @@ const Login = (props) => {
         type="password"
         placeholder="Please verify your password"
       />
-      {registerErrorDisplay}
-      {props.user.isRegistered ? (
+
+      {user.isRegistered ? (
         <Submit onClick={() => push("/profile/uploads")}>Next</Submit>
       ) : (
         <Submit onClick={() => handleRegister()}>Submit</Submit>
@@ -238,12 +234,9 @@ const Login = (props) => {
           </RegisterToggle>
         </ToggleBox>
       </div>
+      {console.log(user)}
     </Window>
   );
 };
 
-const mapStateToProps = (reduxState) => {
-  return reduxState.userReducer;
-};
-
-export default connect(mapStateToProps, { loginUser, registerUser })(Login);
+export default Login;

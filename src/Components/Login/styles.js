@@ -147,17 +147,16 @@ export let Title = styled.h1`
   padding: 10px;
   z-index: 1;
   margin: 10px;
-
   font-weight: 900;
   text-shadow: -1px -1px 0 rgb(246, 243, 235), 1px -1px 0 rgb(246, 243, 235),
     -1px 1px 0 rgb(246, 243, 235), 1px 1px 0 rgb(246, 243, 235);
 `;
 export let Error = styled.div`
   display: flex;
-  width: 13rem;
+width:100%;
   justify-content: center;
   border-radius: 10px;
   background-color: white;
   z-index: 3;
-  padding: 5px;
+
 `;

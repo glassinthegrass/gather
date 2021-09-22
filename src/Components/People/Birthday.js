@@ -1,6 +1,6 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import React, { useEffect, useState,useContext } from "react";
+import { userContext } from "../../userContext";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import Posts from "../Groups/Posts";
@@ -8,7 +8,8 @@ import BirthdayCard from "./BirthdayCard";
 import CreatePost from "./CreatePost";
 
 const Birthday = (props) => {
-  const { isLoggedIn, user_id } = props.user;
+  const [user]=useContext(userContext);
+  const { isLoggedIn, user_id } = user;
   const [birthdays, setBirthdays] = useState([]);
   const [loading, setLoading] = useState(false);
   const [posts, setPosts] = useState([]);
@@ -129,11 +130,8 @@ const Birthday = (props) => {
     </Container>
   );
 };
-const mapStateToProps = (reduxState) => {
-  return reduxState.userReducer;
-};
 
-export default connect(mapStateToProps)(Birthday);
+export default Birthday;
 
 let Spacer = styled.div`
   height: 1rem;

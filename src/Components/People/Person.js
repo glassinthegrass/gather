@@ -60,6 +60,7 @@ const Person = (props) => {
   );
 };
 export default Person;
+
 let Container = styled.section`
   display: flex;
   flex-direction: column;

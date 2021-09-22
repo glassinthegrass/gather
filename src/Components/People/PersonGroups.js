@@ -45,6 +45,7 @@ const PersonGroups = (props) => {
   );
 };
 export default PersonGroups;
+
 let Container = styled.div`
   display: flex;
   justify-content: center;

@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
+import { userContext } from "../../userContext";
 import axios from "axios";
-import { connect } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import Posts from "../Groups/Posts";
 import styled from "styled-components";
 import Comment from "../Groups/Comment";
 
-const PostPage = (props) => {
+const PostPage = () => {
   const push = useHistory().push;
-  const { isLoggedIn, user_id } = props.user;
+  const [user]=useContext(userContext)
+  const { isLoggedIn, user_id } = user;
   const post_id = useParams().post_id;
   const [post, setPost] = useState({});
   const [comments, setComments] = useState([]);
@@ -50,10 +51,9 @@ const PostPage = (props) => {
     </Container>
   );
 };
-const mapStateToProps = (reduxState) => {
-  return reduxState.userReducer;
-};
-export default connect(mapStateToProps)(PostPage);
+
+export default PostPage
+
 let Container = styled.section`
   width: 100vw;
   min-height: 90vh;

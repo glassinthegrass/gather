@@ -1,11 +1,12 @@
 import axios from "axios";
-import React, { useState } from "react";
-import { connect } from "react-redux";
+import React, { useState,useContext } from "react";
+import { userContext } from "../../userContext";
 import styled from "styled-components";
 import Loading from "../Loading";
 import GroupCard from "./GroupCard";
 
 const AddGroup = (props) => {
+  const [user]=useContext(userContext);
   const [image, setImage] = useState([]);
   const [imgPreview, setImgPreview] = useState(null);
   const [loadingToggle, setLoadingToggle] = useState(false);
@@ -63,7 +64,7 @@ const AddGroup = (props) => {
 
     axios
       .post(
-        `/api/groups?user_id=${props.user.user_id}&group_name=${groupName}&subject=${subject}`,
+        `/api/groups?user_id=${user.user_id}&group_name=${groupName}&subject=${subject}`,
         fileData,
         config
       )
@@ -147,11 +148,8 @@ const AddGroup = (props) => {
   );
 };
 
-const mapStateToProps = (reduxState) => {
-  return reduxState.userReducer;
-};
+export default AddGroup;
 
-export default connect(mapStateToProps)(AddGroup);
 let Submit = styled.div`
   width: 18rem;
   height: 2rem;

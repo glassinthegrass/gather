@@ -1,6 +1,7 @@
 import axios from "axios";
-import React, { useState, useEffect, useCallback } from "react";
-import { connect } from "react-redux";
+import React, { useState, useEffect,useContext, useCallback } from "react";
+import { userContext } from "../../userContext";
+
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import CreatePost from "./CreatePost";
@@ -9,6 +10,8 @@ import Posts from "./Posts";
 import { fadeIn } from "../Home/Home";
 
 const SingleGroup = (props) => {
+  const [user]=useContext(userContext);
+  const { isLoggedIn, user_id } = user;
   const history = useHistory(),
     { push, goBack } = history;
   const [group, setGroup] = useState({});
@@ -23,7 +26,6 @@ const SingleGroup = (props) => {
   const [groupUrl, setGroupUrl] = useState("");
   const { group_name } = props.match.params;
   const [offset, setOffset] = useState(0);
-  const { isLoggedIn, user_id } = props.user;
   const { picture_version, picture_public_id } = group;
 
   useEffect(() => {
@@ -225,11 +227,7 @@ const SingleGroup = (props) => {
   );
 };
 
-const mapStateToProps = (reduxState) => {
-  return reduxState.userReducer;
-};
-
-export default connect(mapStateToProps)(SingleGroup);
+export default SingleGroup;
 
 let Follow = styled.div`
   height: 2rem;

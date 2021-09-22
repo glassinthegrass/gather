@@ -1,16 +1,16 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import React, { useEffect, useContext, useState } from "react";
+import { userContext } from "../../userContext";
+import { useHistory } from "react-router-dom";
 import GroupsView from "./GroupsView";
 import styled from "styled-components";
-import { useHistory } from "react-router-dom";
 
 const Groups = (props) => {
   const [filter, setFilter] = useState("all");
   const [groups, setGroups] = useState([]);
   const push = useHistory().push;
-  const { user } = props,
-    { user_id, isLoggedIn } = user;
+  const [user] = useContext(userContext);
+  const { user_id, isLoggedIn } = user;
 
   const handleAll = () => {
     setFilter("all");
@@ -72,10 +72,8 @@ const Groups = (props) => {
     </Container>
   );
 };
-const mapStateToProps = (reduxState) => {
-  return reduxState.userReducer;
-};
-export default connect(mapStateToProps)(Groups);
+
+export default Groups;
 
 let Container = styled.section`
   width: 100vw;

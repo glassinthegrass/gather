@@ -1,6 +1,6 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import React, { useEffect, useState,useContext } from "react";
+import { userContext } from "../../userContext";
 import { useHistory } from "react-router-dom";
 import { fadeIn } from "../Home/Home";
 import styled from "styled-components";
@@ -12,7 +12,8 @@ const People = (props) => {
   const push = useHistory().push;
   const [people, setPeople] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { user_id, isLoggedIn } = props.user;
+  const [user]=useContext(userContext)
+  const { user_id, isLoggedIn } = user;
 
   useEffect(() => {
     axios
@@ -100,10 +101,9 @@ const People = (props) => {
     </Container>
   );
 };
-const mapStateToProps = (reduxState) => {
-  return reduxState.userReducer;
-};
-export default connect(mapStateToProps)(People);
+
+export default People;
+
 let Container = styled.section`
   width: 100vw;
   min-height: 95vh;

@@ -1,21 +1,22 @@
-import React, { useEffect, useState } from "react";
-import "./reset.css";
-import "./App.css";
+import React, { useEffect, useState, useContext } from "react";
+import { userContext } from "./userContext";
 import MainRoutes from "./Routes/MainRoutes";
-import { connect } from "react-redux";
-import { logoutUser, getUser } from "./redux/userReducer";
 import Header from "./Components/Header/Header";
-import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import ProfileIcons from "./Components/Header/ProfileIcons";
 import ProfileMenu from "./Components/Header/ProfileMenu";
+import "./reset.css";
+import "./App.css";
+import styled from "styled-components";
 
 const App = (props) => {
-  const { user, logoutUser } = props;
+  const [user,setUser] = useContext(userContext)
+  const {  logoutUser } = props;
   const { picture_public_id, picture_version, isLoggedIn } = user;
   const [menuToggle, setMenuToggle] = useState(false);
   const [darkToggle, setDarkToggle] = useState(false);
   const [profilePicture, setProfilePicture] = useState("");
+
   const push = useHistory().push;
   useEffect(() => {
     if (picture_version) {
@@ -43,7 +44,7 @@ const App = (props) => {
           <ProfileMenuMover>
             <ProfileMenu
               url={profilePicture}
-              logout={props.logoutUser}
+              logout={()=>setUser({isLoggedIn:false})}
               push={push}
               darkToggle={darkToggle}
               handleDarkToggle={handleDarkToggle}
@@ -62,7 +63,7 @@ const App = (props) => {
         profileMenu={
           <ProfileMenu
             url={profilePicture}
-            logout={props.logoutUser}
+            logout={()=>setUser({isLoggedIn:false})}
             push={push}
             darkToggle={darkToggle}
             handleDarkToggle={handleDarkToggle}
@@ -86,11 +87,8 @@ const App = (props) => {
 
   return <div className="App">{darkMode}</div>;
 };
-const mapStateToProps = (reduxState) => {
-  return reduxState.userReducer;
-};
 
-export default connect(mapStateToProps, { logoutUser, getUser })(App);
+export default App
 
 let MainHolder = styled.div`
   display: flex;

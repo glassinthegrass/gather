@@ -1,15 +1,14 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import React, { useEffect, useState, useContext } from "react";
+import { userContext } from "../../userContext";
 import { useHistory } from "react-router-dom";
-import { getUser } from "../../redux/userReducer";
 import styled from "styled-components";
 import UserPosts from "./UserPosts";
 import UserProfile from "./UserProfile";
 import Groups from "../Profile/Groups";
 
 const Profile = (props) => {
-  let loggedInUser = props.user;
+  const [loggedInUser, setLoggedInUser] = useContext(userContext);
 
   const history = useHistory(),
     { push, goBack } = history;
@@ -99,9 +98,8 @@ const Profile = (props) => {
       .put(
         `/auth/email?email=${email}&newEmail=${newEmail}&password=${password}`
       )
-      .then((res) => setUser(res.data))
+      .then((res) => setLoggedInUser(res.data))
       .catch((err) => console.log(err));
-    props.getUser(user_id);
   };
   const togglePosts = () => {
     toggle === null || toggle === true ? setToggle(false) : setToggle(null);
@@ -122,7 +120,7 @@ const Profile = (props) => {
         )}
       </ProfileContainer>
     ) : (
-      <Groups loggedInUser={props.user} user={user} />
+      <Groups loggedInUser={loggedInUser} user={user} />
     );
 
   return (
@@ -135,7 +133,7 @@ const Profile = (props) => {
           handleEmailSubmit={handleEmailSubmit}
           handleSubmit={handleProfileSubmit}
           profilePicture={profilePicture}
-          loggedInUser={props.user}
+          loggedInUser={loggedInUser}
           push={push}
           user={user}
           handleLoadingToggle={handleLoadingToggle}
@@ -152,11 +150,9 @@ const Profile = (props) => {
     </Container>
   );
 };
-const mapStateToProps = (reduxState) => {
-  return reduxState.userReducer;
-};
 
-export default connect(mapStateToProps, { getUser })(Profile);
+export default Profile;
+
 let Container = styled.section`
   width: 100vw;
   min-height: 95vh;

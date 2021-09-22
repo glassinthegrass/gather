@@ -5,14 +5,6 @@ const session = require("express-session");
 const formData = require("express-form-data");
 const massive = require("massive");
 const path = require("path");
-const {
-  SERVER_PORT,
-  CONNECTION_STRING,
-  SESSION_SECRET,
-  CLOUD_NAME,
-  API_KEY,
-  API_SECRET,
-} = process.env;
 const cloudinary = require("cloudinary").v2;
 const authCtrl = require("./controllers/authCtrl");
 const pplCtrl = require("./controllers/pplCtrl");
@@ -24,6 +16,15 @@ const viewsCtrl = require("./controllers/viewsCtrl");
 const emailCtrl = require("./controllers/emailCtrl");
 const { getBirthday } = require("./controllers/birthdayCtrl");
 const friendCtrl = require("./controllers/friendCtrl");
+
+const {
+  SERVER_PORT,
+  CONNECTION_STRING,
+  SESSION_SECRET,
+  CLOUD_NAME,
+  API_KEY,
+  API_SECRET,
+} = process.env;
 
 app.use(formData.parse());
 app.use(express.json());
@@ -86,6 +87,7 @@ app.delete("/api/posts/:post_id", postCtrl.deletePost);
 //comments
 app.get(`/api/comments/:post_id`, postCtrl.getCommentsByPost);
 app.post(`/api/post-comment`, postCtrl.createPostComment);
+
 //groups
 app.get("/api/groups/all", groupCtrl.getAllGroups);
 app.get("/api/groups", groupCtrl.searchGroups);
@@ -133,12 +135,15 @@ app.use(express.static(__dirname + "/../build"));
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../build/index.html"));
 });
-massive({
-  connectionString: CONNECTION_STRING,
-  ssl: {
-    rejectUnauthorized: false,
+massive(
+  {
+    connectionString: CONNECTION_STRING,
+    ssl: {
+      rejectUnauthorized: false,
+    },
   },
-}).then((dbInstance) => {
+  { scripts: path.join(__dirname, "../db") }
+).then((dbInstance) => {
   app.set("db", dbInstance);
   app.listen(SERVER_PORT, () => console.log(`GATHER on port ${SERVER_PORT}`));
 });
