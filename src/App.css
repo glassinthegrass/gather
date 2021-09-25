@@ -6,5 +6,15 @@
 
 input{
   text-align: center;
+  font-family:Nunito,Roboto,sans-serif;
+  font-weight:300;
   background-color: rgb(233, 233, 233);
+}
+header{
+  font-family:Nunito,Roboto,sans-serif;
+  font-weight:300;
+  padding:3px;
+}
+.active{
+
 }

@@ -125,7 +125,7 @@ const Profile = (props) => {
 
   return (
     <Container>
-      <Back onClick={() => goBack(1)}>{"<<<"}</Back>
+      <Back onClick={() => goBack(1)}>{"<"}</Back>
       <Spacer></Spacer>
       <ProfileContainer>
         <UserProfile
@@ -201,7 +201,7 @@ let ProfileContainer = styled.div`
 `;
 let PostsOrGroups = styled.section`
   width: 100%;
-  min-height: 15vh;
+  min-height: 21vh;
   background-color: rgb(88, 88, 88, 0.5);
   padding-top: 5vh;
 `;
@@ -230,7 +230,8 @@ let AddPosts = styled.div`
 let Back = styled.div`
   position: fixed;
   display: flex;
-  font-weight: 900;
+  font-weight: 800;
+  width:2rem;
   align-items: center;
   justify-content: center;
   margin-right: 92vw;
@@ -238,6 +239,7 @@ let Back = styled.div`
   z-index: 5;
   font-size: 30px;
   cursor: pointer;
+  padding:2px;
   border-radius: 3px;
   background-color: rgb(88, 88, 88);
   color: rgb(252, 142, 52);

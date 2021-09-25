@@ -45,8 +45,7 @@ export const Input = styled.input`
   margin-left: 10%;
   box-shadow: 10px 0px 13px -7px #897b7b, 0px 7px 13px -7px #000000;
   border-radius: 10px 10px 10px 10px;
-  font-weight: 400;
-  font-size: 10px;
+  font-size: 12px;
   z-index: 1;
 `;
 export const Submit = styled.h1`
@@ -153,7 +152,10 @@ export let Title = styled.h1`
 `;
 export let Error = styled.div`
   display: flex;
-width:100%;
+width:90%;
+padding:3px;
+text-wrap:wrap;
+font-size:10px;
   justify-content: center;
   border-radius: 10px;
   background-color: white;

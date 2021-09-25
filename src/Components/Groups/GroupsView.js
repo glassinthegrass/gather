@@ -149,16 +149,16 @@ let AddGroupText = styled.h1`
   justify-content: center;
   align-content: center;
   align-items: center;
-
-  font-weight: 900;
+  font-weight: 800;
   font-size: 14em;
   color: rgb(88, 88, 88, 0.3);
-  margin-top: -5px;
+  margin-top: -2.5rem;
   width: 7rem;
   height: 7rem;
   &:hover {
+    margin-top:-2.6rem;
     color: rgb(88, 88, 88, 0.7);
-    transform: scale(1.2);
+    transform: scale(1.1);
   }
   @media (min-width: 900px) {
     width: 10rem;

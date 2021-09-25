@@ -3,18 +3,17 @@ import styled, { keyframes } from "styled-components";
 export const StyledHeader = styled.header`
   position: sticky;
   top: 0;
-
-  font-weight:400;
   display: flex;
   height: 2.5rem;
   justify-content: center;
-  padding: 10px;
+padding-top:10px;
   border-bottom: 1px inset rgb(88, 88, 88, 0.7);
   background-color: rgb(242, 145, 50);
   box-shadow: 10px 0px 13px -7px #897b7b, 0px 7px 13px -7px #000000;
   z-index: 3;
   @media (max-width: 600px) {
     padding-top: 12px;
+    padding-bottom:5px;
     height: 1rem;
   }
 `;
@@ -44,7 +43,7 @@ export const GreetingContainer = styled.section`
 `;
 
 export const Greeting = styled.h1`
-
+font-family:Nunito;
 font-weight:400;
 `;
 let Hover = keyframes`
@@ -141,11 +140,9 @@ export let LogoContainer = styled.div`
 `;
 export let Gather = styled.h1`
   position: absolute;
-
-  font-weight:900;
+  font-weight:600;
   font-size: 30px;
   color: rgb(88, 88, 88);
-
   margin-top: -1.4rem;
   margin-left: 2.5rem;
   @media (max-width: 600px) {
@@ -196,7 +193,6 @@ export let MiniGather = styled(Gather)`
   display: none;
   font-size: 20px;
   margin-top: 16px;
-
   animation: ${slide} 0.36s ease-in;
   animation-iteration-count: 1;
 `;

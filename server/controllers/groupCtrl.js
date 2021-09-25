@@ -42,8 +42,6 @@ module.exports = {
               let { url } = eager[0];
               const picture_public_id = result.public_id;
               const picture_version = "v" + result.version;
-              console.log(picture_public_id);
-              console.log(picture_version);
               db.groups.update_group_url(
                 newGroup.group_id,
                 url,
@@ -151,7 +149,6 @@ module.exports = {
     try {
       await db.groups.delete_person_from_group(person_id, group_id);
       const groups = await db.people.get_groups_by_person_id(person_id);
-      console.log(groups);
       return res.status(200).send(groups);
     } catch (err) {
       console.log(err)
@@ -265,7 +262,7 @@ module.exports = {
   addMemberToGroup: async (req, res) => {
     const db = req.app.get("db");
     const { loggedInUser, user, group_id, filter } = req.query;
-    console.log(loggedInUser);
+
     try {
       const [member] = await db.groups.check_group_membership(
         group_id,

@@ -4,7 +4,6 @@ const { EMAIL, ENTRY_KEY } = process.env;
 module.exports = {
   sendEmail: async (req, res) => {
     const { first_name, email } = req.query;
-console.log(first_name,email)
     try {
       //invoke the createTransport function passing in your email information.
       let transporter = nodemailer.createTransport({

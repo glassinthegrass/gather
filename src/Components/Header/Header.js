@@ -41,6 +41,7 @@ const Header = (props) => {
       <HeaderSpacer></HeaderSpacer>
       <HeaderSpacer></HeaderSpacer>
       <HeaderSpacer></HeaderSpacer>
+
       {hideButtons}
     </StyledHeader>
   );

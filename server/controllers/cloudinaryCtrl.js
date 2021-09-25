@@ -32,7 +32,7 @@ module.exports = {
       },
       function (error, result) {
         if (result) {
-          console.log(result);
+
           const { eager } = result;
           const profile_picture_url = eager[0].url;
           const picture_public_id = result.public_id;

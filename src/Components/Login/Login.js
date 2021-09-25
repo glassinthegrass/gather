@@ -33,7 +33,8 @@ const Login = (props) => {
     loginToggle: false,
     registerToggle: false,
   });
-  const [emailError, setEmailError] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const [regError, setRegError] = useState("");
   const history = useHistory();
   const { push } = history;
   const { isLoggedIn } = user;
@@ -45,25 +46,12 @@ const Login = (props) => {
       push("/");
     }
   }, [isLoggedIn, push]);
+
   const handleLoginEmail = (email) => {
-    setEmailError("");
-    setLoginUser({ ...loginUser, email: email });
-  };
-  const handleLogin = () => {
-    let emailReg = new RegExp(/^\S+@\S+\.\S+$/, "ig");
-    if (emailReg.test(loginUser.email)) {
-      const { email, password } = loginUser;
-      axios
-        .post("/auth/login", { email, password })
-        .then((res) => {
-          setUser(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      setEmailError("Email is not valid");
-    }
+    setLoginError("");
+    let user = { ...loginUser };
+    user.email = email;
+    setLoginUser(user);
   };
 
   const handleLoginPassword = (password) => {
@@ -75,17 +63,30 @@ const Login = (props) => {
     }
     setLoginUser({ ...loginUser, password: newPassword });
   };
+  const handleLogin = () => {
+    let emailReg = new RegExp(/^\S+@\S+\.\S+$/, "ig");
+    const { email, password } = loginUser;
+    if (!emailReg.test(loginUser.email)) {
+      setLoginError("Email is not valid.");
+    } else {
+      axios
+        .post("/auth/login", { email, password })
+        .then((res) => {
+          setUser(res.data);
+        })
+        .catch((err) => {
+          setLoginError(err.response.data);
+        });
+    }
+  };
+
   const handleLoginKeyPress = (e) => {
     if (e.key === "Enter") {
       handleLogin();
     }
   };
-  const handleRegisterKeyPress = (e) => {
-    if (e.key === "Enter") {
-      handleRegister();
-    }
-  };
   const handleRegister = () => {
+    setRegError("");
     const { first_name, last_name, username, email, password } = newUser;
     axios
       .post("/auth/register", {
@@ -99,26 +100,32 @@ const Login = (props) => {
         setUser(res.data);
       })
       .catch((err) => {
-        return console.log(err);
+        setRegError(err.response.data);
       });
-    props.registerUser();
+  };
+  const handleRegisterKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleRegister();
+    }
   };
 
   let loginWindow = (
     <>
-      <Error>{emailError}</Error>
       <Input
         onChange={(e) => handleLoginEmail(e.target.value)}
         placeholder="Enter email"
+        value={loginUser.email}
       />
       <Input
         onChange={(e) => handleLoginPassword(e.target.value)}
         onKeyPress={(e) => {
           handleLoginKeyPress(e);
         }}
+        value={loginUser.password}
         type="password"
         placeholder="Enter password"
       />
+    {loginError&&<Error>{loginError}</Error>}
 
       <Submit onClick={() => handleLogin()}>Submit</Submit>
     </>
@@ -127,45 +134,63 @@ const Login = (props) => {
   let registerWindow = (
     <>
       <Input
-        onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}
+        onChange={(e) => {
+          setNewUser({ ...newUser, username: e.target.value });
+          setRegError("");
+        }}
         className="registerInput"
+        value={newUser.username}
         type="text"
         placeholder="Pick a username!"
       />
       <Input
-        onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+        onChange={(e) => {
+          setNewUser({ ...newUser, email: e.target.value });
+          setRegError("");
+        }}
         className="registerInput"
+        value={newUser.email}
         type="text"
         placeholder="What's your email?"
       />
       <Input
-        onChange={(e) => setNewUser({ ...newUser, first_name: e.target.value })}
+        onChange={(e) => {
+          setNewUser({ ...newUser, first_name: e.target.value });
+          setRegError("");
+        }}
         className="registerInput"
         type="text"
         placeholder="What's your first name?"
       />
       <Input
-        onChange={(e) => setNewUser({ ...newUser, last_name: e.target.value })}
+        onChange={(e) => {
+          setNewUser({ ...newUser, last_name: e.target.value });
+          setRegError("");
+        }}
         className="registerInput"
         type="text"
         placeholder="What's your last name?"
       />
       <Input
-        onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
+        onChange={(e) => {
+          setNewUser({ ...newUser, password: e.target.value });
+          setRegError("");
+        }}
         className="registerInput"
         type="password"
         placeholder="Enter a password"
       />
       <Input
-        onChange={(e) =>
-          setNewUser({ ...newUser, passwordTwo: e.target.value })
-        }
+        onChange={(e) => {
+          setNewUser({ ...newUser, passwordTwo: e.target.value });
+          setRegError("");
+        }}
         onKeyPress={(e) => handleRegisterKeyPress(e)}
         className="registerInput"
         type="password"
-        placeholder="Please verify your password"
+        placeholder="Re-enter your password"
       />
-
+      { regError&&<Error>{regError}</Error>}
       {user.isRegistered ? (
         <Submit onClick={() => push("/profile/uploads")}>Next</Submit>
       ) : (
@@ -234,7 +259,6 @@ const Login = (props) => {
           </RegisterToggle>
         </ToggleBox>
       </div>
-      {console.log(user)}
     </Window>
   );
 };

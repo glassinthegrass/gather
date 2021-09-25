@@ -181,7 +181,7 @@ const SingleGroup = (props) => {
 
   return (
     <Fade>
-      <Back onClick={() => goBack(1)}>{"<<<"}</Back>
+      <Back onClick={() => goBack(1)}>{"<"}</Back>
       <Container>
         {FollowUnfollow}
         <GroupHeader>
@@ -341,11 +341,12 @@ let AddPosts = styled.div`
 let Back = styled.div`
   position: fixed;
   display: flex;
-
+padding:2px;
+width:2rem;
   font-weight: 900;
   align-items: center;
   justify-content: center;
-  margin-right: 92vw;
+margin-left:2rem;
   margin-top: -3.5rem;
   z-index: 5;
   font-size: 30px;

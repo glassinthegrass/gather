@@ -1,13 +1,15 @@
 const bcrypt = require("bcryptjs");
 
-let errorMessage = "Bzzzzt- Email is not registered";
-
 module.exports = {
   //register controller function
   register: async (req, res) => {
     //gain access to db functions
     const db = req.app.get("db");
     const { first_name, last_name, username, email, password } = req.body;
+
+    if(password.length<6){
+      return res.status(411).send('Password be at least 6 characters')
+    }
     const today = new Date()
     const mmddyyyy = String(`${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}-${String(today.getYear()+1900)}`);
     //check if email used
@@ -17,7 +19,7 @@ module.exports = {
 
       //if an object is returned, send an error
       if (existingUser) {
-        return res.status(409).send("User already Exists");
+        return res.status(409).send("Email or username is already registered");
       } else {
         const salt = bcrypt.genSaltSync(10);
         const hash = bcrypt.hashSync(password, salt);
@@ -37,7 +39,7 @@ module.exports = {
         return res.status(200).send(registeredUser);
       }
     } catch (err) {
-      return res.status(500).send(errorMessage);
+      return res.status(500).send('Bzzzt- something went wrong.');
     }
   },
   registerAdmin: async (req, res) => {
@@ -67,7 +69,7 @@ module.exports = {
         return res.status(200).send(registeredUser);
       }
     } catch (err) {
-      return res.status(500).send(errorMessage);
+      return res.status(500).send('Bzzzt- Something went wrong. Try again.');
     }
   },
   login: async (req, res) => {
@@ -75,13 +77,13 @@ module.exports = {
     const { email, password } = req.body;
     try {
       const [existingUser] = await db.auth.get_user_by_email(email, email);
+      console.log(existingUser)
       if (!existingUser) {
-        return res.status(403).send(errorMessage);
+        return res.status(403).send('Email is not registered');
       } else {
         const isAuthenticated = bcrypt.compareSync(password, existingUser.hash);
         if (!isAuthenticated) {
-          errorMessage = "bad password";
-          return res.status(403).send(errorMessage);
+          return res.status(403).send("Password is incorrect");
         } else {
           delete existingUser.hash;
           existingUser.isLoggedIn = true;
@@ -91,7 +93,7 @@ module.exports = {
       }
     } catch (err) {
       console.log(err);
-      return res.status(500).send(errorMessage);
+      return res.status(500).send('Bzzzt- Something went wrong. Try again.');
     }
   },
   logout: (req, res) => {
@@ -111,8 +113,7 @@ module.exports = {
       console.log(existingUser)
       const isAuthenticated = bcrypt.compareSync(password, existingUser.hash);
       if (!isAuthenticated) {
-        errorMessage = "Bad Password";
-        return res.status(409).send(errorMessage);
+        return res.status(409).send('Password is incorrect');
       } else {
         const [updatedUser] = await db.auth.update_email(email, newEmail);
         delete updatedUser.hash
@@ -121,6 +122,7 @@ module.exports = {
       }
     } catch (err) {    
       console.log(err);
+      res.status(500).send('Bzzzt- Something went wrong. Try again.')
     }
   },
   updatePassword: async (req, res) => {
@@ -128,17 +130,16 @@ module.exports = {
     // const {user_id}=req.session.user
     const { email, password, newPassword } = req.body;
     if (password === newPassword) {
-      return res.status(409).send({
-        message:
-          "Old password and new password match. Please re-enter your new password.",
-      });
+      return res.status(409).send(
+        "New password cannot match old password- try again.",
+    );
     }
     try {
       const [existingUser] = await db.auth.get_user_by_email(email);
       const isAuthenticated = bcrypt.compareSync(password, existingUser.hash);
 
       if (!isAuthenticated) {
-        return res.sendStatus(409);
+        return res.status(409).send('current password is incorrect- cannot update password');
       } else {
         const salt = bcrypt.genSaltSync(10);
         const hash = bcrypt.hashSync(newPassword, salt);
@@ -155,22 +156,19 @@ module.exports = {
     try {
       const [existingUser] = await db.auth.get_user_by_user_id(user_id);
       if (!existingUser) {
-        return res.send("you are not registered");
+        return res.status(500).send("You are not registered.");
       }
-
-
       existingUser.isLoggedIn = true;
       delete existingUser.hash;
       return res.status(200).send(existingUser);
     } catch (err) {
       console.log(err);
-      return res.send(404);
+      return res.status(500).send('Bzzt- something went wrong.');
     }
   },
   updateUser: async (req, res) => {
     const db = req.app.get("db");
     const { newInfo } = req.body;
-    console.log(newInfo);
     try {
       await db.auth.update_user(
         newInfo.first_name,
@@ -182,6 +180,7 @@ module.exports = {
       return res.status(200).send(user);
     } catch (err) {
       console.log(err);
+      return res.status(404).send('Bzzt- something went wrong.');
     }
   },
 };

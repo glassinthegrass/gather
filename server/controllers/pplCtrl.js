@@ -69,7 +69,6 @@ module.exports = {
         },
         function (error, result) {
           if (result) {
-            console.log(result);
             const { eager } = result;
             const profile_picture_url = eager[0].url;
             const picture_public_id = result.public_id;
@@ -123,7 +122,6 @@ module.exports = {
   deletePerson: async (req, res) => {
     const db = req.app.get("db");
     const { person_id, user_id } = req.query;
-    console.log(person_id, user_id);
     try {
       const [person] = await db.people.get_person(person_id);
       if (!person) {
