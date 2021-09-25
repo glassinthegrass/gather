@@ -75,7 +75,7 @@ const Login = (props) => {
           setUser(res.data);
         })
         .catch((err) => {
-          setLoginError(err.response.data);
+          setLoginError(err.response);
         });
     }
   };

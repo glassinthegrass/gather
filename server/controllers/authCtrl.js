@@ -81,8 +81,7 @@ module.exports = {
     const { email, password } = req.body;
     try {
       const [existingUser] = await db.auth.get_user_by_email(email, email);
-      console.log(existingUser);
-      if (!existingUser) {
+      if (!existingUser.hasOwnProperty('email')) {
         return res.status(403).send("Email is not registered");
       } else {
         const isAuthenticated = bcrypt.compareSync(password, existingUser.hash);
