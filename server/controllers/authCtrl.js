@@ -7,11 +7,15 @@ module.exports = {
     const db = req.app.get("db");
     const { first_name, last_name, username, email, password } = req.body;
 
-    if(password.length<6){
-      return res.status(411).send('Password be at least 6 characters')
+    if (password.length < 6) {
+      return res.status(411).send("Password be at least 6 characters");
     }
-    const today = new Date()
-    const mmddyyyy = String(`${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}-${String(today.getYear()+1900)}`);
+    const today = new Date();
+    const mmddyyyy = String(
+      `${String(today.getMonth() + 1).padStart(2, "0")}-${String(
+        today.getDate()
+      ).padStart(2, "0")}-${String(today.getYear() + 1900)}`
+    );
     //check if email used
     try {
       //checking email status
@@ -39,7 +43,7 @@ module.exports = {
         return res.status(200).send(registeredUser);
       }
     } catch (err) {
-      return res.status(500).send('Bzzzt- something went wrong.');
+      return res.status(500).send("Bzzzt- something went wrong.");
     }
   },
   registerAdmin: async (req, res) => {
@@ -69,7 +73,7 @@ module.exports = {
         return res.status(200).send(registeredUser);
       }
     } catch (err) {
-      return res.status(500).send('Bzzzt- Something went wrong. Try again.');
+      return res.status(500).send("Bzzzt- Something went wrong. Try again.");
     }
   },
   login: async (req, res) => {
@@ -77,9 +81,9 @@ module.exports = {
     const { email, password } = req.body;
     try {
       const [existingUser] = await db.auth.get_user_by_email(email, email);
-      console.log(existingUser)
+      console.log(existingUser);
       if (!existingUser) {
-        return res.status(403).send('Email is not registered');
+        return res.status(403).send("Email is not registered");
       } else {
         const isAuthenticated = bcrypt.compareSync(password, existingUser.hash);
         if (!isAuthenticated) {
@@ -93,7 +97,7 @@ module.exports = {
       }
     } catch (err) {
       console.log(err);
-      return res.status(500).send('Bzzzt- Something went wrong. Try again.');
+      return res.status(500).send("Bzzzt- Something went wrong. Try again.");
     }
   },
   logout: (req, res) => {
@@ -107,22 +111,22 @@ module.exports = {
   },
   updateEmail: async (req, res) => {
     const db = req.app.get("db");
-    const { email,newEmail,password } = req.query;
+    const { email, newEmail, password } = req.query;
     try {
-      const [existingUser] = await db.auth.get_user_by_email(email,'');
-      console.log(existingUser)
+      const [existingUser] = await db.auth.get_user_by_email(email, "");
+      console.log(existingUser);
       const isAuthenticated = bcrypt.compareSync(password, existingUser.hash);
       if (!isAuthenticated) {
-        return res.status(409).send('Password is incorrect');
+        return res.status(409).send("Password is incorrect");
       } else {
         const [updatedUser] = await db.auth.update_email(email, newEmail);
-        delete updatedUser.hash
-        req.session.user= updatedUser
+        delete updatedUser.hash;
+        req.session.user = updatedUser;
         return res.status(200).send(req.session.user);
       }
-    } catch (err) {    
+    } catch (err) {
       console.log(err);
-      res.status(500).send('Bzzzt- Something went wrong. Try again.')
+      res.status(500).send("Bzzzt- Something went wrong. Try again.");
     }
   },
   updatePassword: async (req, res) => {
@@ -130,16 +134,18 @@ module.exports = {
     // const {user_id}=req.session.user
     const { email, password, newPassword } = req.body;
     if (password === newPassword) {
-      return res.status(409).send(
-        "New password cannot match old password- try again.",
-    );
+      return res
+        .status(409)
+        .send("New password cannot match old password- try again.");
     }
     try {
       const [existingUser] = await db.auth.get_user_by_email(email);
       const isAuthenticated = bcrypt.compareSync(password, existingUser.hash);
 
       if (!isAuthenticated) {
-        return res.status(409).send('current password is incorrect- cannot update password');
+        return res
+          .status(409)
+          .send("current password is incorrect- cannot update password");
       } else {
         const salt = bcrypt.genSaltSync(10);
         const hash = bcrypt.hashSync(newPassword, salt);
@@ -163,7 +169,7 @@ module.exports = {
       return res.status(200).send(existingUser);
     } catch (err) {
       console.log(err);
-      return res.status(500).send('Bzzt- something went wrong.');
+      return res.status(500).send("Bzzt- something went wrong.");
     }
   },
   updateUser: async (req, res) => {
@@ -180,7 +186,7 @@ module.exports = {
       return res.status(200).send(user);
     } catch (err) {
       console.log(err);
-      return res.status(404).send('Bzzt- something went wrong.');
+      return res.status(404).send("Bzzt- something went wrong.");
     }
   },
 };
