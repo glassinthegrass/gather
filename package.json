@@ -5,8 +5,8 @@
   "main": "./server/index.js",
   "proxy": "http://localhost:3111",
   "dependencies": {
-    "@cloudinary/base": "*",
-    "@cloudinary/react": "*",
+    "@cloudinary/base": "^1.0.0-beta.4",
+    "@cloudinary/react": "^1.0.0-beta.11",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",

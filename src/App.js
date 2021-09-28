@@ -8,15 +8,27 @@ import ProfileMenu from "./Components/Header/ProfileMenu";
 import "./reset.css";
 import "./App.css";
 import styled from "styled-components";
+import axios from "axios";
 
 const App = (props) => {
   const [user,setUser] = useContext(userContext)
-  const {  logoutUser } = props;
   const { picture_public_id, picture_version, isLoggedIn } = user;
   const [menuToggle, setMenuToggle] = useState(false);
-  const [darkToggle, setDarkToggle] = useState(false);
+  const [darkToggle, setDarkToggle] = useState();
   const [profilePicture, setProfilePicture] = useState("");
+useEffect(()=>{
+  let remember = JSON.parse(localStorage.getItem('user'));
+  remember===null?setUser({isLoggedIn:false}):remember?axios.post('/auth/session',{remember}).then(res=>setUser(remember)):setUser({isLoggedIn:false});
+  
+},[setUser])
 
+
+  useEffect(()=>{
+    let dark = JSON.parse(localStorage.getItem('dark'));
+
+    dark===null?setDarkToggle(false):dark?setDarkToggle(true):setDarkToggle(false);
+
+  },[])
   const push = useHistory().push;
   useEffect(() => {
     if (picture_version) {
@@ -33,9 +45,15 @@ const App = (props) => {
     setMenuToggle(!menuToggle);
   };
   const handleDarkToggle = () => {
-    setDarkToggle(!darkToggle);
-  };
+    !darkToggle?setDarkToggle(!darkToggle):setDarkToggle(!darkToggle)
+    localStorage.setItem('dark',!darkToggle);
 
+  };
+const logout=()=>{
+  let user= {isLoggedIn:false}
+  setUser(user);
+localStorage.setItem('user',JSON.stringify(user))
+}
   const bottomHeaderSwitch = isLoggedIn ? (
     <BottomHeader>
       <ProfileIcons
@@ -44,7 +62,7 @@ const App = (props) => {
           <ProfileMenuMover>
             <ProfileMenu
               url={profilePicture}
-              logout={()=>setUser({isLoggedIn:false})}
+              logout={logout}
               push={push}
               darkToggle={darkToggle}
               handleDarkToggle={handleDarkToggle}
@@ -63,7 +81,7 @@ const App = (props) => {
         profileMenu={
           <ProfileMenu
             url={profilePicture}
-            logout={()=>setUser({isLoggedIn:false})}
+            logout={logout}
             push={push}
             darkToggle={darkToggle}
             handleDarkToggle={handleDarkToggle}
@@ -71,7 +89,7 @@ const App = (props) => {
           />
         }
         profilePicture={profilePicture}
-        logout={logoutUser}
+logout={logout}
         darkToggle={darkToggle}
         handleDarkToggle={handleDarkToggle}
         push={push}
@@ -83,9 +101,9 @@ const App = (props) => {
     </>
   );
 
-  const darkMode = darkToggle ? <DarkMode>{mainView}</DarkMode> : mainView;
+  const darkMode = darkToggle? <DarkMode>{mainView}</DarkMode> : mainView;
 
-  return <div className="App">{darkMode}</div>;
+  return <div className="App">{console.log(JSON.stringify(localStorage.getItem('user')))}{darkMode}</div>;
 };
 
 export default App

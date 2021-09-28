@@ -8,7 +8,7 @@ module.exports = {
     },
     isLoggedIn: (req, res, next) => {
       if (!req.session.user.isLoggedIn) {
-        return res.status(403).send({"message":"you are not not logged in"});
+        return res.status(403).send('no good homie');
       } else {
         next();
       }

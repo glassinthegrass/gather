@@ -40,7 +40,8 @@ module.exports = {
         await db.groups.create_group_users(1, registeredUser.user_id, false);
         delete registeredUser.hash;
         registeredUser.isRegistered = true;
-        return res.status(200).send(registeredUser);
+        req.session.user = registeredUser;
+        return res.status(200).send(req.session.user);
       }
     } catch (err) {
       return res.status(500).send("Bzzzt- something went wrong.");
@@ -81,18 +82,17 @@ module.exports = {
     const { email, password } = req.body;
     try {
       const [existingUser] = await db.auth.get_user_by_email(email, email);
-      if (!existingUser.hasOwnProperty('email')) {
+      if (!existingUser) {
         return res.status(403).send("Email is not registered");
+      }
+      const isAuthenticated = bcrypt.compareSync(password, existingUser.hash);
+      if (!isAuthenticated) {
+        return res.status(403).send("Password is incorrect");
       } else {
-        const isAuthenticated = bcrypt.compareSync(password, existingUser.hash);
-        if (!isAuthenticated) {
-          return res.status(403).send("Password is incorrect");
-        } else {
-          delete existingUser.hash;
-          existingUser.isLoggedIn = true;
-          req.session.user = existingUser;
-          return res.status(200).send(req.session.user);
-        }
+        delete existingUser.hash;
+        existingUser.isLoggedIn = true;
+        req.session.user = existingUser;
+        return res.status(200).send(req.session.user);
       }
     } catch (err) {
       console.log(err);
@@ -187,5 +187,10 @@ module.exports = {
       console.log(err);
       return res.status(404).send("Bzzt- something went wrong.");
     }
+  },
+  createSession: (req, res) => {
+    const { remember } = req.body;
+    req.session.user = remember;
+    return res.status(200).send(req.session.user);
   },
 };

@@ -16,7 +16,7 @@ const viewsCtrl = require("./controllers/viewsCtrl");
 const emailCtrl = require("./controllers/emailCtrl");
 const { getBirthday } = require("./controllers/birthdayCtrl");
 const friendCtrl = require("./controllers/friendCtrl");
-
+const authUser = require("./middleware/authenticateUser");
 const {
   SERVER_PORT,
   CONNECTION_STRING,
@@ -35,7 +35,6 @@ app.use(
     saveUninitialized: true,
     cookie: {
       maxAge: 31556952000,
-      sameSite: "strict",
     },
   })
 );
@@ -55,79 +54,127 @@ app.get("/api/group-posts", viewsCtrl.getGroupPosts);
 app.post("/api/images/:user_id", cloudinaryCtrl.uploadProfileImages);
 
 //auth
-app.get("/api/profile/:user_id", authCtrl.getUser);
+app.get("/api/profile/:user_id", authUser.isLoggedIn, authCtrl.getUser);
+app.post('/auth/session',authCtrl.createSession);
 app.post(`/auth/register`, authCtrl.register);
 app.post(`/auth/admin`, authCtrl.registerAdmin);
 app.post("/auth/login", authCtrl.login);
-app.put("/auth/user", authCtrl.updateUser);
-app.put("/auth/email", authCtrl.updateEmail);
-app.put("/auth/authentication", authCtrl.updatePassword);
-app.delete("/auth/logout", authCtrl.logout);
+app.put("/auth/user", authUser.isLoggedIn, authCtrl.updateUser);
+app.put("/auth/email", authUser.isLoggedIn, authCtrl.updateEmail);
+app.put("/auth/authentication", authUser.isLoggedIn, authCtrl.updatePassword);
+app.delete("/auth/logout", authUser.isLoggedIn, authCtrl.logout);
 
 //ppl
-app.get("/api/people", pplCtrl.getPeople);
-app.get("/api/people/:person_id", pplCtrl.getPerson);
-app.get("/api/searchpeople", pplCtrl.personSearch);
-app.get("/api/person/groups", pplCtrl.getGroups);
-app.get("/api/groupedpeople", pplCtrl.getPeopleGrouped);
-app.post("/api/people", pplCtrl.createPerson);
-app.put("/api/people/:person_id", pplCtrl.updatePerson);
-app.delete("/api/people", pplCtrl.deletePerson);
+app.get("/api/people", authUser.isLoggedIn, pplCtrl.getPeople);
+app.get("/api/people/:person_id", authUser.isLoggedIn, pplCtrl.getPerson);
+app.get("/api/searchpeople", authUser.isLoggedIn, pplCtrl.personSearch);
+app.get("/api/person/groups", authUser.isLoggedIn, pplCtrl.getGroups);
+app.get("/api/groupedpeople", authUser.isLoggedIn, pplCtrl.getPeopleGrouped);
+app.post("/api/people", authUser.isLoggedIn, pplCtrl.createPerson);
+app.put("/api/people/:person_id", authUser.isLoggedIn, pplCtrl.updatePerson);
+app.delete("/api/people", authUser.isLoggedIn, pplCtrl.deletePerson);
 
 //post
-app.get("/api/posts", postCtrl.getPosts);
-app.get("/api/home-posts", postCtrl.getPostsByJoinedGroups);
-app.get(`/api/birthday-post`, postCtrl.getPostsByPersonId);
-app.get(`/api/post/:post_id`, postCtrl.getPostByPostId);
-app.post("/api/birthday-post", cloudinaryCtrl.addBirthdayPost);
-app.post("/api/groupPosts/:group_id/user/:user_id", groupCtrl.createGroupPost);
-app.put("/api/posts/:post_id", postCtrl.editPost);
-app.delete("/api/posts/:post_id", postCtrl.deletePost);
+app.get("/api/posts", authUser.isLoggedIn, postCtrl.getPosts);
+app.get(
+  "/api/home-posts",
+  authUser.isLoggedIn,
+  postCtrl.getPostsByJoinedGroups
+);
+app.get(`/api/birthday-post`, authUser.isLoggedIn, postCtrl.getPostsByPersonId);
+app.get(`/api/post/:post_id`, authUser.isLoggedIn, postCtrl.getPostByPostId);
+app.post(
+  "/api/birthday-post",
+  authUser.isLoggedIn,
+  cloudinaryCtrl.addBirthdayPost
+);
+app.post(
+  "/api/groupPosts/:group_id/user/:user_id",
+  authUser.isLoggedIn,
+  groupCtrl.createGroupPost
+);
+app.put("/api/posts/:post_id", authUser.isLoggedIn, postCtrl.editPost);
+app.delete("/api/posts/:post_id", authUser.isLoggedIn, postCtrl.deletePost);
 
 //comments
-app.get(`/api/comments/:post_id`, postCtrl.getCommentsByPost);
-app.post(`/api/post-comment`, postCtrl.createPostComment);
+app.get(
+  `/api/comments/:post_id`,
+  authUser.isLoggedIn,
+  postCtrl.getCommentsByPost
+);
+app.post(`/api/post-comment`, authUser.isLoggedIn, postCtrl.createPostComment);
 
 //groups
-app.get("/api/groups/all", groupCtrl.getAllGroups);
-app.get("/api/groups", groupCtrl.searchGroups);
-app.get("/api/groups/:user_id", groupCtrl.getGroupsByUser);
-app.get("/api/member/groups", groupCtrl.checkGroupMembership);
-app.post("/api/groups/member", groupCtrl.addMemberToGroup);
-app.post("/api/groups", groupCtrl.createGroup);
-app.post("/api/groups/add-person", groupCtrl.addPersonToGroup);
+app.get("/api/groups/all", authUser.isLoggedIn, groupCtrl.getAllGroups);
+app.get("/api/groups", authUser.isLoggedIn, groupCtrl.searchGroups);
+app.get("/api/groups/:user_id", authUser.isLoggedIn, groupCtrl.getGroupsByUser);
+app.get(
+  "/api/member/groups",
+  authUser.isLoggedIn,
+  groupCtrl.checkGroupMembership
+);
+app.post("/api/groups/member", authUser.isLoggedIn, groupCtrl.addMemberToGroup);
+app.post("/api/groups", authUser.isLoggedIn, groupCtrl.createGroup);
+app.post(
+  "/api/groups/add-person",
+  authUser.isLoggedIn,
+  groupCtrl.addPersonToGroup
+);
 app.put(
   "/api/groups/:group_id/person/:person_id",
+  authUser.isLoggedIn,
   groupCtrl.deletePersonFromGroup
 );
-app.put("/api/person-groups", groupCtrl.deleteGroupFromPerson);
-app.delete("/api/groups", groupCtrl.deleteUserFromGroup);
-app.delete("/api/delete-group", groupCtrl.deleteGroup);
+app.put(
+  "/api/person-groups",
+  authUser.isLoggedIn,
+  groupCtrl.deleteGroupFromPerson
+);
+app.delete("/api/groups", authUser.isLoggedIn, groupCtrl.deleteUserFromGroup);
+app.delete("/api/delete-group", authUser.isLoggedIn, groupCtrl.deleteGroup);
 
 //announcements
 
-app.get("/api/announcements/:announcement_id", announceCtrl.getAnnouncement);
-app.post("/api/announcements", announceCtrl.createAnnouncement);
+app.get(
+  "/api/announcements/:announcement_id",
+  authUser.isLoggedIn,
+  announceCtrl.getAnnouncement
+);
+app.post(
+  "/api/announcements",
+  authUser.isLoggedIn,
+  announceCtrl.createAnnouncement
+);
 app.post(
   "/api/announcements/:announcement_id",
   announceCtrl.createAnnouncementParagraph
 );
-app.delete("/api/announcements", announceCtrl.deleteAnnouncement);
+app.delete(
+  "/api/announcements",
+  authUser.isLoggedIn,
+  announceCtrl.deleteAnnouncement
+);
 
 //email
-app.post("/api/email", emailCtrl.sendEmail);
+app.post("/api/email", authUser.isLoggedIn, emailCtrl.sendEmail);
 
 //birthday
-app.get("/api/birthday", getBirthday);
+app.get("/api/birthday", authUser.isLoggedIn, getBirthday);
 
 //friends
-app.get("/api/friendships/:user_id", friendCtrl.getFrienships);
+app.get(
+  "/api/friendships/:user_id",
+  authUser.isLoggedIn,
+  friendCtrl.getFrienships
+);
 app.post(
   "/api/friend_request/:requesting_user_id/responding/:responding_user_id",
+  authUser.isLoggedIn,
   friendCtrl.createFriendRequest
 );
 app.post(
   "/api/friendship/:responding_user_id/requested/:requesting_user_id",
+  authUser.isLoggedIn,
   friendCtrl.acceptFriendRequest
 );
 

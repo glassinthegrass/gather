@@ -42,7 +42,6 @@ export const Input = styled.input`
   flex-direction: column;
   padding: 1vh;
   margin: 1vh;
-  margin-left: 10%;
   box-shadow: 10px 0px 13px -7px #897b7b, 0px 7px 13px -7px #000000;
   border-radius: 10px 10px 10px 10px;
   font-size: 12px;
@@ -54,7 +53,7 @@ export const Submit = styled.h1`
   padding: 1vh;
   align-items: center;
   margin: 5%;
-  margin-left: 20%;
+
 
   font-weight: 300;
   background-color: rgb(252, 219, 166);
@@ -162,3 +161,13 @@ font-size:10px;
   z-index: 3;
 
 `;
+export let Checkbox = styled(Input)`
+width:1.5rem;
+`
+export let Row= styled.div`
+display:flex;
+justify-content:center;
+align-items:center;
+width:65%;
+font-size:12px;
+`

@@ -14,6 +14,8 @@ import {
   Bee,
   Title,
   Error,
+  Checkbox,
+  Row
 } from "./styles.js";
 import axios from "axios";
 
@@ -34,6 +36,7 @@ const Login = (props) => {
     registerToggle: false,
   });
   const [loginError, setLoginError] = useState("");
+  const [remember, setRemember] = useState(false);
   const [regError, setRegError] = useState("");
   const history = useHistory();
   const { push } = history;
@@ -73,9 +76,10 @@ const Login = (props) => {
         .post("/auth/login", { email, password })
         .then((res) => {
           setUser(res.data);
+          localStorage.setItem('user',JSON.stringify(res.data));
         })
         .catch((err) => {
-          setLoginError(err.response);
+          setLoginError(err.response.data);
         });
     }
   };
@@ -102,12 +106,17 @@ const Login = (props) => {
       .catch((err) => {
         setRegError(err.response.data);
       });
+    localStorage.setItem('dark',false);
   };
   const handleRegisterKeyPress = (e) => {
     if (e.key === "Enter") {
       handleRegister();
     }
   };
+
+const handleRemember =()=>{
+  setRemember(!remember)
+}
 
   let loginWindow = (
     <>
@@ -125,6 +134,7 @@ const Login = (props) => {
         type="password"
         placeholder="Enter password"
       />
+      <Row>remember me?<Checkbox name='remember me' onChange={handleRemember} value={remember} checked={remember} type='checkbox'/></Row>
     {loginError&&<Error>{loginError}</Error>}
 
       <Submit onClick={() => handleLogin()}>Submit</Submit>
@@ -245,6 +255,7 @@ const Login = (props) => {
 
   return (
     <Window>
+      {console.log(remember)}
       <div>
         <p>A place for friends to...</p>
         <Bee src={bee} alt="" />
