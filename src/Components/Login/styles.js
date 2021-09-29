@@ -55,7 +55,6 @@ export const Submit = styled.h1`
   align-items: center;
   margin: 5%;
 
-
   font-weight: 300;
   background-color: rgb(252, 219, 166);
   border: 1px solid rgb(88, 88, 88);

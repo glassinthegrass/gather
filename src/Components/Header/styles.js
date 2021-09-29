@@ -81,6 +81,7 @@ let show = keyframes`
 100%{opacity:1;}
 `;
 export let ProfileMenuBox = styled.div``;
+
 export let Profile = styled.div`
   display: none;
   position: absolute;
@@ -88,34 +89,32 @@ export let Profile = styled.div`
   margin-left: -6rem;
   box-shadow: 10px 0px 13px -7px #897b7b, 0px 7px 13px -7px #000000;
   width: 10rem;
-  background-color: rgb(88, 88, 88);
   border-radius: 10px;
   cursor: auto;
   z-index: 3;
+${props=>props.dark?'background-color:rgb(252, 219, 166)':'background-color:rgb(88,88,88)'};
   animation: ${show} 0.3s ease-in;
   animation-iteration-count: 1;
 `;
 
 export let ProfileLink = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
   border: 1px solid rgb(88, 88, 88, 0.5);
   border-radius: 3px;
   width: 100%;
   height: 40px;
   border-left: 0px;
   border-right: 0px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
   font-weight:400;
   font-size: 20px;
   z-index: 3;
   cursor: pointer;
-  background-color: rgb(88, 88, 88);
   color: rgb(252, 142, 52, 0.792);
-
+  ${props=>props.dark?'background-color:rgb(252, 219, 166)':'background-color:rgb(88,88,88)'};
   &:hover {
-    background-color: rgb(252, 219, 166);
+${props=>props.dark?'background-color:rgb(252, 219, 166)':'background-color:rgb(88,88,88)'};
   }
   &:active {
     background-color: rgb(252, 142, 52, 0.792);

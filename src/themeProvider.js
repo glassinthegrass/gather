@@ -10,7 +10,7 @@ const ThemeContextProvider = (props) => {
     'background-color':'rgb(88,88,88,0.5)',
     }
     const lightTheme={
-        color:'black',
+
     }
 const theme = dark?darkTheme:lightTheme;
 

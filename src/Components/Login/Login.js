@@ -40,6 +40,7 @@ const Login = (props) => {
   const history = useHistory();
   const { push } = history;
   const { isLoggedIn } = user;
+  const{nullToggle,loginToggle,registerToggle}=toggle
 
   useEffect(() => {
     if (isLoggedIn === true) {
@@ -74,8 +75,9 @@ const Login = (props) => {
       axios
         .post("/auth/login", { email, password })
         .then((res) => {
+let old = user
           setUser(res.data);
-          localStorage.setItem("user", JSON.stringify(res.data));
+          remember?localStorage.setItem("user", JSON.stringify(res.data)):localStorage.setItem('user',JSON.stringify(old))
         })
         .catch((err) => {
           setLoginError(err.response.data);
@@ -145,7 +147,7 @@ const Login = (props) => {
       </Row>
       {loginError && <Error>{loginError}</Error>}
 
-      <Submit onClick={() => handleLogin()}>Submit</Submit>
+      <Submit  onClick={() => handleLogin()}>Submit</Submit>
     </>
   );
 
@@ -218,7 +220,7 @@ const Login = (props) => {
   );
 
   const handleLoginClick = () => {
-    if (toggle.nullToggle || toggle.registerToggle) {
+    if (nullToggle || registerToggle) {
       setToggle({
         ...toggle,
         nullToggle: false,
@@ -235,7 +237,7 @@ const Login = (props) => {
     }
   };
   const handleRegisterClick = () => {
-    if (toggle.nullToggle || toggle.loginToggle) {
+    if (nullToggle || loginToggle) {
       setToggle({
         ...toggle,
         registerToggle: true,
@@ -251,11 +253,11 @@ const Login = (props) => {
       });
     }
   };
-  const windowToggle = toggle.nullToggle ? (
+  const windowToggle = nullToggle ? (
     <></>
-  ) : toggle.loginToggle ? (
+  ) : loginToggle ? (
     loginWindow
-  ) : toggle.registerToggle ? (
+  ) : registerToggle ? (
     registerWindow
   ) : (
     <></>
@@ -272,7 +274,8 @@ const Login = (props) => {
         </Box>
         <ToggleBox>
           <LoginToggle onClick={handleLoginClick}>Login</LoginToggle>
-          <RegisterToggle onClick={handleRegisterClick}>
+
+          <RegisterToggle loginToggle={loginToggle} onClick={handleRegisterClick}>
             Register
           </RegisterToggle>
         </ToggleBox>

@@ -3,7 +3,6 @@ import styled, { keyframes } from "styled-components";
 
 const Group = (props) => {
   const [toggle, setToggle] = useState(false);
-
   const { group, push, handleDelete } = props;
   let url = group.picture_public_id
     ? `https://res.cloudinary.com/glassinthegrass/image/upload/w_50,h_50,g_auto,c_fill_pad,r_5,f_png/` +

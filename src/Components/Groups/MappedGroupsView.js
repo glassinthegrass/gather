@@ -10,6 +10,7 @@ const MappedGroupsView = (props) => {
   const { group_name, group_id, picture_version, picture_public_id } =
     props.group;
   const { user, loggedInUser } = props;
+  let id=loggedInUser.user_id
 
   const { user_id } = user;
   const url =
@@ -21,11 +22,11 @@ const MappedGroupsView = (props) => {
   useEffect(() => {
     axios
       .get(
-        `/api/member/groups?group_id=${group_id}&user_id=${loggedInUser.user_id}`
+        `/api/member/groups?group_id=${group_id}&user_id=${id}`
       )
       .then((res) => setMember(res.data))
       .catch((err) => console.log(err));
-  }, [group_id, loggedInUser.user_id]);
+  }, [group_id,id]);
 
   const handleGroupClick = () => {
     push(`/groups/${group_name}`);
