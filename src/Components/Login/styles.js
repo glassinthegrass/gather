@@ -13,10 +13,11 @@ export const Window = styled.div`
   min-height: 90vh;
   width: 100vw;
   font-weight: 400;
-
   z-index: 1;
   animation: ${fadeIn} 1s linear;
-`;
+${props=>props.theme}
+  `;
+  // background: ${props => props.primary ? 'black':'yellow'};
 export const Box = styled.div`
   display: flex;
   justify-content: center;

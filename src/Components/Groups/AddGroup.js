@@ -210,6 +210,7 @@ let Container = styled.section`
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  ${props=>props.theme}
   @media (max-width: 500px) {
     justify-content: flex-start;
   }

@@ -159,6 +159,7 @@ let Container = styled.section`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  ${props=>props.theme}
 `;
 let PostToggle = styled.h1`
   border: 1px solid rgb(88, 88, 88, 0.5);

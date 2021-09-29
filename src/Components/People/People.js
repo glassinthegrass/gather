@@ -112,6 +112,7 @@ let Container = styled.section`
   align-items: center;
   flex-direction: column;
   animation: ${fadeIn} 0.5s linear;
+  ${props=>props.theme};
 `;
 let PeopleColumn = styled.div`
   display: flex;

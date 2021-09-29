@@ -1,8 +1,8 @@
+import bee from "../../Assets/Gather_Line_with_Bee.png";
 import React, { useEffect, useContext, useState } from "react";
 import { userContext } from "../../userContext";
 import { useHistory } from "react-router-dom";
-import bee from "../../Assets/Gather_Line_with_Bee.png";
-
+import axios from "axios";
 import {
   ToggleBox,
   Window,
@@ -15,9 +15,8 @@ import {
   Title,
   Error,
   Checkbox,
-  Row
+  Row,
 } from "./styles.js";
-import axios from "axios";
 
 const Login = (props) => {
   const [user, setUser] = useContext(userContext);
@@ -76,7 +75,7 @@ const Login = (props) => {
         .post("/auth/login", { email, password })
         .then((res) => {
           setUser(res.data);
-          localStorage.setItem('user',JSON.stringify(res.data));
+          localStorage.setItem("user", JSON.stringify(res.data));
         })
         .catch((err) => {
           setLoginError(err.response.data);
@@ -106,7 +105,7 @@ const Login = (props) => {
       .catch((err) => {
         setRegError(err.response.data);
       });
-    localStorage.setItem('dark',false);
+    localStorage.setItem("dark", false);
   };
   const handleRegisterKeyPress = (e) => {
     if (e.key === "Enter") {
@@ -114,9 +113,9 @@ const Login = (props) => {
     }
   };
 
-const handleRemember =()=>{
-  setRemember(!remember)
-}
+  const handleRemember = () => {
+    setRemember(!remember);
+  };
 
   let loginWindow = (
     <>
@@ -134,8 +133,17 @@ const handleRemember =()=>{
         type="password"
         placeholder="Enter password"
       />
-      <Row>remember me?<Checkbox name='remember me' onChange={handleRemember} value={remember} checked={remember} type='checkbox'/></Row>
-    {loginError&&<Error>{loginError}</Error>}
+      <Row>
+        remember me?
+        <Checkbox
+          name="remember me"
+          onChange={handleRemember}
+          value={remember}
+          checked={remember}
+          type="checkbox"
+        />
+      </Row>
+      {loginError && <Error>{loginError}</Error>}
 
       <Submit onClick={() => handleLogin()}>Submit</Submit>
     </>
@@ -200,7 +208,7 @@ const handleRemember =()=>{
         type="password"
         placeholder="Re-enter your password"
       />
-      { regError&&<Error>{regError}</Error>}
+      {regError && <Error>{regError}</Error>}
       {user.isRegistered ? (
         <Submit onClick={() => push("/profile/uploads")}>Next</Submit>
       ) : (
@@ -255,7 +263,6 @@ const handleRemember =()=>{
 
   return (
     <Window>
-      {console.log(remember)}
       <div>
         <p>A place for friends to...</p>
         <Bee src={bee} alt="" />

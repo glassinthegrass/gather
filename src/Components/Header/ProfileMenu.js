@@ -2,7 +2,7 @@ import React from "react";
 import { Profile, ProfileLink, ProfilePic } from "./styles";
 
 const ProfileMenu = (props) => {
-  let toggleText = props.darkToggle ? "Light Mode" : "Dark Mode";
+  let toggleText = props.dark ? "Light Mode" : "Dark Mode";
 
   return (
     <Profile className="profileMenu">

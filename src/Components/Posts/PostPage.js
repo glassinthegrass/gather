@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { userContext } from "../../userContext";
 import axios from "axios";
 import { useHistory, useParams } from "react-router-dom";
@@ -8,7 +8,7 @@ import Comment from "../Groups/Comment";
 
 const PostPage = () => {
   const push = useHistory().push;
-  const [user]=useContext(userContext)
+  const [user] = useContext(userContext);
   const { isLoggedIn, user_id } = user;
   const post_id = useParams().post_id;
   const [post, setPost] = useState({});
@@ -52,7 +52,7 @@ const PostPage = () => {
   );
 };
 
-export default PostPage
+export default PostPage;
 
 let Container = styled.section`
   width: 100vw;
@@ -61,6 +61,7 @@ let Container = styled.section`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  ${(props) => props.theme}
 `;
 let Column = styled.div`
   display: flex;

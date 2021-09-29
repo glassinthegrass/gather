@@ -1,5 +1,6 @@
 import React, { useState, useEffect,useContext } from "react";
 import { userContext } from "../../userContext";
+import { darkContext } from "../../themeProvider";
 import axios from "axios";
 import Groups from "./Groups";
 import { useHistory } from "react-router";
@@ -19,7 +20,8 @@ const [postsToggle,setPostsToggle]=useState(false)
   const [offset, setOffset] = useState(0);
   const [offsetToggle, setOffsetToggle] = useState(true);
   const [idx, setIdx] = useState(0);
-  const [user] = useContext(userContext)
+  const [user] = useContext(userContext);
+  const [dark] = useContext(darkContext);
    const { user_id, isLoggedIn } = user;
 
   setInterval(() => {
@@ -115,7 +117,7 @@ const [postsToggle,setPostsToggle]=useState(false)
     );
 
   return (
-    <HomeDiv>
+    <HomeDiv dark={dark}>
       <Box>
         <Title>Your Hives</Title>
         <GroupsDiv>{mappedGroups}</GroupsDiv>
@@ -123,12 +125,11 @@ const [postsToggle,setPostsToggle]=useState(false)
           <Birthdays birthday={birthdays[idx]} />
         </Announce>
         <Spacer></Spacer>
-        <PostContainer onScroll={(e)=>console.log(e.target)}>{mappedPosts}</PostContainer>
+        <PostContainer>{mappedPosts}</PostContainer>
         <Spacer></Spacer>
         {gotAllPosts}
         <Spacer></Spacer>
       </Box>
-      {console.log(user)}
     </HomeDiv>
   );
 };
@@ -150,8 +151,8 @@ const HomeDiv = styled.div`
   width: 100vw;
   min-height: 95vh;
   z-index: 1;
-
   font-weight: 900;
+  ${props=>props.theme};
 `;
 
 let GroupsDiv = styled.div`
