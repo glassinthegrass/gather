@@ -160,7 +160,7 @@ let Submit = styled.div`
   align-items: center;
   margin: 5px;
   margin-left: -1px;
-
+  font-family:Nunito, Roboto, sans-serif;
   font-weight: 200;
   box-shadow: 10px 0px 13px -12px #897b7b, 0px 7px 13px -7px #000000;
   background-color: rgb(252, 219, 166);
@@ -182,16 +182,16 @@ let Column = styled.div`
 `;
 let PageHeader = styled.h1`
   font-size: 50px;
-
+  font-family:Nunito, Roboto, sans-serif;
   font-weight: 900;
   padding: 2rem;
 `;
 let Header = styled.h6`
-
+font-family:Nunito, Roboto, sans-serif;
   font-weight: 400;
 `;
 let Label = styled.label`
-
+font-family:Nunito, Roboto, sans-serif;
   font-weight: 400;
   display: flex;
   flex-direction: column;

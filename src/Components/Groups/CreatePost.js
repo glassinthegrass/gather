@@ -51,7 +51,7 @@ let TextInput = styled.textarea`
   outline: none;
   resize: none;
   overflow: auto;
-
+  font-family:Nunito, Roboto, sans-serif;
   font-weight: 300;
   text-align: left;
 `;
@@ -128,7 +128,6 @@ let Preview = styled.img`
   border-radius: 10px 10px 0px 0px;
   font-family: 'Nunito', sans-serif;
   font-weight: 300;
-
   box-shadow: 10px 0px 13px -12px #897b7b, 0px 7px 13px -7px #000000;
   background-color: rgb(88, 88, 88);
 `;

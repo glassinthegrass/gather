@@ -145,7 +145,8 @@ export let Title = styled.h1`
   padding: 10px;
   z-index: 1;
   margin: 10px;
-  font-weight: 900;
+  font-family:'Nunito','sans-serif';
+  font-weight: 800;
   text-shadow: -1px -1px 0 rgb(246, 243, 235), 1px -1px 0 rgb(246, 243, 235),
     -1px 1px 0 rgb(246, 243, 235), 1px 1px 0 rgb(246, 243, 235);
 `;

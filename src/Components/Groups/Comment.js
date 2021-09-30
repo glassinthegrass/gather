@@ -34,7 +34,7 @@ let Img = styled.img`
 `;
 let CommentText = styled.p`
   font-size: 14px;
-
+  font-family:Nunito, Roboto, sans-serif;
   font-weight: 300;
   border-radius: 10px;
   padding: 5px;
@@ -47,6 +47,7 @@ let CommentText = styled.p`
 `;
 let CommentUsername = styled(CommentText)`
   font-size: 8px;
+  font-family:Nunito, Roboto, sans-serif;
   font-weight: 400;
   width: 30%;
   padding-top: 0px;
