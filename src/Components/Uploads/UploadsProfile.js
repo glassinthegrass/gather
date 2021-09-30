@@ -163,7 +163,7 @@ let Label = styled.label`
 `;
 let Containter = styled.section`
   width: 100vw;
-  min-height: 95vh;
+  min-height: 94vh;
   display: flex;
   flex-direction: column;
   align-items: center;

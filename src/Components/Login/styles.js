@@ -10,7 +10,7 @@ export const Window = styled.div`
   justify-content: center;
   align-items: center;
   align-content: center;
-  min-height: 90vh;
+height:94vh;
   width: 100vw;
   font-weight: 400;
   z-index: 1;

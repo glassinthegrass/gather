@@ -77,7 +77,7 @@ export default Groups;
 
 let Container = styled.section`
   width: 100vw;
-  min-height: 95vh;
+  min-height: 94vh;
   ${props=>props.theme};
 `;
 let Spacer = styled.div`

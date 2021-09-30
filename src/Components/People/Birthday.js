@@ -139,7 +139,7 @@ let Spacer = styled.div`
 `;
 let Container = styled.section`
   width: 100vw;
-  min-height: 90vh;
+  min-height: 94vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -154,7 +154,6 @@ let Arrow = styled.div`
   align-items: center;
   width: 5rem;
   height: 5rem;
-
   font-weight: 900;
   font-size: 80px;
   border-radius: 10px 10px 10px 10px;

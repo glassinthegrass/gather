@@ -205,7 +205,7 @@ let Input = styled.input`
 
 let Container = styled.section`
   width: 100vw;
-  min-height: 90vh;
+  min-height: 94vh;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -141,6 +141,7 @@ let Container = styled.aside`
   justify-content: flex-start;
   background-color: rgb(88, 88, 88.05);
   width: 15rem;
+  height:94vh;
   overflow: auto;
   box-shadow: 10px 0px 13px -7px #897b7b, 0px 7px 13px -10px #000000;
 `;

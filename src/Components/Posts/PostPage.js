@@ -56,7 +56,7 @@ export default PostPage;
 
 let Container = styled.section`
   width: 100vw;
-  min-height: 90vh;
+  min-height: 94vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

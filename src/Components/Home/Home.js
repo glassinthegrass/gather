@@ -148,7 +148,7 @@ const HomeDiv = styled.div`
   align-items: flex-start;
   align-content: center;
   width: 100vw;
-  min-height: 95vh;
+  min-height: 94vh;
   z-index: 1;
   font-weight: 900;
   ${props=>props.theme};

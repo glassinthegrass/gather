@@ -100,7 +100,7 @@ export default People;
 
 let Container = styled.section`
   width: 100vw;
-  min-height: 95vh;
+  min-height: 94vh;
   display: flex;
   justify-content: center;
   align-items: center;
