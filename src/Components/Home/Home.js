@@ -1,17 +1,16 @@
-import React, { useState, useEffect,useContext } from "react";
-import { userContext } from "../../userContext";
-
-import axios from "axios";
-import Groups from "./Groups";
-import { useHistory } from "react-router";
+import React, { useState, useEffect, useContext } from "react";
 import styled, { keyframes } from "styled-components";
-import Posts from "../Groups/Posts";
+import { useHistory } from "react-router";
+import axios from "axios";
+import { userContext } from "../../userContext";
+import Groups from "./Groups";
 import Birthdays from "./Birthdays";
+import Posts from "../Groups/Posts";
 
 const Home = (props) => {
   const history = useHistory();
   const { push } = history;
-const [postsToggle,setPostsToggle]=useState(false)
+  const [postsToggle, setPostsToggle] = useState(false);
   const [groups, setGroups] = useState([]);
   const [posts, setPosts] = useState([]);
   const [birthdays, setBirthdays] = useState([]);
@@ -21,7 +20,7 @@ const [postsToggle,setPostsToggle]=useState(false)
   const [idx, setIdx] = useState(0);
   const [user] = useContext(userContext);
 
-   const { user_id, isLoggedIn } = user;
+  const { user_id, isLoggedIn } = user;
 
   setInterval(() => {
     if (birthdays[0]) {
@@ -48,7 +47,7 @@ const [postsToggle,setPostsToggle]=useState(false)
         })
         .catch((err) => console.log(err));
     }
-  }, [isLoggedIn,user_id]);
+  }, [isLoggedIn, user_id]);
 
   useEffect(() => {
     if (offsetToggle) {
@@ -57,8 +56,8 @@ const [postsToggle,setPostsToggle]=useState(false)
         .get(`/api/home-posts?user_id=${user_id}&offset=${offset}`)
         .then((res) => {
           setPosts([...posts, res.data].flat());
-          if(res.data.length % 10!==0){
-            setPostsToggle(true)
+          if (res.data.length % 10 !== 0) {
+            setPostsToggle(true);
           }
         })
         .catch((err) => console.log(err));
@@ -73,7 +72,7 @@ const [postsToggle,setPostsToggle]=useState(false)
         .then((res) => setBirthdays(res.data))
         .catch((err) => console.log(err));
     }
-  }, [isLoggedIn,user_id]);
+  }, [isLoggedIn, user_id]);
 
   const handleMorePosts = () => {
     setOffsetToggle(true);
@@ -108,24 +107,22 @@ const [postsToggle,setPostsToggle]=useState(false)
     }
   }, [loadingToggle]);
 
-  let gotAllPosts =
-      postsToggle ?(
-      <AddPosts>That's it!</AddPosts>
-      ) : (
-      <AddPosts onClick={() => handleMorePosts()}>More</AddPosts>
-    );
+  let gotAllPosts = postsToggle ? (
+    <AddPosts>That's it!</AddPosts>
+  ) : (
+    <AddPosts onClick={() => handleMorePosts()}>More</AddPosts>
+  );
 
   return (
-    <HomeDiv >
+    <HomeDiv>
       <Box>
-    <GroupBox>
-
-        <Title>Your Hives</Title>
-        <GroupsDiv>{mappedGroups}</GroupsDiv>
-        <Announce>
-          <Birthdays birthday={birthdays[idx]} />
-        </Announce>
-    </GroupBox>
+        <GroupBox>
+          <Title>Your Hives</Title>
+          <GroupsDiv>{mappedGroups}</GroupsDiv>
+          <Announce>
+            <Birthdays birthday={birthdays[idx]} />
+          </Announce>
+        </GroupBox>
         <Spacer></Spacer>
         <PostContainer>{mappedPosts}</PostContainer>
         <Spacer></Spacer>
@@ -154,24 +151,27 @@ const HomeDiv = styled.div`
   min-height: 94vh;
   z-index: 1;
   font-weight: 900;
-  ${props=>props.theme.dark?props.theme.backgroundColor:''};
-  ${props=>props.theme.color};
+  ${(props) => (props.theme.dark ? props.theme.backgroundColor : "")};
+  ${(props) => props.theme.color};
 `;
 
 let GroupsDiv = styled.div`
   display: flex;
   width: 100%;
-  
+
   justify-content: flex-start;
   overflow-x: scroll;
   z-index: 1;
   border-bottom: 0.5px dotted rgb(88, 88, 88, 0.5);
 `;
 let Title = styled.div`
-${props=>props.theme.dark?props.theme.backgroundColor:'background-color:rgb(88,88,88,0.2)'};
+  ${(props) =>
+    props.theme.dark
+      ? props.theme.backgroundColor
+      : "background-color:rgb(88,88,88,0.2)"};
   width: 100%;
-  ${props=>props.theme.color};
-  font-size:35px;
+  ${(props) => props.theme.color};
+  font-size: 35px;
   font-weight: 900;
   border-bottom: 0.5px dotted rgb(88, 88, 88, 0.5);
   z-index: 1;
@@ -189,7 +189,6 @@ let Announce = styled.div`
 let PostContainer = styled.div`
   display: flex;
   flex-direction: column;
-
 `;
 let Box = styled.div`
   width: 100%;
@@ -200,13 +199,15 @@ let Box = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  ${props=>props.theme.color};
-  
+  ${(props) => props.theme.color};
 `;
-let GroupBox=styled.div`
-${props=>props.theme.dark?props.theme.backgroundColor:'background-color: rgb(252, 219, 165)'};
-width:100%;
-`
+let GroupBox = styled.div`
+  ${(props) =>
+    props.theme.dark
+      ? props.theme.backgroundColor
+      : "background-color: rgb(252, 219, 165)"};
+  width: 100%;
+`;
 let AddPosts = styled.div`
   height: 2rem;
   width: 6rem;
@@ -218,7 +219,10 @@ let AddPosts = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 30px 30px 30px 30px;
-  ${props=>props.theme.dark?props.theme.solidBackgroundColor:'background-color: rgb(252, 219, 166)'};
+  ${(props) =>
+    props.theme.dark
+      ? props.theme.solidBackgroundColor
+      : "background-color: rgb(252, 219, 166)"};
   box-shadow: 10px 0px 13px -12px #897b7b, 0px 7px 13px -7px #000000;
   cursor: pointer;
   &:hover {
