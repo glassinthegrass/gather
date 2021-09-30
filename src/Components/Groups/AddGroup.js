@@ -210,7 +210,7 @@ let Container = styled.section`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  ${props=>props.theme}
+  ${props=>props.theme.dark?props.theme.backgroundColor:''};
   @media (max-width: 500px) {
     justify-content: flex-start;
   }

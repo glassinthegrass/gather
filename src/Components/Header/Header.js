@@ -28,7 +28,7 @@ const Header = (props) => {
   return (
     <StyledHeader>
       <LogoContainer onClick={() => {
-            push("/home");
+            push("/");
           }}>
         <Logo src={logo} alt="" />
         <GatherHolder

@@ -15,7 +15,7 @@ height:94vh;
   font-weight: 400;
   z-index: 1;
   animation: ${fadeIn} 1s linear;
-${props=>props.theme}
+${props=>props.theme.dark?props.theme.backgroundColor:''};
   `;
   // background: ${props => props.primary ? 'black':'yellow'};
 export const Box = styled.div`

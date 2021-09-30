@@ -145,14 +145,14 @@ let Container = styled.section`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  ${props=>props.theme}
+  ${props=>props.theme.dark?props.theme.backgroundColor:''};
 `;
 let PostToggle = styled.h1`
   border: 1px solid rgb(88, 88, 88, 0.5);
   width: 50%;
   height: 30px;
   font-size: 8px;
-  background-color: rgb(252, 219, 166);
+${props=>props.theme.dark?props.theme.backgroundColor:'background-color: rgb(252, 219, 166)'};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -189,7 +189,7 @@ let ProfileContainer = styled.div`
 let PostsOrGroups = styled.section`
   width: 100%;
   min-height: 21vh;
-  background-color: rgb(88, 88, 88, 0.5);
+
   padding-top: 5vh;
 `;
 let AddPosts = styled.div`

@@ -77,7 +77,7 @@ let Container = styled.section`
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  background-color: rgb(252, 219, 166);
+${props=>props.theme.backgroundColor};
   padding: 5px;
   margin: 3px;
   border-radius: 3px;

@@ -128,7 +128,9 @@ export default CreatePerson;
 
 let Container = styled.section`
   width: 100%;
-  background-color: rgb(252, 219, 166);
+  ${props=>props.theme.dark?props.theme.backgroundColor:'background-color: rgb(252, 219, 166)'};
+  ${props=>props.theme.color+';'+props.theme.fontShadow};
+  
   padding: 5px;
   display: flex;
   justify-content: center;
@@ -148,6 +150,7 @@ let TextInput = styled.input`
   width: 70%;
   font-weight: 300;
   padding: 3px;
+  ${props=>props.theme.color};
 `;
 
 let Title = styled.h6`
@@ -178,8 +181,9 @@ font-weight: 400;
 padding:10px;
 cursor:pointer;
 margin:5px;
-background-color:rgb(88,88,88,0.3);
-text-shadow: -0.5px 0 white, 0 0.5px white, 0.5px 0 white, 0 -0.5px white;
+background-color:rgb(88,88,88,0.5);
+${props=>props.theme.color};
+${props=>props.theme.dark?props.theme.fontShadow:'text-shadow: -0.5px 0 white, 0 0.5px white, 0.5px 0 white, 0 -0.5px white'};
 &:hover{
   border:3px solid rgb(88,88,88);
   }

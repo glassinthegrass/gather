@@ -61,7 +61,7 @@ let Container = styled.section`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  ${(props) => props.theme}
+  ${props=>props.theme.dark?props.theme.backgroundColor:''};
 `;
 let Column = styled.div`
   display: flex;

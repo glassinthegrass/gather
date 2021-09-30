@@ -254,7 +254,7 @@ let Spacer = styled.div`
   width: 100%;
 `;
 let Container = styled.section`
-${props=>props.theme}
+${props=>props.theme.dark?props.theme.backgroundColor:''};
   display: flex;
   justify-content: center;
   flex-direction: column;

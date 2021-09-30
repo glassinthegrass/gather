@@ -1,6 +1,6 @@
 import React, { useState, useEffect,useContext } from "react";
 import { userContext } from "../../userContext";
-import { darkContext } from "../../themeProvider";
+
 import axios from "axios";
 import Groups from "./Groups";
 import { useHistory } from "react-router";
@@ -20,7 +20,7 @@ const [postsToggle,setPostsToggle]=useState(false)
   const [offsetToggle, setOffsetToggle] = useState(true);
   const [idx, setIdx] = useState(0);
   const [user] = useContext(userContext);
-  const [dark] = useContext(darkContext);
+
    const { user_id, isLoggedIn } = user;
 
   setInterval(() => {
@@ -116,13 +116,16 @@ const [postsToggle,setPostsToggle]=useState(false)
     );
 
   return (
-    <HomeDiv dark={dark}>
+    <HomeDiv >
       <Box>
+    <GroupBox>
+
         <Title>Your Hives</Title>
         <GroupsDiv>{mappedGroups}</GroupsDiv>
         <Announce>
           <Birthdays birthday={birthdays[idx]} />
         </Announce>
+    </GroupBox>
         <Spacer></Spacer>
         <PostContainer>{mappedPosts}</PostContainer>
         <Spacer></Spacer>
@@ -151,22 +154,24 @@ const HomeDiv = styled.div`
   min-height: 94vh;
   z-index: 1;
   font-weight: 900;
-  ${props=>props.theme};
+  ${props=>props.theme.dark?props.theme.backgroundColor:''};
+  ${props=>props.theme.color};
 `;
 
 let GroupsDiv = styled.div`
   display: flex;
   width: 100%;
-  background-color: rgb(252, 219, 165);
+  
   justify-content: flex-start;
   overflow-x: scroll;
   z-index: 1;
   border-bottom: 0.5px dotted rgb(88, 88, 88, 0.5);
 `;
 let Title = styled.div`
-  background-color: rgb(252, 219, 165);
+${props=>props.theme.dark?props.theme.backgroundColor:'background-color:rgb(88,88,88,0.2)'};
   width: 100%;
-
+  ${props=>props.theme.color};
+  font-size:35px;
   font-weight: 900;
   border-bottom: 0.5px dotted rgb(88, 88, 88, 0.5);
   z-index: 1;
@@ -195,7 +200,13 @@ let Box = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  ${props=>props.theme.color};
+  
 `;
+let GroupBox=styled.div`
+${props=>props.theme.dark?props.theme.backgroundColor:'background-color: rgb(252, 219, 165)'};
+width:100%;
+`
 let AddPosts = styled.div`
   height: 2rem;
   width: 6rem;
@@ -207,7 +218,7 @@ let AddPosts = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 30px 30px 30px 30px;
-  background-color: rgb(252, 219, 166);
+  ${props=>props.theme.dark?props.theme.solidBackgroundColor:'background-color: rgb(252, 219, 166)'};
   box-shadow: 10px 0px 13px -12px #897b7b, 0px 7px 13px -7px #000000;
   cursor: pointer;
   &:hover {

@@ -143,6 +143,7 @@ let Container = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
+  ${props=>props.theme.dark?props.theme.backgroundColor:''};
 `;
 let PostContainer = styled.div`
   display: flex;

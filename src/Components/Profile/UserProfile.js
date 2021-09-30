@@ -237,7 +237,7 @@ let Input = styled.input`
 let ProfileContainer = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: rgb(252, 219, 166);
+  ${props=>props.theme.dark?props.theme.backgroundColor:'background-color: rgb(252, 219, 166)'};
   padding: 2.5rem;
   border: 1px dotted rgb(88, 88, 88);
   border-radius: 10px 10px 10px 10px;
@@ -260,13 +260,14 @@ let ProfileTitle = styled.h4`
 font-weight: 900;
   font-size: 20px;
   padding: 2px;
-  background-color: rgb(252, 219, 166);
+  ${props=>props.theme.color};
   z-index: 1;
 `;
 
 let ProfileText = styled.h1`
 font-weight: 300;
-  background-color: rgb(252, 219, 166);
+${props=>props.theme.color};
+${props=>props.theme.dark?props.theme.solidBackgroundColor:'background-color: rgb(252, 219, 166)'};
   z-index: 1;
 `;
 let EditContainer = styled.div`

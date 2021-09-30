@@ -12,7 +12,7 @@ const ProfileIcons = (props) => {
       <Link to={`/home`}>
         <HeaderIcons src={home} alt="" />
       </Link>
-      <Link to={`/all-groups`}>
+      <Link to={`/groups`}>
         <HeaderIcons src={groups} alt="" />
       </Link>
       <Link to={`/people`}>

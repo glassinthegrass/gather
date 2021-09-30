@@ -32,8 +32,8 @@ align-items:center;
   font-size: 10px;
   border: 1px dotted rgb(88, 88, 88, 0.5);
   border-radius: 10px;
-  background-color: rgb(88, 88, 88, 0.1);
   cursor: pointer;
+  background-color:${props=>props.theme.dark?'rgb(88,88,88,0.5)':'rgb(88,88,88,0.2)'};
   &:hover {
     background-color: rgb(88, 88, 88, 0.3);
     color: rgb(252, 142, 52, 0.792);
@@ -52,18 +52,20 @@ align-items:center;
   }
 `;
 let GroupName = styled.h6`
-  color: rgb(88, 88, 88);
+${props=>props.theme.color};
+${props=>props.theme.fontShadow};
+font-weight:${props=>props.theme.dark?'500':'300'};
   width: 5rem;
   overflow: hidden;
   border-radius: 50px;
   padding: 1px;
-  border: 3px solid rgb(252, 219, 165);
+  border: 3px solid ${props=>props.theme.dark?'rgb(88,88,88)':'rgb(252, 219, 165)'};
 `;
 let GroupImage = styled.div`
 height:60px;
 width:60px;
   border-radius: 50%;
   padding: 3px;
-  border: 3px solid rgb(252, 219, 165);
+  border: 3px solid ${props=>props.theme.dark?'rgb(88,88,88)':'rgb(252, 219, 165)'};
 `;
 

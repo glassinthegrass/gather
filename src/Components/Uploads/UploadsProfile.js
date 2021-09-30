@@ -167,6 +167,7 @@ let Containter = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
+  ${props=>props.theme.dark?props.theme.backgroundColor:''};
 `;
 let UploadContainer = styled.div`
   min-height: 90%;

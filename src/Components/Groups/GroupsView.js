@@ -186,7 +186,7 @@ let Toggles = styled.div`
   z-index: 4;
   font-size: 20px;
   box-shadow: 10px 0px 13px -12px #897b7b, 0px 7px 13px -7px #000000;
-  background-color: rgb(252, 219, 166);
+  ${props=>props.theme.dark?props.theme.solidBackgroundColor:'background-color: rgb(252, 219, 166)'};
   cursor: pointer;
   &:hover {
     background-color: rgb(88, 88, 88);

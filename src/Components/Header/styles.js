@@ -6,14 +6,14 @@ export const StyledHeader = styled.header`
   display: flex;
   height: 2.5rem;
   justify-content: center;
-padding-top:10px;
+  padding-top: 10px;
   border-bottom: 1px inset rgb(88, 88, 88, 0.7);
   background-color: rgb(242, 145, 50);
   box-shadow: 10px 0px 13px -7px #897b7b, 0px 7px 13px -7px #000000;
   z-index: 3;
   @media (max-width: 600px) {
     padding-top: 12px;
-    padding-bottom:5px;
+    padding-bottom: 5px;
     height: 1rem;
   }
 `;
@@ -43,8 +43,8 @@ export const GreetingContainer = styled.section`
 `;
 
 export const Greeting = styled.h1`
-font-family:Nunito;
-font-weight:400;
+  font-family: Nunito;
+  font-weight: 400;
 `;
 let Hover = keyframes`
 0%{transform:scale(0.9);}
@@ -92,29 +92,38 @@ export let Profile = styled.div`
   border-radius: 10px;
   cursor: auto;
   z-index: 3;
-${props=>props.dark?'background-color:rgb(252, 219, 166)':'background-color:rgb(88,88,88)'};
+  ${(props) =>
+    props.dark
+      ? "background-color:rgb(252, 219, 166)"
+      : "background-color:rgb(88,88,88)"};
   animation: ${show} 0.3s ease-in;
   animation-iteration-count: 1;
 `;
 
 export let ProfileLink = styled.div`
-display: flex;
-justify-content: center;
-align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border: 1px solid rgb(88, 88, 88, 0.5);
   border-radius: 3px;
   width: 100%;
   height: 40px;
   border-left: 0px;
   border-right: 0px;
-  font-weight:400;
+  font-weight: 400;
   font-size: 20px;
   z-index: 3;
   cursor: pointer;
   color: rgb(252, 142, 52, 0.792);
-  ${props=>props.dark?'background-color:rgb(252, 219, 166)':'background-color:rgb(88,88,88)'};
+  ${(props) =>
+    props.dark
+      ? "background-color:rgb(252, 219, 166)"
+      : "background-color:rgb(88,88,88)"};
   &:hover {
-${props=>props.dark?'background-color:rgb(252, 219, 166)':'background-color:rgb(88,88,88)'};
+    ${(props) =>
+      props.dark
+        ? "background-color:rgb(252, 219, 166)"
+        : "background-color:rgb(88,88,88)"};
   }
   &:active {
     background-color: rgb(252, 142, 52, 0.792);
@@ -132,6 +141,7 @@ export let LogoContainer = styled.div`
   justify-content: flex-start;
   align-items: center;
   margin-right: 75vw;
+  z-index: 3;
   @media (max-width: 600px) {
     margin-right: 65vw;
     margin-top: -10px;
@@ -139,10 +149,10 @@ export let LogoContainer = styled.div`
 `;
 export let Gather = styled.h1`
   position: absolute;
-  font-weight:600;
+  font-weight: 800;
   font-size: 30px;
   color: rgb(88, 88, 88);
-  margin-top: -1.4rem;
+  margin-top: -1.15rem;
   margin-left: 2.5rem;
   @media (max-width: 600px) {
     display: none;
@@ -154,6 +164,7 @@ export let Logo = styled.img`
   height: 3rem;
   margin-top: -0.5rem;
   margin-right: 0.5rem;
+  z-index: 3;
   cursor: pointer;
   @media (max-width: 600px) {
     height: 2rem;
