@@ -6,7 +6,7 @@ const Comment = ({comment}) => {
 
   return (
     <CommentContainer>
-      <Img><Image publicId={picture_public_id}><Transformation width='30' height='30' radius='max' crop='fill' gravity='face' fetch_format='png'/></Image></Img>
+      <Img publicId={picture_public_id}><Transformation width='30' height='30' radius='max' crop='fill' gravity='face' fetch_format='png'/></Img>
 
       <Column>
         <CommentUsername>{username}</CommentUsername>
@@ -25,7 +25,7 @@ let CommentContainer = styled.div`
   padding: 1px;
   margin-bottom: 2px;
 `;
-let Img = styled.div`
+let Img = styled(Image)`
   width: 25px;
   height: 25px;
   padding: 3px;
@@ -36,12 +36,14 @@ let CommentText = styled.p`
   font-weight: 300;
   border-radius: 10px;
   padding: 5px;
-  width: 90%;
+min-width:80%;
+max-width:85%;
   margin: 3px;
   padding-top: 2px;
   margin-top: 0px;
   text-align: left;
   background-color: rgb(245, 240, 232);
+overflow-wrap:break-word;
 `;
 let CommentUsername = styled(CommentText)`
   font-size: 8px;

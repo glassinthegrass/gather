@@ -76,20 +76,20 @@ const Posts = (props) => {
         <HeaderBodyComment>
           <PostHeader>
             <PostRow onClick={() => push(`/profile/${post.user_id}`)}>
-              <UserImage><Image publicId={post?.user_picture_public_id}><Transformation width='50' height='50' radius='max' crop='fill' gravity='auto' fetch_format='png' /> </Image></UserImage>
+              <UserImage publicId={post?.user_picture_public_id}><Transformation width='50' height='50' radius='max' crop='fill' gravity='auto' fetch_format='png' /> </UserImage>
 
               <UserName>{`${post.first_name} ${post.last_name}`}</UserName>
             </PostRow>
             <Line src={line} alt="" />
             <PostRow onClick={() => pathway()}>
               <GroupName>{props?.group_name}</GroupName>
-<GroupImage><Image publicId={props.group_picture_public_id}><Transformation width='25' height='25' radius='max' crop='fill' gravity='auto' fetch_format='png' /></Image></GroupImage>
+<GroupImage publicId={props.group_picture_public_id}><Transformation width='25' height='25' radius='max' crop='fill' gravity='auto' fetch_format='png' /></GroupImage>
 
             </PostRow>
           </PostHeader>
           <PostBody>
             <PostContent>{post?.post_content}</PostContent>
-<Image publicId={post?.post_picture_public_id}><Transformation width='300' height='300' crop='fill_pad' gravity='auto' fetch_format='auto'/></Image>
+<PostImage publicId={post?.post_picture_public_id}><Transformation width='300' height='300' crop='fill_pad' gravity='auto' fetch_format='auto'/></PostImage>
           </PostBody>
 
           <Row>
@@ -106,7 +106,7 @@ const Posts = (props) => {
 };
 export default Posts;
 
-const UserImage=styled.div`
+const UserImage=styled(Image)`
 width: 50px;
 height: 50px;
 border: 1px solid rgb(88, 88, 88, 0.5);
@@ -115,8 +115,10 @@ margin: 5px;
 cursor: pointer;
 z-index: 1;
 `
+const PostImage=styled(Image)`
 
-const GroupImage= styled.div`
+`
+const GroupImage= styled(Image)`
 width: 25px;
 height: 25px;
 border: 1px solid rgb(88, 88, 88, 0.5);
@@ -177,7 +179,7 @@ let PostContent = styled.p`
   max-width: 80%;
   margin-left: 10%;
   margin-right: 10%;
-
+  overflow-wrap:break-word;
   font-weight: 300;
 `;
 let CreationDate = styled(PostContent)`
