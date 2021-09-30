@@ -1,24 +1,22 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-
+import { Image,Transformation } from "cloudinary-react";
 const Groups = (props) => {
   const history = useHistory();
   const { push } = history;
-  const { group_name, picture_version, picture_public_id } = props.group;
+  const { group_name, picture_public_id } = props.group;
 
-  const url = picture_version?
-    `https://res.cloudinary.com/glassinthegrass/image/upload/w_60,h_60,c_fill,r_max,g_auto,f_auto/` +
-    picture_version +
-    "/" +
-    picture_public_id:'';
 
   return (
-    <GroupsContainer>
-      <div onClick={() => push(`/groups/${group_name}`)}>
-        <GroupImage className="groupname" src={url} alt={"group"} />
+    <GroupsContainer onClick={() => push(`/groups/${group_name}`)}>
+
+     <GroupImage> <Image publicId={picture_public_id}>
+      <Transformation width="60" height="60" gravity="auto" radius='max' fetch_format="auto" crop="fill" />
+      </Image>
+</GroupImage>
         <GroupName className="groupname">{group_name}</GroupName>
-      </div>
+
     </GroupsContainer>
   );
 };
@@ -27,10 +25,9 @@ export default Groups;
 let GroupsContainer = styled.section`
   display: flex;
   flex-direction: column;
-  align-contents: center;
+align-items:center;
   margin: 2px;
   padding: 5px;
-
   font-weight: 300;
   font-size: 10px;
   border: 1px dotted rgb(88, 88, 88, 0.5);
@@ -62,8 +59,11 @@ let GroupName = styled.h6`
   padding: 1px;
   border: 3px solid rgb(252, 219, 165);
 `;
-let GroupImage = styled.img`
+let GroupImage = styled.div`
+height:60px;
+width:60px;
   border-radius: 50%;
   padding: 3px;
   border: 3px solid rgb(252, 219, 165);
 `;
+

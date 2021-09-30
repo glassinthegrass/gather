@@ -1,12 +1,9 @@
 import React from "react";
+import { Image, Transformation } from "cloudinary-react";
 import styled from "styled-components";
 
 const BirthdayCard = (props) => {
   const { birthdays, idx, push } = props;
-  let personUrl = birthdays[idx]?.person_picture_public_id
-    ? `https://res.cloudinary.com/glassinthegrass/image/upload/w_400,h_400,c_pad,f_auto/co_rgb:ffff00,l_text:Nunito_20_bold_letter_spacing_2:!!Happy Birthday!!/fl_layer_apply,g_south,y_20/${birthdays[idx]?.person_picture_version}/${birthdays[idx]?.person_picture_public_id}`
-    : birthdays[idx]?.person_picture_url;
-  let groupUrl = `https://res.cloudinary.com/glassinthegrass/image/upload/w_50,h_50,c_fill_pad,g_auto,f_auto/${birthdays[idx]?.group_picture_version}/${birthdays[idx]?.group_picture_public_id}`;
 
   return (
     <Container>
@@ -15,11 +12,45 @@ const BirthdayCard = (props) => {
         Birthday!
         <br /> Leave a message to brighten their day.
       </Info>
-      <PersonPicture src={personUrl} alt="" />
+      <PersonPicture>
+        <Image publicId={birthdays[idx]?.person_picture_public_id}>
+          <Transformation
+            background="auto:predominant_gradient_contrast:4"
+            width="400"
+            height="400"
+            crop="pad"
+            fetch_format="auto"
+          />
+          <Transformation
+            overlay={{
+              fontFamily: "Nunito",
+              letterSpacing: 3,
+              fontSize: 30,
+              fontWeight: "bold",
+              text: "Happy Birthday!!!",
+            }}
+            gravity="south"
+            y="20"
+            flags="layer_apply"
+            color="rgb:F29132"
+          />
+        </Image>
+      </PersonPicture>
       <Row>
         <Info>Person shared from</Info>
         <Column onClick={() => push(`/groups/${birthdays[idx]?.group_name}`)}>
-          <GroupPicture src={groupUrl} alt="" />
+          <GroupPicture>
+            <Image publicId={birthdays[idx]?.group_picture_public_id}>
+              <Transformation
+                width="40"
+                height="40"
+                crop="thumb"
+                gravity="faces"
+                fetch_format="auto"
+              />
+            </Image>
+          </GroupPicture>
+
           <GroupInfo>{birthdays[idx]?.group_name}</GroupInfo>
         </Column>
       </Row>
@@ -39,14 +70,19 @@ let Container = styled.div`
   border-radius: 10px 10px 10px 10px;
 `;
 let Info = styled.p`
-
   font-weight: 400;
   font-size: 14px;
+
   padding: 5px;
 `;
 let GroupInfo = styled(Info)`
-font-weight: 400;
+  font-weight: 800;
   font-size: 8px;
+  max-width: 40px;
+  overflow: hidden;
+  position: absolute;
+  margin-top: 25px;
+  margin-left: 19px;
 `;
 let Row = styled.div`
   display: flex;
@@ -60,11 +96,11 @@ let Column = styled.div`
   z-index: 2;
   cursor: pointer;
 `;
-let GroupPicture = styled.img`
+let GroupPicture = styled.div`
   height: 20px;
   width: 20px;
 `;
-let PersonPicture = styled.img`
+let PersonPicture = styled.div`
   width: 400px;
   height: 400px;
 `;

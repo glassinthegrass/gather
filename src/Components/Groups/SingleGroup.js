@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState, useEffect,useContext, useCallback } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import { userContext } from "../../userContext";
 
 import { useHistory } from "react-router-dom";
@@ -8,6 +8,7 @@ import CreatePost from "./CreatePost";
 import SingleGroupUsers from "./SingleGroupUsers";
 import Posts from "./Posts";
 import { fadeIn } from "../Home/Home";
+import { Image, Transformation } from "cloudinary-react";
 
 const SingleGroup = (props) => {
   const [user]=useContext(userContext);
@@ -23,7 +24,7 @@ const SingleGroup = (props) => {
   const [image, setImage] = useState([]);
   const [postContent, setPostContent] = useState("");
   const [member, setMember] = useState(false);
-  const [groupUrl, setGroupUrl] = useState("");
+
   const { group_name } = props.match.params;
   const [offset, setOffset] = useState(0);
   const { picture_version, picture_public_id } = group;
@@ -47,25 +48,13 @@ const SingleGroup = (props) => {
       .then((res) => setPosts([res.data, ...posts].flat()))
       .catch((err) => console.log(err));
   };
-  let imageCall = useCallback(() => {
-    if (picture_version) {
-      setGroupUrl(
-        `https://res.cloudinary.com/glassinthegrass/image/upload/w_400,h_400,c_fill_pad,g_auto,f_auto/${picture_version}/${picture_public_id}`
-      );
-    }
-  }, [picture_version, picture_public_id]);
-
-  let redirect = useCallback(() => {
-    push("/");
-  }, [push]);
 
   useEffect(() => {
-    if (isLoggedIn === true) {
-      imageCall();
-    } else if (isLoggedIn === false) {
-      redirect();
-    }
-  }, [isLoggedIn, imageCall, redirect]);
+if(!isLoggedIn){
+  push('/')
+}    
+  }, [isLoggedIn,push]);
+
   useEffect(() => {
     if (group?.group_id) {
       axios
@@ -191,7 +180,8 @@ const SingleGroup = (props) => {
             {group?.subject}
             {")"}
           </GroupSubject>
-          <GroupImage src={groupUrl} alt="" />
+
+          <Image publicId={picture_public_id}><Transformation border='3px_solid_gray' radius='5' width='500' height='400' background='auto' crop='pad' fetch_format='png' /></Image>
         </GroupHeader>
         <div>
           <CreatePost
@@ -275,14 +265,7 @@ ${props=>props.theme}
     justify-content: flex-start;
   }
 `;
-let GroupImage = styled.img`
-  width: 400px;
-  height: 400px;
-  @media (max-width: 600px) {
-    width: 250px;
-    height: 250px;
-  }
-`;
+
 let GroupName = styled.h1`
 
   font-weight: 900;

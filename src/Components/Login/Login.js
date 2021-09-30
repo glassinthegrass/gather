@@ -280,6 +280,7 @@ let old = user
           </RegisterToggle>
         </ToggleBox>
       </div>
+
     </Window>
   );
 };

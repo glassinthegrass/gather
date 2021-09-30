@@ -3,19 +3,13 @@ import {
   Container,
   UserContainer,
   Username,
-  Picture,
+
 } from "./MappedSingleGroupUsers";
 import styled from "styled-components";
+import { Image, Transformation } from "cloudinary-react";
 
 const MappedSingleGroupPeople = (props) => {
   const { person } = props;
-
-  const url = person?.picture_version
-    ? `https://res.cloudinary.com/glassinthegrass/image/upload/w_40,h_40,c_fill_pad,g_auto,f_auto,r_max/` +
-      person.picture_version +
-      "/" +
-      person.picture_public_id
-    : person?.picture_url;
   let editCheck =
     props.person?.creator === props?.loggedInUser && props?.edit ? (
       <Delete
@@ -31,7 +25,7 @@ const MappedSingleGroupPeople = (props) => {
     <Container>
       {editCheck}
       <UserContainer>
-        <Picture src={url} alt="" />
+        <Image publicId={person?.picture_public_id}><Transformation width='31' height='31' crop='fill_pad' gravity='auto' fetch_format='png' radius='max'/></Image>
         <Username>
           {person.first_name} {person.last_name}
         </Username>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import {Image,Transformation} from 'cloudinary-react'
 import styled from "styled-components";
 import bee from "../../Assets/Gather_Line_with_Bee.png";
 import Loading from "../Loading";
@@ -18,7 +19,7 @@ const UserProfile = (props) => {
     password: "",
   });
 
-  const { profilePicture, user, loggedInUser } = props;
+  const { user, loggedInUser } = props;
   const { birthday, creation_date, email, first_name, last_name } = user;
 
   useEffect(() => {
@@ -51,7 +52,10 @@ const UserProfile = (props) => {
       change your profile picture
     </PictureInput>
   ) : (
-    <ImageContainer src={profilePicture} alt={first_name} />
+    <ImageContainer>
+    <Image publicId={user?.picture_public_id}><Transformation width='200' height='250' crop='fill' radius='5' fetch_format='png' /></Image>
+
+    </ImageContainer>
   );
   let loadingToggleDisplay = props.loadingToggle ? (
     <LoadingContainer>
@@ -238,7 +242,7 @@ let ProfileContainer = styled.div`
   border: 1px dotted rgb(88, 88, 88);
   border-radius: 10px 10px 10px 10px;
 `;
-let ImageContainer = styled.img`
+let ImageContainer = styled.div`
   width: 200px;
   height: 250px;
   display: flex;

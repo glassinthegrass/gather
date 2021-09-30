@@ -18,9 +18,7 @@ const Profile = (props) => {
   const [offset, setOffset] = useState(0);
   const [offsetToggle, setOffsetToggle] = useState(true);
   const [loadingToggle, setLoadingToggle] = useState(true);
-  const [profilePicture, setProfilePicture] = useState("");
   const [toggle, setToggle] = useState(null);
-  const { picture_public_id, picture_version } = user;
 
   const handleSetToggle = (loadingToggle) => {
     setLoadingToggle(!loadingToggle);
@@ -73,17 +71,6 @@ const Profile = (props) => {
     }
   }, [offsetToggle, user_id, offset, posts]);
 
-  useEffect(() => {
-    if (picture_public_id) {
-      setProfilePicture(
-        `https://res.cloudinary.com/glassinthegrass/image/upload/w_200,h_250,g_auto,c_fill,r_5,f_png/` +
-          picture_version +
-          "/" +
-          picture_public_id
-      );
-    }
-  }, [picture_version, picture_public_id]);
-
   const handleOffsetPosts = () => {
     setOffsetToggle(true);
   };
@@ -132,7 +119,6 @@ const Profile = (props) => {
           handleSetToggle={handleSetToggle}
           handleEmailSubmit={handleEmailSubmit}
           handleSubmit={handleProfileSubmit}
-          profilePicture={profilePicture}
           loggedInUser={loggedInUser}
           push={push}
           user={user}

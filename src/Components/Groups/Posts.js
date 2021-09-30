@@ -1,10 +1,10 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useHistory, useRouteMatch } from "react-router-dom";
+import { Image,Transformation } from "cloudinary-react";
 import styled from "styled-components";
 import line from "../../Assets/Gather_Dotted_Line.png";
 import Comment from "./Comment";
-
 const Posts = (props) => {
   const [content, setContent] = useState("");
   const [commentToggle, setCommentToggle] = useState(false);
@@ -14,20 +14,6 @@ const Posts = (props) => {
   const { post, loggedInUser } = props;
   const { post_id } = post;
 
-  let userUrl = post.user_picture_public_id
-    ? `https://res.cloudinary.com/glassinthegrass/image/upload/w_50,h_50,r_max,c_fill,g_face,f_png/${post.user_picture_version}/${post.user_picture_public_id}`
-    : "";
-  let groupUrl = props.group_picture_public_id
-    ? `https://res.cloudinary.com/glassinthegrass/image/upload/w_25,h_25,r_max,c_fill,g_auto,f_png/${props?.group_picture_version}/${props?.group_picture_public_id}`
-    : "";
-  let postUrl = post.post_picture_public_id
-    ? `https://res.cloudinary.com/glassinthegrass/image/upload/w_300,h_300,c_fill_pad,g_auto,f_jpg/${post?.post_picture_version}/${post?.post_picture_public_id}`
-    : "";
-  let postPicture = post.post_picture_version ? (
-    <PostPicture src={postUrl} alt="postPic" />
-  ) : (
-    <></>
-  );
   const pathway = () => {
     if (path !== "/birthdays") {
       push(`/groups/${props?.group_name}`);
@@ -90,18 +76,20 @@ const Posts = (props) => {
         <HeaderBodyComment>
           <PostHeader>
             <PostRow onClick={() => push(`/profile/${post.user_id}`)}>
-              <PostUser src={userUrl} alt="" />
+              <UserImage><Image publicId={post?.user_picture_public_id}><Transformation width='50' height='50' radius='max' crop='fill' gravity='auto' fetch_format='png' /> </Image></UserImage>
+
               <UserName>{`${post.first_name} ${post.last_name}`}</UserName>
             </PostRow>
             <Line src={line} alt="" />
             <PostRow onClick={() => pathway()}>
               <GroupName>{props?.group_name}</GroupName>
-              <GroupPicture src={groupUrl} alt="" />
+<GroupImage><Image publicId={props.group_picture_public_id}><Transformation width='25' height='25' radius='max' crop='fill' gravity='auto' fetch_format='png' /></Image></GroupImage>
+
             </PostRow>
           </PostHeader>
           <PostBody>
             <PostContent>{post?.post_content}</PostContent>
-            {postPicture}
+<Image publicId={post?.post_picture_public_id}><Transformation width='300' height='300' crop='fill_pad' gravity='auto' fetch_format='auto'/></Image>
           </PostBody>
 
           <Row>
@@ -117,6 +105,25 @@ const Posts = (props) => {
   );
 };
 export default Posts;
+
+const UserImage=styled.div`
+width: 50px;
+height: 50px;
+border: 1px solid rgb(88, 88, 88, 0.5);
+border-radius: 50%;
+margin: 5px;
+cursor: pointer;
+z-index: 1;
+`
+
+const GroupImage= styled.div`
+width: 25px;
+height: 25px;
+border: 1px solid rgb(88, 88, 88, 0.5);
+border-radius: 50%;
+margin: 5px;
+cursor: pointer;
+z-index: 1;`
 let Container = styled.section`
   display: flex;
   justify-content: center;
@@ -177,17 +184,7 @@ let CreationDate = styled(PostContent)`
   font-size: 8px;
   padding: 3px;
 `;
-let PostUser = styled.img`
-  cursor: pointer;
-  border: 1px solid rgb(88, 88, 88, 0.5);
-  border-radius: 50%;
-  margin: 5px;
-`;
 
-let PostPicture = styled.img`
-  background-color: white;
-  width: 90%;
-`;
 let UserName = styled.p`
 
   font-weight: 400;
@@ -196,15 +193,7 @@ let UserName = styled.p`
   margin-left: -5px;
   white-space: nowrap;
 `;
-let GroupPicture = styled.img`
-  width: 25px;
-  height: 25px;
-  border: 1px solid rgb(88, 88, 88, 0.5);
-  border-radius: 50%;
-  margin: 5px;
-  cursor: pointer;
-  z-index: 1;
-`;
+
 let GroupName = styled(UserName)`
 
   font-weight: 300;

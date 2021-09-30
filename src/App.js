@@ -11,13 +11,12 @@ import styled from "styled-components";
 import axios from "axios";
 import { darkContext } from "./themeProvider";
 
+
 const App = (props) => {
   const [user, setUser] = useContext(userContext);
   const [dark, setDark] = useContext(darkContext);
-  const { picture_public_id, picture_version, isLoggedIn } = user;
+  const { picture_public_id, isLoggedIn } = user;
   const [menuToggle, setMenuToggle] = useState(false);
-
-  const [profilePicture, setProfilePicture] = useState("");
   useEffect(() => {
     let remember = JSON.parse(localStorage.getItem("user"));
     remember === null
@@ -38,16 +37,7 @@ const App = (props) => {
       : setDark(false);
   }, [setDark]);
   const push = useHistory().push;
-  useEffect(() => {
-    if (picture_version) {
-      setProfilePicture(
-        `https://res.cloudinary.com/glassinthegrass/image/upload/w_40,h_40,c_fill,r_max,f_png/` +
-          picture_version +
-          "/" +
-          picture_public_id
-      );
-    }
-  }, [picture_version, picture_public_id]);
+
 
   const handleMenuToggle = () => {
     setMenuToggle(!menuToggle);
@@ -61,20 +51,21 @@ const App = (props) => {
     setUser(user);
     localStorage.setItem("user", JSON.stringify(user));
   };
+  const popUpMenu= <ProfileMenu
+  publicId={picture_public_id}
+    logout={logout}
+    push={push}
+    dark={dark}
+    handleDarkToggle={handleDarkToggle}
+    user_id={user.user_id}
+  />
   const bottomHeaderSwitch = isLoggedIn ? (
     <BottomHeader>
       <ProfileIcons
         user_id={user.user_id}
         profileMenu={
           <ProfileMenuMover>
-            <ProfileMenu
-              url={profilePicture}
-              logout={logout}
-              push={push}
-              dark={dark}
-              handleDarkToggle={handleDarkToggle}
-              user_id={user.user_id}
-            />
+            {popUpMenu}
           </ProfileMenuMover>
         }
       />
@@ -85,17 +76,7 @@ const App = (props) => {
   const mainView = (
     <>
       <Header
-        profileMenu={
-          <ProfileMenu
-            url={profilePicture}
-            logout={logout}
-            push={push}
-            dark={dark}
-            handleDarkToggle={handleDarkToggle}
-            user_id={user.user_id}
-          />
-        }
-        profilePicture={profilePicture}
+        profileMenu={popUpMenu}
         logout={logout}
         handleDarkToggle={handleDarkToggle}
         push={push}

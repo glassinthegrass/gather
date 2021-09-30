@@ -1,3 +1,4 @@
+import { Image, Transformation } from "cloudinary-react";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
@@ -5,16 +6,17 @@ import styled from "styled-components";
 const MappedSingleGroupUsers = (props) => {
   const history = useHistory();
   const { push } = history;
-  const { user_id } = props.user;
+  const { user_id,picture_public_id } = props.user;
 
   const handleProfileClick = () => {
     push(`/profile/${user_id}`);
   };
-  let userUrl = `https://res.cloudinary.com/glassinthegrass/image/upload/w_50,h_50,r_max,c_fill,g_auto,f_auto,q_100/${props.user.picture_version}/${props.user.picture_public_id}`;
+
   return (
     <Container>
       <UserContainer onClick={handleProfileClick}>
-        <Picture src={userUrl} alt="pic" />
+
+<Image publicId={picture_public_id}><Transformation width='31'height='31'radius='max' crop='fill' gravity='auto' fetch_format='png' border='1px_solid_gray'/></Image>
         <Username>{props.user.username}</Username>
       </UserContainer>
     </Container>

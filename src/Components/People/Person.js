@@ -1,12 +1,20 @@
+import { Image, Transformation } from "cloudinary-react";
 import { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import PersonGroups from "./PersonGroups";
 
 const Person = (props) => {
-  const { handleDelete, toggle, user_id, personUrl } = props;
+  const { handleDelete, toggle, user_id } = props;
   const [groupToggle, setGroupToggle] = useState(false);
-  const { birthday, creation_date, first_name, last_name, message, person_id } =
-    props.person;
+  const {
+    birthday,
+    creation_date,
+    picture_public_id,
+    first_name,
+    last_name,
+    message,
+    person_id,
+  } = props.person;
   const handleGroupToggle = () => {
     groupToggle ? setGroupToggle(!groupToggle) : setGroupToggle(!groupToggle);
   };
@@ -26,7 +34,10 @@ const Person = (props) => {
     <Container>
       {edit}
       <PersonContainer>
-        <Picture src={personUrl} alt="" />
+        <Image publicId={picture_public_id}>
+          <Transformation width='50' height='50' background='auto' border='1px_solid_gray' gravity='auto' crop='fill_pad' radius='3' />
+        </Image>
+
 
         <Column>
           <Title>Name</Title>
@@ -89,10 +100,7 @@ let Column = styled.div`
   flex-direction: column;
   width: 20%;
 `;
-let Picture = styled.img`
-  height: 3rem;
-  width: 3rem;
-`;
+
 let Delete = styled.div`
   width: 100%;
   z-index: 1;

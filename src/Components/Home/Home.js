@@ -4,7 +4,6 @@ import { darkContext } from "../../themeProvider";
 import axios from "axios";
 import Groups from "./Groups";
 import { useHistory } from "react-router";
-
 import styled, { keyframes } from "styled-components";
 import Posts from "../Groups/Posts";
 import Birthdays from "./Birthdays";

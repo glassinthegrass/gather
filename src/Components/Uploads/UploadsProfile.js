@@ -1,32 +1,33 @@
-import React, { useEffect, useState,useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { userContext } from "../../userContext";
 import Loading from "../Loading";
 import axios from "axios";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
+import { Image, Transformation } from "cloudinary-react";
 
 const UploadsProfile = (props) => {
   const push = useHistory().push;
-  const [user,setUser]=useContext(userContext);
-  const {user_id,isRegistered,first_name,email}=user;
+  const [user, setUser] = useContext(userContext);
+  const { user_id, isRegistered, first_name, email } = user;
   const [response, setResponse] = useState(null);
   const [loadingToggle, setLoadingToggle] = useState(false);
   const [preview, setPreview] = useState(null);
   const [image, setImage] = useState([]);
-  console.log(props)
-useEffect(()=>{
-if(!user_id){
-  push('/')
-}
-},[user_id,push])
-  useEffect(()=>{
-    if(isRegistered){
-  
-
-        let sent= axios.post(`/api/email?first_name=${first_name}&email=${email}`).then(res=>res.data)
-        console.log(sent)
+  console.log(props);
+  useEffect(() => {
+    if (!user_id) {
+      push("/");
     }
-  })
+  }, [user_id, push]);
+  useEffect(() => {
+    if (isRegistered) {
+      let sent = axios
+        .post(`/api/email?first_name=${first_name}&email=${email}`)
+        .then((res) => res.data);
+      console.log(sent);
+    }
+  });
   const handleFile = (img) => {
     if (img[0]) {
       setImage(img[0]);
@@ -52,18 +53,27 @@ if(!user_id){
     axios
       .post(`/api/images/${user_id}`, fileData, config)
       .then(function (res) {
-        setUser(res.data)
-        console.log(res.data)
-        setResponse(res.data.profile_picture_url);
+        setUser(res.data);
+        console.log(res.data);
+        setResponse(res.data);
         setLoadingToggle(false);
       })
       .catch((err) => console.log(err));
   };
 
-
   let picSwitch = preview ? (
     response ? (
-      <Preview src={response} alt="" />
+      <Image publicId={response?.picture_public_id}>
+        <Transformation
+          fetch_format="auto"
+          width="400"
+          height="400"
+          crop="fill_pad"
+          gravity="auto"
+          background="auto"
+          quality="100"
+        />
+      </Image>
     ) : (
       <Preview src={preview} alt="" />
     )
@@ -103,12 +113,12 @@ if(!user_id){
 
         {loadingSwitch}
       </UploadContainer>
-      {console.log(user)}
+      {console.log(response)}
     </Containter>
   );
 };
 
-export default UploadsProfile
+export default UploadsProfile;
 
 let HiddenInput = styled.input`
   width: 0.1px;
@@ -145,7 +155,7 @@ let Submit = styled.div`
   }
 `;
 let Label = styled.label`
-font-weight: 400;
+  font-weight: 400;
   display: flex;
   flex-direction: column;
   align-items: center;

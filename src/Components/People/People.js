@@ -50,17 +50,11 @@ const People = (props) => {
   };
   let mappedPeople = people[0] ? (
     people.map((person, i) => {
-      const personUrl = person.picture_public_id
-        ? `https://res.cloudinary.com/glassinthegrass/image/upload/w_200,h_250,g_auto,c_fill,r_5,f_png/` +
-          person.picture_version +
-          "/" +
-          person.picture_public_id
-        : person.picture_url;
+
       return (
         <Person
           handleGroupDelete={handleGroupDelete}
           push={push}
-          personUrl={personUrl}
           toggle={toggle}
           handleDelete={handleDelete}
           user_id={user_id}

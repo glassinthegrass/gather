@@ -2,31 +2,23 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-
+import {Image,Transformation}from 'cloudinary-react'
 const MappedGroupsView = (props) => {
   const [toggle, setToggle] = useState(false);
   const [member, setMember] = useState(false);
   const push = useHistory().push;
-  const { group_name, group_id, picture_version, picture_public_id } =
+  const { group_name, group_id, picture_public_id } =
     props.group;
   const { user, loggedInUser } = props;
-  let id=loggedInUser.user_id
-
   const { user_id } = user;
-  const url =
-    `https://res.cloudinary.com/glassinthegrass/image/upload/w_150,h_150,q_80,c_fill,g_face,f_auto/` +
-    picture_version +
-    "/" +
-    picture_public_id;
-
+  let id = loggedInUser.user_id;
+  
   useEffect(() => {
     axios
-      .get(
-        `/api/member/groups?group_id=${group_id}&user_id=${id}`
-      )
+      .get(`/api/member/groups?group_id=${group_id}&user_id=${id}`)
       .then((res) => setMember(res.data))
       .catch((err) => console.log(err));
-  }, [group_id,id]);
+  }, [group_id, id]);
 
   const handleGroupClick = () => {
     push(`/groups/${group_name}`);
@@ -86,14 +78,15 @@ const MappedGroupsView = (props) => {
         <h1 onClick={handleToggle}>...</h1>
         {optionsToggleWindow}
       </Options>
+ <GroupImage onClick={() => handleGroupClick()} publicId={picture_public_id}><Transformation width='150' height='150' crop='fill' gravity='auto' fetch_format='auto'/></GroupImage>
 
-      <GroupImage onClick={() => handleGroupClick()} src={url} alt="" />
       <GroupName>{group_name}</GroupName>
     </Container>
   );
 };
 
 export default MappedGroupsView;
+
 let Container = styled.section`
   display: flex;
   justify-content: center;
@@ -106,7 +99,7 @@ let Container = styled.section`
     width: 17rem;
   }
 `;
-let GroupImage = styled.img`
+let GroupImage = styled(Image)`
   border: 3px solid rgb(88, 88, 88, 0.7);
   border-radius: 25px 25px 25px 25px;
   background-color: rgb(252, 142, 52, 0.792);

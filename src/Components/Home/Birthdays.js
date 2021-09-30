@@ -1,27 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-
+import { Image,Transformation } from "cloudinary-react";
 const Birthdays = (props) => {
   const push = useHistory().push;
-  const [personUrl, setPersonUrl] = useState("");
-  const { birthday } = props;
 
-  useEffect(() => {
-    if (birthday?.person_picture_public_id) {
-      setPersonUrl(
-        `https://res.cloudinary.com/glassinthegrass/image/upload/w_50,h_50,c_fill,g_auto,f_auto/${birthday?.person_picture_version}/${birthday?.person_picture_public_id}`
-      );
-    } else {
-      setPersonUrl(birthday?.person_picture_url);
-    }
-  }, [birthday]);
+  const { birthday } = props
+
 
   let check = birthday?.first_name ? (
     <BirthdayContainer onClick={() => push(`/birthdays`)}>
       <LowText>
         It's {birthday?.first_name} {birthday?.last_name}'s birthday!
-        <Image src={personUrl} alt="" />
+        
+        <Image publicId={birthday?.person_picture_public_id} >
+          <Transformation width="50" height='50' crop='fill' gravity='auto' radius='5'fetch_format='auto'/>
+        </Image>
       </LowText>
       <HighText>Click to Leave a Birthday Wish!</HighText>
     </BirthdayContainer>
@@ -57,7 +51,4 @@ let LowText = styled.p`
   color: rgb(88, 88, 88);
   white-space: nowrap;
 `;
-let Image = styled.img`
-  width: 2.5rem;
-  height: 2.5rem;
-`;
+

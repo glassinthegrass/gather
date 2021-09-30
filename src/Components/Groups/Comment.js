@@ -1,15 +1,13 @@
 import React from "react";
 import styled from "styled-components";
+import {Image,Transformation} from 'cloudinary-react'
+const Comment = ({comment}) => {
+  const { picture_public_id, username, comment_content } =comment;
 
-const Comment = (props) => {
-  const { picture_version, picture_public_id, username, comment_content } =
-    props.comment;
-  let userUrl = picture_public_id
-    ? `https://res.cloudinary.com/glassinthegrass/image/upload/w_30,h_30,r_max,c_fill,g_face,f_png/${picture_version}/${picture_public_id}`
-    : "";
   return (
     <CommentContainer>
-      <Img src={userUrl} alt="" />
+      <Img><Image publicId={picture_public_id}><Transformation width='30' height='30' radius='max' crop='fill' gravity='face' fetch_format='png'/></Image></Img>
+
       <Column>
         <CommentUsername>{username}</CommentUsername>
         <CommentText>{comment_content}</CommentText>
@@ -27,7 +25,7 @@ let CommentContainer = styled.div`
   padding: 1px;
   margin-bottom: 2px;
 `;
-let Img = styled.img`
+let Img = styled.div`
   width: 25px;
   height: 25px;
   padding: 3px;

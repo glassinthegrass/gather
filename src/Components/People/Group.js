@@ -1,15 +1,11 @@
+import { Image,Transformation } from "cloudinary-react";
 import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 
 const Group = (props) => {
   const [toggle, setToggle] = useState(false);
   const { group, push, handleDelete } = props;
-  let url = group.picture_public_id
-    ? `https://res.cloudinary.com/glassinthegrass/image/upload/w_50,h_50,g_auto,c_fill_pad,r_5,f_png/` +
-      group.picture_version +
-      "/" +
-      group.picture_public_id
-    : "";
+
   const handleToggle = () => {
     toggle ? setToggle(!toggle) : setToggle(!toggle);
   };
@@ -25,7 +21,8 @@ const Group = (props) => {
   return (
     <MapContainer>
       <Row onClick={() => push(`groups/${group.group_name}`)}>
-        <Image src={url} alt="" />
+
+        <Image publicId={group?.picture_public_id}><Transformation height='30' width='30' background='auto' border='1px_solid_gray' gravity='auto'  crop='fill_pad' radius='3' fetch_format='png'/></Image>
         <Name>{group.group_name}</Name>
       </Row>
       <Options className="options" onClick={() => handleToggle()}>
@@ -61,12 +58,6 @@ let MapContainer = styled.div`
   }
 `;
 
-let Image = styled.img`
-  height: 2rem;
-  width: 2rem;
-  border-radius: 3px;
-  background-color: white;
-`;
 let Name = styled.p`
   display: flex;
   align-items: center;

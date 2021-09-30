@@ -1,7 +1,8 @@
 import React from "react";
-import { Profile, ProfileLink, ProfilePic } from "./styles";
+import { Image,Transformation } from "cloudinary-react";
+import { Profile, ProfileLink } from "./styles";
 
-const ProfileMenu = ({dark,url,push,handleDarkToggle,logout,user_id}) => {
+const ProfileMenu = ({dark,url,push,publicId,handleDarkToggle,logout,user_id}) => {
 
   let toggleText = dark ? "Light Mode" : "Dark Mode";
 
@@ -11,7 +12,8 @@ const ProfileMenu = ({dark,url,push,handleDarkToggle,logout,user_id}) => {
       <ProfileLink  onClick={() => push(`/profile/${user_id}`)}>
         <>
           Profile
-          <ProfilePic src={url} alt="" />
+          <Image publicId={publicId}><Transformation width='35' height='35' crop='fill' gravity='auto'radius='max' fetch_format='png' /></Image>
+
         </>
       </ProfileLink>
 
