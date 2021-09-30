@@ -27,12 +27,12 @@ const Header = (props) => {
   );
   return (
     <StyledHeader>
-      <LogoContainer>
+      <LogoContainer onClick={() => {
+            push("/home");
+          }}>
         <Logo src={logo} alt="" />
         <GatherHolder
-          onClick={() => {
-            push("/home");
-          }}
+          
         >
           <MiniGather className="miniGather">Gather</MiniGather>
         </GatherHolder>
