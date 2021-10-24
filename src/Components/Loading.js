@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../Assets/BeeLogoFull.png";
+import logo from "../Public/BeeLogoFull.png";
 import styled, { keyframes } from "styled-components";
 
 const Loading = () => {

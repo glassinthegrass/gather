@@ -2,15 +2,14 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const session = require("express-session");
-const formData = require("express-form-data");
 const massive = require("massive");
 const path = require("path");
 const cloudinary = require("cloudinary").v2;
+const formData = require("express-form-data");
 const authCtrl = require("./controllers/authCtrl");
 const pplCtrl = require("./controllers/pplCtrl");
 const postCtrl = require("./controllers/postCtrl");
 const groupCtrl = require("./controllers/groupCtrl");
-const announceCtrl = require("./controllers/announceCtrl");
 const cloudinaryCtrl = require("./controllers/cloudinaryCtrl");
 const viewsCtrl = require("./controllers/viewsCtrl");
 const emailCtrl = require("./controllers/emailCtrl");
@@ -55,7 +54,7 @@ app.post("/api/images/:user_id", cloudinaryCtrl.uploadProfileImages);
 
 //auth
 app.get("/api/profile/:user_id", authUser.isLoggedIn, authCtrl.getUser);
-app.post('/auth/session',authCtrl.createSession);
+app.post("/auth/session", authCtrl.createSession);
 app.post(`/auth/register`, authCtrl.register);
 app.post(`/auth/admin`, authCtrl.registerAdmin);
 app.post("/auth/login", authCtrl.login);
@@ -133,27 +132,6 @@ app.put(
 app.delete("/api/groups", authUser.isLoggedIn, groupCtrl.deleteUserFromGroup);
 app.delete("/api/delete-group", authUser.isLoggedIn, groupCtrl.deleteGroup);
 
-//announcements
-
-app.get(
-  "/api/announcements/:announcement_id",
-  authUser.isLoggedIn,
-  announceCtrl.getAnnouncement
-);
-app.post(
-  "/api/announcements",
-  authUser.isLoggedIn,
-  announceCtrl.createAnnouncement
-);
-app.post(
-  "/api/announcements/:announcement_id",
-  announceCtrl.createAnnouncementParagraph
-);
-app.delete(
-  "/api/announcements",
-  authUser.isLoggedIn,
-  announceCtrl.deleteAnnouncement
-);
 
 //email
 app.post("/api/email", authUser.isLoggedIn, emailCtrl.sendEmail);
@@ -191,6 +169,6 @@ massive(
   },
   { scripts: path.join(__dirname, "../db") }
 ).then((dbInstance) => {
-  app.set("db", dbInstance);
+  app.set('db', dbInstance);
   app.listen(SERVER_PORT, () => console.log(`GATHER on port ${SERVER_PORT}`));
 });

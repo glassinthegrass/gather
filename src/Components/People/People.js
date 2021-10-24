@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState,useContext } from "react";
-import { userContext } from "../../userContext";
+import { userContext } from "../../Context/userContext";
 import { useHistory } from "react-router-dom";
 import { fadeIn } from "../Home/Home";
 import styled from "styled-components";

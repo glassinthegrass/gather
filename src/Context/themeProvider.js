@@ -20,7 +20,8 @@ const ThemeContextProvider = (props) => {
     color: "color:rgb(88,88,88)",
     backgroundColor: "background-color: rgb(252, 219, 166)",
     postFontWeight: "font-weight:400",
-    fontShadow:'',
+    fontShadow: `text-shadow: -1.5px -1.5px 0 rgb(88,88,88), 1.5px -1.5px 0 rgb(88,88,88),
+    -1.5px 1.5px 0 rgb(88,88,88), 1px 1px 0 rgb(88,88,88)`,
   };
   const theme = dark ? darkTheme : lightTheme;
 

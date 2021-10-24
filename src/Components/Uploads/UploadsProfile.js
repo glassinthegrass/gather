@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { userContext } from "../../userContext";
+import { userContext } from "../../Context/userContext";
 import Loading from "../Loading";
 import axios from "axios";
 import styled from "styled-components";
@@ -102,7 +102,7 @@ const UploadsProfile = (props) => {
   );
   return (
     <Containter>
-      {console.log(response)}
+
       <UploadContainer>
         <HiddenInput
           type="file"
@@ -127,8 +127,15 @@ let HiddenInput = styled.input`
   overflow: hidden;
   position: absolute;
   z-index: -1;
-`;
-
+  `;
+  
+  let Label = styled.label`
+    font-weight: 400;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 10px;
+  `;
 let Submit = styled.div`
   width: 10rem;
   height: 3rem;
@@ -153,13 +160,6 @@ let Submit = styled.div`
   @media (max-width: 600px) {
     width: 80%;
   }
-`;
-let Label = styled.label`
-  font-weight: 400;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 10px;
 `;
 let Containter = styled.section`
   width: 100vw;

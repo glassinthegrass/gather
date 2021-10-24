@@ -1,17 +1,19 @@
-import axios from "axios";
-import React, { useState, useEffect,useContext } from "react";
-import { userContext } from "../../userContext";
-
+//modules
+import React, { useState, useEffect, useContext } from "react";
 import { useHistory } from "react-router-dom";
+import axios from "axios";
 import styled from "styled-components";
+import { Image, Transformation } from "cloudinary-react";
+//components
+import Posts from "./Posts";
 import CreatePost from "./CreatePost";
 import SingleGroupUsers from "./SingleGroupUsers";
-import Posts from "./Posts";
+//other
+import { userContext } from "../../Context/userContext";
 import { fadeIn } from "../Home/Home";
-import { Image, Transformation } from "cloudinary-react";
 
-const SingleGroup = (props) => {
-  const [user]=useContext(userContext);
+const SingleGroup = ({ match }) => {
+  const [user] = useContext(userContext);
   const { isLoggedIn, user_id } = user;
   const history = useHistory(),
     { push, goBack } = history;
@@ -24,11 +26,16 @@ const SingleGroup = (props) => {
   const [image, setImage] = useState([]);
   const [postContent, setPostContent] = useState("");
   const [member, setMember] = useState(false);
-
-  const { group_name } = props.match.params;
+  const { group_name } = match.params;
   const [offset, setOffset] = useState(0);
-  const { picture_version, picture_public_id } = group;
 
+  //login check
+  useEffect(() => {
+    if (isLoggedIn === false) {
+      push("/");
+    }
+  }, [isLoggedIn, push]);
+  //get info
   useEffect(() => {
     axios
       .get(`/api/group/${group_name}`)
@@ -40,7 +47,9 @@ const SingleGroup = (props) => {
       })
       .catch((err) => console.log(err));
   }, [group_name]);
-
+  //destructure group after setting it
+  const { picture_version, picture_public_id, group_id } = group;
+  //getPosts needs lazy load
   const handleGetMorePosts = () => {
     setOffset(offset + 10);
     axios
@@ -48,26 +57,18 @@ const SingleGroup = (props) => {
       .then((res) => setPosts([res.data, ...posts].flat()))
       .catch((err) => console.log(err));
   };
-
+  //check group membership
   useEffect(() => {
-if(!isLoggedIn){
-  push('/')
-}    
-  }, [isLoggedIn,push]);
-
-  useEffect(() => {
-    if (group?.group_id) {
-      axios
-        .get(`/api/member/groups?group_id=${group.group_id}&user_id=${user_id}`)
-        .then((res) => setMember(res.data))
-        .catch((err) => console.log(err));
-    }
-  }, [group?.group_id, user_id]);
-
+    axios
+      .get(`/api/member/groups?group_id=${group_id}&user_id=${user_id}`)
+      .then((res) => setMember(res.data))
+      .catch((err) => console.log(err));
+  }, [group_id, user_id]);
+  //add post w/o call
   const handleAddPost = (post) => {
     setPosts([post, ...posts]);
   };
-
+  //serve post to server
   const handleAdd = (group_id, person_id) => {
     axios
       .post(
@@ -76,29 +77,18 @@ if(!isLoggedIn){
       .then((res) => setPeople(res.data))
       .catch((err) => console.log(err));
   };
-  const handleDelete = (group_id, person_id) => {
+  //allow delete member
+  const handleDeletePerson = (group_id, person_id) => {
     axios
       .put(`/api/groups/${group_id}/person/${person_id}`)
       .then((res) => setPeople(res.data))
       .catch((err) => console.log(err));
   };
-
-  let mappedPosts = posts.map((post, i) => {
-    return (
-      <Posts
-        key={i}
-        post={post}
-        loggedInUser={user_id}
-        group_name={group_name}
-        group_picture_public_id={picture_public_id}
-        group_picture_version={picture_version}
-      />
-    );
-  });
-
+  //handle post text
   const handleContent = (content) => {
     setPostContent(content);
   };
+  //handle image and preview
   const handleImage = (img) => {
     if (img[0]) {
       setImage(img[0]);
@@ -108,7 +98,7 @@ if(!isLoggedIn){
       setPreview(null);
     }
   };
-
+  //handle whole post submit
   const handleSubmit = () => {
     setLoading(true);
     let fileData = new FormData();
@@ -140,6 +130,7 @@ if(!isLoggedIn){
     setPreview(null);
   };
 
+  //leave group
   const handleLeave = () => {
     axios
       .delete(
@@ -150,7 +141,7 @@ if(!isLoggedIn){
       .then((res) => setMember(res.data))
       .catch((err) => console.log(err));
   };
-
+  //join group
   const handleJoin = () => {
     axios
       .post(
@@ -161,6 +152,19 @@ if(!isLoggedIn){
       .then((res) => setMember(res.data))
       .catch((err) => console.log(err));
   };
+  //displays
+  let mappedPosts = posts.map((post, i) => {
+    return (
+      <Posts
+        key={i}
+        post={post}
+        loggedInUser={user_id}
+        group_name={group_name}
+        group_picture_public_id={picture_public_id}
+        group_picture_version={picture_version}
+      />
+    );
+  });
 
   let FollowUnfollow = member ? (
     <Unfollow onClick={() => handleLeave()}>unfollow</Unfollow>
@@ -168,20 +172,26 @@ if(!isLoggedIn){
     <Follow onClick={() => handleJoin()}>follow</Follow>
   );
 
-  return (
-    <Fade>
+  let display = (
+    <React.Fragment>
       <Back onClick={() => goBack(1)}>{"<"}</Back>
       <Container>
         {FollowUnfollow}
         <GroupHeader>
           <GroupName>{group.group_name}</GroupName>
-          <GroupSubject>
-            {"("}
-            {group?.subject}
-            {")"}
-          </GroupSubject>
+          <GroupSubject>{`(${group?.subject})`}</GroupSubject>
 
-          <Image publicId={picture_public_id}><Transformation border='3px_solid_gray' radius='5' width='500' height='400' background='auto' crop='pad' fetch_format='png' /></Image>
+          <Image publicId={picture_public_id}>
+            <Transformation
+              border="3px_solid_gray"
+              radius="5"
+              width="500"
+              height="400"
+              background="auto"
+              crop="pad"
+              fetch_format="png"
+            />
+          </Image>
         </GroupHeader>
         <div>
           <CreatePost
@@ -191,30 +201,29 @@ if(!isLoggedIn){
             handlePostContent={handleContent}
             handleImage={handleImage}
             handleSubmit={handleSubmit}
-            user={props.user}
+            user={user}
             group={group}
             posts={posts}
           />
           <Spacer></Spacer>
         </div>
         <PostContainer>{mappedPosts}</PostContainer>
-        {posts.length % 10 === 0 ? (
-          <AddPosts onClick={() => handleGetMorePosts()}>More</AddPosts>
-        ) : (
-          <AddPosts>All Done</AddPosts>
-        )}
+        <AddPosts onClick={() => handleGetMorePosts()}>More</AddPosts>
       </Container>
 
       <SingleGroupUsers
-        handleDelete={handleDelete}
+        push={push}
+        handleDelete={handleDeletePerson}
         handleAdd={handleAdd}
         group={group}
         users={users}
         people={people}
         loggedInUser={user_id}
       />
-    </Fade>
+    </React.Fragment>
   );
+
+  return <Fade>{display}</Fade>;
 };
 
 export default SingleGroup;
@@ -254,7 +263,7 @@ let Spacer = styled.div`
   width: 100%;
 `;
 let Container = styled.section`
-${props=>props.theme.dark?props.theme.backgroundColor:''};
+  ${(props) => (props.theme.dark ? props.theme.backgroundColor : "")};
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -267,7 +276,6 @@ ${props=>props.theme.dark?props.theme.backgroundColor:''};
 `;
 
 let GroupName = styled.h1`
-
   font-weight: 900;
   font-size: 60px;
   @media (min-width: 800px) {
@@ -278,7 +286,6 @@ let GroupName = styled.h1`
   }
 `;
 let GroupSubject = styled.p`
-
   font-weight: 300;
   font-size: 14px;
 `;
@@ -325,12 +332,12 @@ let AddPosts = styled.div`
 let Back = styled.div`
   position: fixed;
   display: flex;
-padding:2px;
-width:2rem;
+  padding: 2px;
+  width: 2rem;
   font-weight: 900;
   align-items: center;
   justify-content: center;
-margin-left:2rem;
+  margin-left: 2rem;
   margin-top: -3.5rem;
   z-index: 5;
   font-size: 30px;

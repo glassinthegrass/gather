@@ -1,22 +1,24 @@
+import React from "react";
 import styled from "styled-components";
 import Loading from "../Loading";
 
-const CreatePost = (props) => {
-  const { preview, handleImage, handlePostContent, handleSubmit, postContent } =
-    props;
-  let picSwitch = preview ? (
-    <Preview src={preview} alt="" />
-  ) : (
-    <PictureInput>UPLOAD PHOTO</PictureInput>
-  );
-
-  let loadingSwitch = props.loading ? (
+const CreatePost = ({preview,loading,handleImage,handlePostContent,handleSubmit,postContent}) => {
+  //loading switch for display upon upload
+  let displayLoadingSwitch = loading ? (
+    //loading show
     <LoadingBox>
       <Loading />
     </LoadingBox>
   ) : (
-    <>
-      <Label htmlFor="single">{picSwitch}</Label>
+    //main Display
+    <React.Fragment>
+      <Label htmlFor="single">
+        {preview ? (
+          <Preview src={preview} alt="" />
+        ) : (
+          <PictureInput>UPLOAD PHOTO</PictureInput>
+        )}
+      </Label>
       <Row>
         <TextInput
           value={postContent}
@@ -25,16 +27,17 @@ const CreatePost = (props) => {
         ></TextInput>
         <Submit onClick={() => handleSubmit()}>Submit</Submit>
       </Row>
-      <div>
+      <React.Fragment>
         <HiddenInput
           type="file"
           id="single"
           onChange={(e) => handleImage(e.target.files)}
         />
-      </div>
-    </>
+      </React.Fragment>
+    </React.Fragment>
   );
-  return <Container>{loadingSwitch}</Container>;
+
+  return <Container>{displayLoadingSwitch}</Container>;
 };
 export default CreatePost;
 let Container = styled.div`
@@ -51,7 +54,7 @@ let TextInput = styled.textarea`
   outline: none;
   resize: none;
   overflow: auto;
-  font-family:Nunito, Roboto, sans-serif;
+  font-family: Nunito, Roboto, sans-serif;
   font-weight: 300;
   text-align: left;
 `;
@@ -65,7 +68,7 @@ let HiddenInput = styled.input`
 `;
 
 let Label = styled.label`
-font-family: 'Nunito', sans-serif;
+  font-family: "Nunito", sans-serif;
   font-weight: 400;
   display: flex;
   flex-direction: column;
@@ -83,7 +86,7 @@ let PictureInput = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Nunito', sans-serif;
+  font-family: "Nunito", sans-serif;
   font-weight: 300;
   box-shadow: 10px 0px 13px -12px #897b7b, 0px 7px 13px -7px #000000;
   background-color: rgb(252, 219, 166);
@@ -106,7 +109,7 @@ let Submit = styled.div`
   justify-content: center;
   align-items: center;
   margin-left: -1px;
-  font-family: 'Nunito', sans-serif;
+  font-family: "Nunito", sans-serif;
   font-weight: 300;
   background-color: rgb(252, 219, 166);
   &:hover {
@@ -126,7 +129,7 @@ let Preview = styled.img`
   justify-content: center;
   align-items: center;
   border-radius: 10px 10px 0px 0px;
-  font-family: 'Nunito', sans-serif;
+  font-family: "Nunito", sans-serif;
   font-weight: 300;
   box-shadow: 10px 0px 13px -12px #897b7b, 0px 7px 13px -7px #000000;
   background-color: rgb(88, 88, 88);

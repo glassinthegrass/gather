@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import { Image, Transformation } from "cloudinary-react";
 import styled from "styled-components";
-import line from "../../Assets/Gather_Dotted_Line.png";
+import line from "../../Public/Gather_Dotted_Line.png";
 import Comment from "./Comment";
 const Posts = (props) => {
   const [content, setContent] = useState("");
@@ -188,8 +188,7 @@ let PostHeader = styled.div`
   border-radius: 10px 10px 0px 0px;
   align-items: flex-end;
   border: 1px solid rgb(88, 88, 88, 0.2);
-
-  ${(props) => props.theme.postFontWeight + ";" + props.theme.fontShadow};
+  ${(props) => props.theme.postFontWeight};
 `;
 let PostBody = styled.div`
   padding: 5px;
@@ -217,7 +216,7 @@ let CreationDate = styled(PostContent)`
   font-size: 8px;
   padding: 3px;
   ${props=>props.theme.color};
-  ${props=>props.theme.fontShadow};
+
 `;
 
 let UserName = styled.p`
@@ -256,7 +255,7 @@ let Input = styled.input`
   outline: none;
   resize: none;
   overflow: auto;
-  ${(props) => props.theme.postFontWeight + ";" + props.theme.fontShadow};
+  ${(props) => props.theme.postFontWeight};
   font-size: 12px;
   margin-left: 5%;
   margin-top: 0.5%;
@@ -282,14 +281,13 @@ let Submit = styled.div`
 let CommentToggle = styled(CreationDate)`
   cursor: pointer;
   ${props=>props.theme.color};
-  ${props=>props.theme.fontShadow};
 `;
 let SeeComments = styled(CommentToggle)`
   background-color: rgb(88, 88, 88, 0);
   margin-top: 3px;
   width: 20%;
   ${props=>props.theme.color};
-  ${props=>props.theme.fontShadow};
+
 `;
 let HeaderBodyComment = styled.div`
   display: flex;

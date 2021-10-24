@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { userContext } from "./userContext";
+import { userContext } from "./Context/userContext";
 import MainRoutes from "./Routes/MainRoutes";
 import Header from "./Components/Header/Header";
 import { useHistory } from "react-router-dom";
@@ -9,7 +9,7 @@ import "./reset.css";
 import "./App.css";
 import styled from "styled-components";
 import axios from "axios";
-import { darkContext } from "./themeProvider";
+import { darkContext } from "./Context/themeProvider";
 
 
 const App = (props) => {

@@ -1,6 +1,6 @@
 import React from "react";
 
-import logo from "../../Assets/BeeLogoFull.png";
+import logo from "../../Public/BeeLogoFull.png";
 import {
   StyledHeader,
   Gather,
@@ -27,13 +27,13 @@ const Header = (props) => {
   );
   return (
     <StyledHeader>
-      <LogoContainer onClick={() => {
-            push("/");
-          }}>
+      <LogoContainer
+        onClick={() => {
+          push("/");
+        }}
+      >
         <Logo src={logo} alt="" />
-        <GatherHolder
-          
-        >
+        <GatherHolder>
           <MiniGather className="miniGather">Gather</MiniGather>
         </GatherHolder>
         <Gather>Gather</Gather>

@@ -1,10 +1,6 @@
 const cloudinary = require("cloudinary").v2;
-const today = new Date();
-const mmddyyyy = String(
-  `${String(today.getMonth() + 1).padStart(2, "0")}-${String(
-    today.getDate()
-  ).padStart(2, "0")}-${String(today.getYear() + 1900)}`
-);
+const { format } = require("date-fns");
+let date =format(new Date(), 'MM/dd/yyyy')
 
 module.exports = {
   createGroup: async (req, res) => {
@@ -18,7 +14,7 @@ module.exports = {
         const [newGroup] = await db.groups.create_group(
           group_name,
           subject,
-          mmddyyyy
+date
         );
         await db.groups.create_group_users(newGroup.group_id, user_id, true);
 
@@ -199,7 +195,7 @@ module.exports = {
     if (req.files?.image) {
       try {
         const { path } = req.files.image;
-        const [post] = await db.posts.create_post(post_content, null, mmddyyyy);
+        const [post] = await db.posts.create_post(post_content, null, date);
 
         if (post) {
           await db.posts.create_group_post_user(
@@ -250,7 +246,7 @@ module.exports = {
       }
     } else {
       try {
-        let [post] = await db.posts.create_post(post_content, null, mmddyyyy);
+        let [post] = await db.posts.create_post(post_content, null, date);
         await db.posts.create_group_post_user(group_id, post.post_id, user_id);
         const [newPost] = await db.posts.get_post_by_post_id(post.post_id);
         return res.status(200).send(newPost);

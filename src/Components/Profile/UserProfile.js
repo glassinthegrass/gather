@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {Image,Transformation} from 'cloudinary-react'
 import styled from "styled-components";
-import bee from "../../Assets/Gather_Line_with_Bee.png";
+import bee from "../../Public/Gather_Line_with_Bee.png";
 import Loading from "../Loading";
 
 const UserProfile = (props) => {

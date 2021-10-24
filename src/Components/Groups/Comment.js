@@ -1,22 +1,20 @@
 import React from "react";
 import styled from "styled-components";
 import {Image,Transformation} from 'cloudinary-react'
-const Comment = ({comment}) => {
-  const { picture_public_id, username, comment_content } =comment;
 
-  return (
+//post comment.
+const Comment = ({picture_public_id, username, comment_content }) => (
     <CommentContainer>
       <Img publicId={picture_public_id}><Transformation width='30' height='30' radius='max' crop='fill' gravity='face' fetch_format='png'/></Img>
-
       <Column>
         <CommentUsername>{username}</CommentUsername>
         <CommentText>{comment_content}</CommentText>
       </Column>
     </CommentContainer>
   );
-};
 
 export default Comment;
+
 let CommentContainer = styled.div`
   width: 22rem;
   display: flex;

@@ -1,43 +1,34 @@
+//modules
 import React, { useState, useEffect, useContext } from "react";
-import styled, { keyframes } from "styled-components";
 import { useHistory } from "react-router";
 import axios from "axios";
-import { userContext } from "../../userContext";
+import styled, { keyframes } from "styled-components";
+//components
 import Groups from "./Groups";
-import Birthdays from "./Birthdays";
 import Posts from "../Groups/Posts";
+//data
+import { userContext } from "../../Context/userContext";
 
 const Home = (props) => {
-  const history = useHistory();
-  const { push } = history;
-  const [postsToggle, setPostsToggle] = useState(false);
-  const [groups, setGroups] = useState([]);
-  const [posts, setPosts] = useState([]);
-  const [birthdays, setBirthdays] = useState([]);
-  const [loadingToggle, setLoadingToggle] = useState(true);
-  const [offset, setOffset] = useState(0);
-  const [offsetToggle, setOffsetToggle] = useState(true);
-  const [idx, setIdx] = useState(0);
-  const [user] = useContext(userContext);
-
-  const { user_id, isLoggedIn } = user;
-
-  setInterval(() => {
-    if (birthdays[0]) {
-      if (idx < birthdays.length - 1) {
-        setIdx(idx + 1);
-      } else {
-        setIdx(0);
-      }
-    }
-  }, 10000);
-
+  const push = useHistory().push;
+  //loggedInUser info
+  const [user] = useContext(userContext),
+    { user_id, isLoggedIn } = user;
+  //states
+  const [postsToggle, setPostsToggle] = useState(false),
+    [birthdays, setBirthdays] = useState([]),
+    [groups, setGroups] = useState([]),
+    [posts, setPosts] = useState([]),
+    [loadingToggle, setLoadingToggle] = useState(true),
+    [offsetToggle, setOffsetToggle] = useState(true),
+    [offset, setOffset] = useState(0);
+  //redirect
   useEffect(() => {
     if (isLoggedIn === false) {
       push("/");
     }
   }, [isLoggedIn, push]);
-
+  //axios calls lots of data
   useEffect(() => {
     if (isLoggedIn) {
       axios
@@ -74,10 +65,24 @@ const Home = (props) => {
     }
   }, [isLoggedIn, user_id]);
 
+  //weird toggle function to fix unknown issue with retrieving and combining posts. look at later
   const handleMorePosts = () => {
     setOffsetToggle(true);
   };
 
+  const handleLoading = () => {
+    setInterval(() => {
+      setLoadingToggle(false);
+    }, 1000);
+  };
+
+  useEffect(() => {
+    if (loadingToggle) {
+      handleLoading();
+    }
+  }, [loadingToggle]);
+
+  //maps
   const mappedGroups = groups.map((group, i) => {
     return <Groups group={group} key={i} />;
   });
@@ -95,42 +100,34 @@ const Home = (props) => {
     );
   });
 
-  const handleLoading = () => {
-    setInterval(() => {
-      setLoadingToggle(false);
-    }, 1000);
-  };
-
-  useEffect(() => {
-    if (loadingToggle === true) {
-      handleLoading();
-    }
-  }, [loadingToggle]);
-
   let gotAllPosts = postsToggle ? (
     <AddPosts>That's it!</AddPosts>
   ) : (
     <AddPosts onClick={() => handleMorePosts()}>More</AddPosts>
   );
-
-  return (
-    <HomeDiv>
-      <Box>
-        <GroupBox>
-          <Title>Your Hives</Title>
-          <GroupsDiv>{mappedGroups}</GroupsDiv>
-          <Announce>
-            <Birthdays birthday={birthdays[idx]} />
-          </Announce>
-        </GroupBox>
-        <Spacer></Spacer>
-        <PostContainer>{mappedPosts}</PostContainer>
-        <Spacer></Spacer>
-        {gotAllPosts}
-        <Spacer></Spacer>
-      </Box>
-    </HomeDiv>
+  let birthday = birthdays[0] && (
+    <BirthdayContainer onClick={() => push(`/birthdays`)}>
+      <Text>A Very Special Person Has A Birthday!</Text>
+      <Text>Click to Leave a Birthday Wish!</Text>
+    </BirthdayContainer>
   );
+  //main display
+  let display = (
+    <Box>
+      <GroupBox>
+        <Title>Your Hives</Title>
+        <GroupsDiv>{mappedGroups}</GroupsDiv>
+        <Announce>{birthday}</Announce>
+      </GroupBox>
+      <Spacer></Spacer>
+      <PostContainer>{mappedPosts}</PostContainer>
+      <Spacer></Spacer>
+      {gotAllPosts}
+      <Spacer></Spacer>
+    </Box>
+  );
+
+  return <HomeDiv>{display}</HomeDiv>;
 };
 
 export default Home;
@@ -233,4 +230,25 @@ let AddPosts = styled.div`
     background-color: rgb(252, 142, 52, 0.792);
     color: rgb(88, 88, 88);
   }
+`;
+let BirthdayContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  ${(props) =>
+    props.theme.dark
+      ? props.theme.backgroundColor
+      : "background-color: rgb(88,88,88,0.1)"};
+  cursor: pointer;
+`;
+
+let Text = styled.p`
+  display: flex;
+  font-weight: 600;
+  font-size: 15px;
+  align-items: center;
+  white-space: nowrap;
+  padding-left: 10px;
+  padding-right: 10px;
+  ${(props) => props.theme.color + ";" + props.theme.fontShadow};
 `;

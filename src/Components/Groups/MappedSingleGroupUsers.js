@@ -1,27 +1,25 @@
-import { Image, Transformation } from "cloudinary-react";
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { Image, Transformation } from "cloudinary-react";
 import styled from "styled-components";
-
-const MappedSingleGroupUsers = (props) => {
-  const history = useHistory();
-  const { push } = history;
-  const { user_id,picture_public_id } = props.user;
-
-  const handleProfileClick = () => {
-    push(`/profile/${user_id}`);
-  };
-
-  return (
-    <Container>
-      <UserContainer onClick={handleProfileClick}>
-
-<Image publicId={picture_public_id}><Transformation width='31'height='31'radius='max' crop='fill' gravity='auto' fetch_format='png' border='1px_solid_gray'/></Image>
-        <Username>{props.user.username}</Username>
-      </UserContainer>
-    </Container>
-  );
-};
+//mapped users belonging to group
+const MappedSingleGroupUsers = ({ publicId, user, handleProfileClick }) => (
+  <Container>
+    <UserContainer onClick={handleProfileClick}>
+      <Image publicId={publicId}>
+        <Transformation
+          width="31"
+          height="31"
+          radius="max"
+          crop="fill"
+          gravity="auto"
+          fetch_format="png"
+          border="1px_solid_gray"
+        />
+      </Image>
+      <Username>{user.username}</Username>
+    </UserContainer>
+  </Container>
+);
 
 export default MappedSingleGroupUsers;
 

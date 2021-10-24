@@ -1,14 +1,15 @@
+const { format } = require("date-fns");
+
 module.exports = {
   getBirthday: async (req, res) => {
     const {user_id}=req.query
-    const db = req.app.get("db");
-    const today = new Date();
-    const mm = String(today.getMonth() + 1).padStart(2, "0");
-    const dd = String(today.getDate()).padStart(2, "0");
 
-const mmdd=`${mm}-${dd}`
+    const db = req.app.get("db");
+    let date =format(new Date(), 'MM-dd')
+
     try {
-      let birthdays = await db.birthdays.get_birthdays(mmdd,user_id);
+      let birthdays = await db.birthdays.get_birthdays(date,user_id);
+      console.log(birthdays)
       return res.status(200).send(birthdays);
     } catch (err) {
       console.log(err);

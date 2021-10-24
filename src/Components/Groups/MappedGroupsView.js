@@ -1,88 +1,100 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import axios from "axios";
+import { Image, Transformation } from "cloudinary-react";
 import styled from "styled-components";
-import {Image,Transformation}from 'cloudinary-react'
-const MappedGroupsView = (props) => {
+
+const MappedGroupsView = ({
+  handleJoin,
+  handleLeave,
+  handleDelete,
+  filter,
+  user,
+  loggedInUser,
+  push,
+  group,
+}) => {
   const [toggle, setToggle] = useState(false);
   const [member, setMember] = useState(false);
-  const push = useHistory().push;
-  const { group_name, group_id, picture_public_id } =
-    props.group;
-  const { user, loggedInUser } = props;
+  const { group_name, group_id, picture_public_id } = group;
   const { user_id } = user;
   let id = loggedInUser.user_id;
-  
+
+  //check if logged in user is member of group
   useEffect(() => {
     axios
       .get(`/api/member/groups?group_id=${group_id}&user_id=${id}`)
       .then((res) => setMember(res.data))
       .catch((err) => console.log(err));
   }, [group_id, id]);
-
-  const handleGroupClick = () => {
-    push(`/groups/${group_name}`);
-  };
+  //toggle group options box
   const handleToggle = () => {
     !toggle ? setToggle(!toggle) : setToggle(!toggle);
   };
-
+  //link to group
+  const handleGroupClick = () => {
+    push(`/groups/${group_name}`);
+  };
+  //leave group
   const handleLeaveClick = () => {
-    props.handleLeave(
-      user.user_id,
-      group_id,
-      loggedInUser.user_id,
-      props.filter
-    );
+    handleLeave(user_id, group_id, id, filter);
     setMember(false);
     setToggle(false);
   };
+
+  //delete group if admin
   const handleDeleteClick = () => {
-    props.handleDelete(user.user_id, group_id, props.filter);
+    handleDelete(user_id, group_id, filter);
     setToggle(false);
     setToggle(false);
   };
+  //join group
   const handleJoinClick = () => {
-    props.handleJoin(
-      group_id,
-      user.user_id,
-      loggedInUser.user_id,
-      props.filter
-    );
+    handleJoin(group_id, user_id, id, filter);
     setMember(user_id);
     setToggle(false);
   };
-  let isAdmin =
-    member !== false && member.admin === true ? (
-      <OptionBox onClick={() => handleDeleteClick()}>Delete Hive</OptionBox>
-    ) : (
-      <></>
-    );
-
+  //display if group member and toggle window
   let optionsToggleWindow = toggle ? (
     member !== false ? (
-      <>
+      <React.Fragment>
         <OptionBox onClick={() => handleLeaveClick()}>Leave Hive</OptionBox>
-        {isAdmin}
-      </>
+        {member !== false && member.admin === true ? (
+          <OptionBox onClick={() => handleDeleteClick()}>Delete Hive</OptionBox>
+        ) : (
+          <React.Fragment></React.Fragment>
+        )}
+      </React.Fragment>
     ) : (
       <OptionBox onClick={handleJoinClick}>Join Hive</OptionBox>
     )
   ) : (
-    <></>
+    <React.Fragment></React.Fragment>
   );
-
-  return (
-    <Container>
+//display put together
+  let display = (
+    <React.Fragment>
       <Options>
         <h1 onClick={handleToggle}>...</h1>
         {optionsToggleWindow}
       </Options>
- <GroupImage onClick={() => handleGroupClick()} publicId={picture_public_id}><Transformation width='150' height='150' crop='fill' gravity='auto' fetch_format='auto'/></GroupImage>
-
+      <GroupImage
+        onClick={() => handleGroupClick()}
+        publicId={picture_public_id}
+      >
+        <Transformation
+          width="150"
+          height="150"
+          crop="fill"
+          gravity="auto"
+          fetch_format="auto"
+        />
+      </GroupImage>
       <GroupName>{group_name}</GroupName>
-    </Container>
+    </React.Fragment>
   );
+
+//return value
+  return <Container>{display}</Container>;
 };
 
 export default MappedGroupsView;

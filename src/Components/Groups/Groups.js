@@ -1,9 +1,9 @@
-import axios from "axios";
 import React, { useEffect, useContext, useState } from "react";
-import { userContext } from "../../userContext";
 import { useHistory } from "react-router-dom";
-import GroupsView from "./GroupsView";
+import axios from "axios";
 import styled from "styled-components";
+import { userContext } from "../../Context/userContext";
+import GroupsView from "./GroupsView";
 
 const Groups = (props) => {
   const [filter, setFilter] = useState("all");
@@ -12,12 +12,10 @@ const Groups = (props) => {
   const [user] = useContext(userContext);
   const { user_id, isLoggedIn } = user;
 
-  const handleAll = () => {
-    setFilter("all");
+  const handleFilter = () => {
+    filter === 'all' ? setFilter('user'):setFilter("all");
   };
-  const handleUserGroups = () => {
-    setFilter("user");
-  };
+
 
   useEffect(() => {
     if (isLoggedIn === false) {
@@ -59,15 +57,14 @@ const Groups = (props) => {
   return (
     <Container>
       <Spacer>Visit a Hive</Spacer>
-
       <GroupsView
-        handleAll={handleAll}
+        handleFilter={handleFilter}
         handleGroupSearch={handleGroupSearch}
-        handleUserGroups={handleUserGroups}
         filter={filter}
-        groups={groups}
+        allGroups={groups}
         loggedInUser={user}
         user={user}
+        push={push}
       />
     </Container>
   );
@@ -78,8 +75,8 @@ export default Groups;
 let Container = styled.section`
   width: 100vw;
   min-height: 94vh;
-  ${props=>props.theme.dark?props.theme.backgroundColor:''};
-  ${props=>props.theme.color};
+  ${(props) => (props.theme.dark ? props.theme.backgroundColor : "")};
+  ${(props) => props.theme.color};
 `;
 let Spacer = styled.div`
   height: 3rem;

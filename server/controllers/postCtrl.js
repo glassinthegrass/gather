@@ -1,9 +1,5 @@
-const today = new Date();
-const mmddyyyy = String(
-  `${String(today.getMonth() + 1).padStart(2, "0")}-${String(
-    today.getDate()
-  ).padStart(2, "0")}-${String(today.getYear() + 1900)}`
-);
+const { format } = require("date-fns");
+let date =format(new Date(), 'MM/dd/yyyy')
 
 module.exports = {
   getPosts: async (req, res) => {
@@ -103,7 +99,7 @@ module.exports = {
       const [comment] = await db.posts.create_post_comment(
         content,
         "",
-        mmddyyyy
+date
       );
       await db.posts.create_comment_post_user(
         comment.comment_id,
@@ -111,7 +107,7 @@ module.exports = {
         user_id
         );
         const [newComment] = await db.posts.get_new_comment(comment.comment_id);
-        console.log(newComment)
+
       return res.status(200).send(newComment);
     } catch (err) {
       console.log(err);
@@ -123,7 +119,6 @@ module.exports = {
 
     try {
       const comments = await db.posts.get_comments_by_post_id(post_id);
-      console.log(comments)
       return res.status(200).send(comments);
     } catch (err) {
       console.log(err);

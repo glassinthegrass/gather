@@ -129,7 +129,7 @@ export default CreatePerson;
 let Container = styled.section`
   width: 100%;
   ${props=>props.theme.dark?props.theme.backgroundColor:'background-color: rgb(252, 219, 166)'};
-  ${props=>props.theme.color+';'+props.theme.fontShadow};
+  ${props=>props.theme.color};
   
   padding: 5px;
   display: flex;

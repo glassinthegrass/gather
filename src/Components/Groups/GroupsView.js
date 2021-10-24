@@ -1,21 +1,25 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import bee from "../../Assets/Gather_Line_with_Bee.png";
-import { useHistory } from "react-router-dom";
+import bee from "../../Public/Gather_Line_with_Bee.png";
 import { fadeIn } from "../Home/Home";
 import styled from "styled-components";
 import MappedGroupsView from "./MappedGroupsView";
 
-const GroupsView = (props) => {
-  const push = useHistory().push;
+const GroupsView = ({
+  filter,
+  push,
+  allGroups,
+  user,
+  loggedInUser,
+  handleFilter,
+  handleGroupSearch,
+}) => {
   const [groups, setGroups] = useState([]);
-
-  const { user, loggedInUser } = props;
-
+  //re-used Groupsview after the fact required some rejiggering to get it to function with different starting inputs on the pages. needs clean up but works.
   useEffect(() => {
-    setGroups(props.groups);
-  }, [props.groups]);
-
+    setGroups(allGroups);
+  }, [allGroups]);
+  //handle group delete.
   const handleDelete = (user, group_id, filter) => {
     axios
       .delete(
@@ -24,7 +28,7 @@ const GroupsView = (props) => {
       .then((res) => setGroups(res.data))
       .catch((err) => console.log(err));
   };
-
+  //handle user leaving group membership
   const handleLeave = (user, group_id, loggedInUser, filter) => {
     axios
       .delete(
@@ -33,7 +37,7 @@ const GroupsView = (props) => {
       .then((res) => setGroups(res.data))
       .catch((err) => console.log(err));
   };
-
+  //handle user joinging group
   const handleJoin = (group_id, user, loggedInUser, filter) => {
     axios
       .post(
@@ -42,11 +46,14 @@ const GroupsView = (props) => {
       .then((res) => setGroups(res.data))
       .catch((err) => console.log(err));
   };
+
+  //map of mappedGroupsView. honestly my naming could be better.
   const MappedGroups = groups ? (
     groups.map((group, i) => {
       return (
         <MappedGroupsView
-          filter={props.filter}
+        push={push}
+          filter={filter}
           handleJoin={handleJoin}
           handleDelete={handleDelete}
           handleLeave={handleLeave}
@@ -58,19 +65,19 @@ const GroupsView = (props) => {
       );
     })
   ) : (
-    <></>
+    <React.Fragment></React.Fragment>
   );
 
   return (
     <Container>
       <MapWrap>
         <Row>
-          <Toggles onClick={props.handleAll}>all groups</Toggles>{" "}
-          <Toggles onClick={props.handleUserGroups}>followed groups</Toggles>
+          <Toggles onClick={handleFilter}>all groups</Toggles>{" "}
+          <Toggles onClick={handleFilter}>followed groups</Toggles>
         </Row>
         <Input
           placeholder="Search for a hive"
-          onChange={(e) => props.handleGroupSearch(e.target.value)}
+          onChange={(e) => handleGroupSearch(e.target.value)}
         />
         <MapWrapTwo>
           <AddGroup onClick={() => push("/add-new-group")}>
@@ -156,7 +163,7 @@ let AddGroupText = styled.h1`
   width: 7rem;
   height: 7rem;
   &:hover {
-    margin-top:-2.6rem;
+    margin-top: -2.6rem;
     color: rgb(88, 88, 88, 0.7);
     transform: scale(1.1);
   }
@@ -186,7 +193,10 @@ let Toggles = styled.div`
   z-index: 4;
   font-size: 20px;
   box-shadow: 10px 0px 13px -12px #897b7b, 0px 7px 13px -7px #000000;
-  ${props=>props.theme.dark?props.theme.solidBackgroundColor:'background-color: rgb(252, 219, 166)'};
+  ${(props) =>
+    props.theme.dark
+      ? props.theme.solidBackgroundColor
+      : "background-color: rgb(252, 219, 166)"};
   cursor: pointer;
   &:hover {
     background-color: rgb(88, 88, 88);

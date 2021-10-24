@@ -1,31 +1,39 @@
 import React from "react";
-import {
-  Container,
-  UserContainer,
-  Username,
-
-} from "./MappedSingleGroupUsers";
-import styled from "styled-components";
 import { Image, Transformation } from "cloudinary-react";
+import styled from "styled-components";
+import { Container, UserContainer, Username } from "./MappedSingleGroupUsers";
 
-const MappedSingleGroupPeople = (props) => {
-  const { person } = props;
-  let editCheck =
-    props.person?.creator === props?.loggedInUser && props?.edit ? (
-      <Delete
-        onClick={() => props.handleDelete(props?.group_id, person.person_id)}
-      >
+const MappedSingleGroupPeople = ({
+  group_id,
+  person,
+  edit,
+  loggedInUser,
+  handleDelete,
+}) => {
+  //people added to group/ needs work. group page needs work especially
+  let creatorDeleteToggle =
+    person?.creator === loggedInUser && edit ? (
+      <Delete onClick={() => handleDelete(group_id, person.person_id)}>
         x
       </Delete>
     ) : (
-      <></>
+      <React.Fragment></React.Fragment>
     );
 
   return (
     <Container>
-      {editCheck}
+      {creatorDeleteToggle}
       <UserContainer>
-        <Image publicId={person?.picture_public_id}><Transformation width='31' height='31' crop='fill_pad' gravity='auto' fetch_format='png' radius='max'/></Image>
+        <Image publicId={person?.picture_public_id}>
+          <Transformation
+            width="31"
+            height="31"
+            crop="fill_pad"
+            gravity="auto"
+            fetch_format="png"
+            radius="max"
+          />
+        </Image>
         <Username>
           {person.first_name} {person.last_name}
         </Username>
@@ -34,6 +42,7 @@ const MappedSingleGroupPeople = (props) => {
   );
 };
 export default MappedSingleGroupPeople;
+
 let Delete = styled(Username)`
   width: 1rem;
   height: 1rem;

@@ -1,10 +1,7 @@
 const cloudinary = require("cloudinary").v2;
-const today = new Date();
-const mmddyyyy = String(
-  `${String(today.getMonth() + 1).padStart(2, "0")}-${String(
-    today.getDate()
-  ).padStart(2, "0")}-${String(today.getYear() + 1900)}`
-);
+const { format } = require("date-fns");
+let date =format(new Date(), 'MM/dd/yyyy')
+
 
 module.exports = {
   uploadProfileImages: async (req, res) => {
@@ -64,7 +61,7 @@ module.exports = {
     if (req.files?.image) {
       try {
         const { path } = req.files.image;
-        const [post] = await db.posts.create_post(post_content, null, mmddyyyy);
+        const [post] = await db.posts.create_post(post_content, null, date);
 
         if (post) {
           await db.posts.create_person_user_post_entry(
@@ -117,7 +114,7 @@ module.exports = {
       }
     } else {
       try {
-        let [post] = await db.posts.create_post(post_content, null,mmddyyyy);
+        let [post] = await db.posts.create_post(post_content, null,date);
         await db.posts.create_person_user_post_entry(
           person_id,
           user_id,
@@ -129,28 +126,7 @@ module.exports = {
         console.log(err);
       }
     }
-    // try {
-    //   const [post] = await db.posts.create_post(post_content, post_url);
-    //   if (!post) {
-    //     return res.sendStatus(404);
-    //   } else {
-    //     const [trackingTable] = await db.posts.create_person_user_post_entry(
-    //       post.post_id,
-    //       person_id,
-    //       user_id
-    //     );
-    //     if (!trackingTable) {
-    //       return res.sendStatus(404);
-    //     } else {
-    //       post.person_id = person_id;
-    //       post.user_id = user_id;
-    //       return res.status(200).send(post);
-    //     }
-    //   }
-    // } catch (err) {
-    //   console.log(err);
-    //   res.sendStatus(404);
-    // }
+
   },
 };
 

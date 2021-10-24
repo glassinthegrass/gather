@@ -1,10 +1,7 @@
 const cloudinary = require("cloudinary").v2;
-const today = new Date();
-const mmddyyyy = String(
-  `${String(today.getMonth() + 1).padStart(2, "0")}-${String(
-    today.getDate()
-  ).padStart(2, "0")}-${String(today.getYear() + 1900)}`
-);
+const { format } = require("date-fns");
+let date =format(new Date(), 'MM/dd/yyyy')
+
 module.exports = {
   getPeople: async (req, res) => {
     const db = req.app.get("db");
@@ -51,7 +48,7 @@ module.exports = {
         birthday,
         message,
         creator,
-        mmddyyyy
+        date
       );
 
       cloudinary.uploader.upload(

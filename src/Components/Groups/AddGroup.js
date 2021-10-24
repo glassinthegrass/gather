@@ -1,12 +1,13 @@
 import axios from "axios";
-import React, { useState,useContext } from "react";
-import { userContext } from "../../userContext";
+import React, { useState, useContext } from "react";
+import { userContext } from "../../Context/userContext";
 import styled from "styled-components";
 import Loading from "../Loading";
 import GroupCard from "./GroupCard";
-
+import { useHistory } from "react-router";
 const AddGroup = (props) => {
-  const [user]=useContext(userContext);
+  const push= useHistory().push
+  const [user] = useContext(userContext);
   const [image, setImage] = useState([]);
   const [imgPreview, setImgPreview] = useState(null);
   const [loadingToggle, setLoadingToggle] = useState(false);
@@ -15,23 +16,29 @@ const AddGroup = (props) => {
   const [search, setSearch] = useState([]);
   const [newGroup, setNewGroup] = useState(null);
 
+  //user image select
   const handleImage = (img) => {
+    //set image/preview
     if (img[0]) {
       setImage(img[0]);
       setImgPreview(URL.createObjectURL(img[0]));
     } else {
+      // clear the images/preview
       setImage(img[0]);
       setImgPreview(null);
     }
   };
+
+  //eliminate spaces, needs better functionality
   const handleGroupNameInput = (groupName) => {
     let newGroup = "";
+    //eliminate spaces
     for (let i = 0; i < groupName.length; i++) {
       if (groupName[i] !== " ") {
         newGroup += groupName[i];
       }
     }
-
+    //search for existing matching groups
     if (groupName.length > 3) {
       axios
         .get(`/api/groups?searchQuery=${newGroup}`)
@@ -44,14 +51,18 @@ const AddGroup = (props) => {
     } else {
       setSearch([]);
     }
+    //setGroup name if shorter than 20 characters
+    //need to add length error for user
     if (groupName.length < 20) {
       setGroupName(newGroup);
     }
   };
+  //set subject input
   const handleSubjectInput = (sub) => {
     setSubject(sub);
   };
 
+  //submit new groupinfo/picture
   const handleGroupSubmit = () => {
     setLoadingToggle(true);
     let fileData = new FormData();
@@ -74,15 +85,19 @@ const AddGroup = (props) => {
       })
       .catch((err) => console.log(err));
   };
+
+  //jsx
+  //change submit button based on input values
   let submit =
     search.length === 0 && groupName.length >= 3 && imgPreview !== null ? (
       <Submit onClick={() => handleGroupSubmit()}>Click to Submit!</Submit>
     ) : (
-      <></>
+      <Submit>Finish to Submit</Submit>
     );
 
+  //main display for page, with loading logic
   let display = (
-    <>
+    <React.Fragment>
       <div>
         <Header>Group Subject</Header>
         <Input
@@ -109,27 +124,26 @@ const AddGroup = (props) => {
         </Label>
       </Column>
       {submit}
-    </>
+    </React.Fragment>
   );
-
-  let existingGroup = search[0]?.group_name ? (
-    <>
+  //if the search comes back with a matching group name, display this instead of full display
+  let existingGroupDisplaySwitch = search[0]?.group_name ? (
+    <React.Fragment>
       <Header>a hive by that name already exists</Header>
-      <GroupCard group={search[0]} />
-    </>
+      <GroupCard push={push} group={search[0]} />
+    </React.Fragment>
   ) : (
-    <>{display}</>
+    <React.Fragment>{display}</React.Fragment>
   );
-
+  //shown once group is created/replaces everything, main display included. prevents going back.
   let newGroupView = newGroup ? (
-    <>
+    <React.Fragment>
       <PageHeader>Hive Created</PageHeader>
       <GroupCard group={newGroup} />
-    </>
+    </React.Fragment>
   ) : (
-    <>
+    <React.Fragment>
       <PageHeader>create a hive</PageHeader>
-
       <div>
         <Header>Group Name</Header>
         <Input
@@ -138,8 +152,8 @@ const AddGroup = (props) => {
           onChange={(e) => handleGroupNameInput(e.target.value)}
         />
       </div>
-      {existingGroup}
-    </>
+      {existingGroupDisplaySwitch}
+    </React.Fragment>
   );
   return (
     <Container>
@@ -160,7 +174,7 @@ let Submit = styled.div`
   align-items: center;
   margin: 5px;
   margin-left: -1px;
-  font-family:Nunito, Roboto, sans-serif;
+  font-family: Nunito, Roboto, sans-serif;
   font-weight: 200;
   box-shadow: 10px 0px 13px -12px #897b7b, 0px 7px 13px -7px #000000;
   background-color: rgb(252, 219, 166);
@@ -182,16 +196,16 @@ let Column = styled.div`
 `;
 let PageHeader = styled.h1`
   font-size: 50px;
-  font-family:Nunito, Roboto, sans-serif;
+  font-family: Nunito, Roboto, sans-serif;
   font-weight: 900;
   padding: 2rem;
 `;
 let Header = styled.h6`
-font-family:Nunito, Roboto, sans-serif;
+  font-family: Nunito, Roboto, sans-serif;
   font-weight: 400;
 `;
 let Label = styled.label`
-font-family:Nunito, Roboto, sans-serif;
+  font-family: Nunito, Roboto, sans-serif;
   font-weight: 400;
   display: flex;
   flex-direction: column;
@@ -210,7 +224,7 @@ let Container = styled.section`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  ${props=>props.theme.dark?props.theme.backgroundColor:''};
+  ${(props) => (props.theme.dark ? props.theme.backgroundColor : "")};
   @media (max-width: 500px) {
     justify-content: flex-start;
   }

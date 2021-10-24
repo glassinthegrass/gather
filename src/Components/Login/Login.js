@@ -1,47 +1,54 @@
-import bee from "../../Assets/Gather_Line_with_Bee.png";
+//modules
 import React, { useEffect, useContext, useState } from "react";
-import { userContext } from "../../userContext";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
+//state management
+import { userContext } from "../../Context/userContext";
+//styles
+import { LoginWindow } from "./LoginWindow";
+import { RegsiterWindow } from "./RegisterWindow";
+import bee from "../../Public/Gather_Line_with_Bee.png";
 import {
   ToggleBox,
   Window,
   Box,
-  Input,
-  Submit,
   LoginToggle,
   RegisterToggle,
   Bee,
   Title,
-  Error,
-  Checkbox,
-  Row,
 } from "./styles.js";
 
 const Login = (props) => {
-  const [user, setUser] = useContext(userContext);
-  const [loginUser, setLoginUser] = useState({ email: "", password: "" });
-  const [newUser, setNewUser] = useState({
-    username: "",
-    email: "",
-    password: "",
-    passwordTwo: "",
-    first_name: "",
-    last_name: "",
-  });
-  const [toggle, setToggle] = useState({
-    nullToggle: true,
-    loginToggle: false,
-    registerToggle: false,
-  });
-  const [loginError, setLoginError] = useState("");
-  const [remember, setRemember] = useState(false);
-  const [regError, setRegError] = useState("");
-  const history = useHistory();
-  const { push } = history;
-  const { isLoggedIn } = user;
-  const{nullToggle,loginToggle,registerToggle}=toggle
+  //loggedInUser
+  const [user, setUser] = useContext(userContext),
+    { isLoggedIn } = user;
+  //loginState
+  const [loginUser, setLoginUser] = useState({ email: "", password: "" }),
+    //register state
+    [newUser, setNewUser] = useState({
+      username: "",
+      email: "",
+      password: "",
+      passwordTwo: "",
+      first_name: "",
+      last_name: "",
+    }),
+    //window toggle state
+    [toggle, setToggle] = useState({
+      nullToggle: true,
+      loginToggle: false,
+      registerToggle: false,
+    }),
+    //destructure toggle
+    { nullToggle, loginToggle, registerToggle } = toggle,
+    //errors
+    [loginError, setLoginError] = useState(""),
+    [regError, setRegError] = useState(""),
+    //localstorage keep login state
+    [remember, setRemember] = useState(false),
+    push = useHistory().push;
 
+  //redirect
   useEffect(() => {
     if (isLoggedIn === true) {
       push("/home");
@@ -50,239 +57,178 @@ const Login = (props) => {
     }
   }, [isLoggedIn, push]);
 
-  const handleLoginEmail = (email) => {
-    setLoginError("");
-    let user = { ...loginUser };
-    user.email = email;
-    setLoginUser(user);
-  };
-
-  const handleLoginPassword = (password) => {
-    let newPassword = "";
-    for (let i = 0; i < password.length; i++) {
-      if (password[i] !== " ") {
-        newPassword += password[i];
+  //handler object
+  const handle = {
+    
+    loginEmail: (email) => {
+      setLoginError("");
+      let user = { ...loginUser };
+      user.email=email
+      setLoginUser(user);
+    },
+    loginPassword: (password) => {
+      //remove spaces
+      let newPassword = "";
+      for (let i = 0; i < password.length; i++) {
+        if (password[i] !== " ") {
+          newPassword += password[i];
+        }
       }
-    }
-    setLoginUser({ ...loginUser, password: newPassword });
-  };
-  const handleLogin = () => {
-    let emailReg = new RegExp(/^\S+@\S+\.\S+$/, "ig");
-    const { email, password } = loginUser;
-    if (!emailReg.test(loginUser.email)) {
-      setLoginError("Email is not valid.");
-    } else {
+      setLoginUser({ ...loginUser, password: newPassword });
+    },
+    login: () => {      
+      const { email, password } = loginUser;
+      //email regex
+      let emailReg = new RegExp(/^\S+@\S+\.\S+$/, "ig");
+      if (!emailReg.test(loginUser.email)) {
+        //if emailReg doesn't return true throw error
+        setLoginError("Email is not valid.");
+      } else {
+        //login functionality with stay logged in info
+        axios
+          .post("/auth/login", { email, password })
+          .then((res) => {
+            //old refers to the user local storage pulled on app.js
+            //and stored in userContext
+            let old = user;
+            setUser(res.data);
+            remember
+              ? localStorage.setItem("user", JSON.stringify(res.data))
+              : localStorage.setItem("user", JSON.stringify(old));
+          })
+          .catch((err) => {
+            //specific errors can be seen in the controller file
+            setLoginError(err.response.data);
+          });
+      }
+    },
+    loginKeyPress: (e) => {
+      //listens for enter keypress to submit login info
+      //only on password input
+      if (e.key === "Enter") {
+        handle.login();
+      }
+    },
+    register: () => {
+      //handle register functionality
+      setRegError("");
+      //destructure newUser
+      const { first_name, last_name, username, email, password } = newUser;
+
       axios
-        .post("/auth/login", { email, password })
+        .post("/auth/register", {
+          first_name,
+          last_name,
+          username,
+          email,
+          password,
+        })
         .then((res) => {
-let old = user
           setUser(res.data);
-          remember?localStorage.setItem("user", JSON.stringify(res.data)):localStorage.setItem('user',JSON.stringify(old))
         })
         .catch((err) => {
-          setLoginError(err.response.data);
+          setRegError(err.response.data);
         });
-    }
+        //establish item on local storage for darkmode
+      localStorage.setItem("dark", false);
+    },
+    registerKeyPress: (e) => {
+      //listen for keypress enter on password 1/2 inputs
+      if (e.key === "Enter") {
+        handle.register();
+      }
+    },
+    loginClick: () => {
+      //open loginwindow close register and title window
+      if (nullToggle || registerToggle) {
+        setToggle({
+          ...toggle,
+          nullToggle: false,
+          loginToggle: true,
+          registerToggle: false,
+        });
+      } else {
+
+        //does oposite of above
+        setToggle({
+          ...toggle,
+          registerToggle: false,
+          loginToggle: false,
+          nullToggle: true,
+        });
+      }
+    },
+
+    registerClick: () => {
+      //opens register window closes login and landing window
+      if (nullToggle || loginToggle) {
+        setToggle({
+          ...toggle,
+          registerToggle: true,
+          loginToggle: false,
+          nullToggle: false,
+        });
+      } else {
+        //does opposite
+        setToggle({
+          ...toggle,
+          registerToggle: false,
+          loginToggle: false,
+          nullToggle: true,
+        });
+      }
+    },
+    remember: () => {
+      setRemember(!remember);
+    },
+    newUser: (e) => {
+      setNewUser(e);
+      setRegError("");
+    },
   };
 
-  const handleLoginKeyPress = (e) => {
-    if (e.key === "Enter") {
-      handleLogin();
-    }
-  };
-  const handleRegister = () => {
-    setRegError("");
-    const { first_name, last_name, username, email, password } = newUser;
-    axios
-      .post("/auth/register", {
-        first_name,
-        last_name,
-        username,
-        email,
-        password,
-      })
-      .then((res) => {
-        setUser(res.data);
-      })
-      .catch((err) => {
-        setRegError(err.response.data);
-      });
-    localStorage.setItem("dark", false);
-  };
-  const handleRegisterKeyPress = (e) => {
-    if (e.key === "Enter") {
-      handleRegister();
-    }
-  };
-
-  const handleRemember = () => {
-    setRemember(!remember);
-  };
-
-  let loginWindow = (
-    <>
-      <Input
-        onChange={(e) => handleLoginEmail(e.target.value)}
-        placeholder="Enter email"
-        value={loginUser.email}
-      />
-      <Input
-        onChange={(e) => handleLoginPassword(e.target.value)}
-        onKeyPress={(e) => {
-          handleLoginKeyPress(e);
-        }}
-        value={loginUser.password}
-        type="password"
-        placeholder="Enter password"
-      />
-      <Row>
-        remember me?
-        <Checkbox
-          name="remember me"
-          onChange={handleRemember}
-          value={remember}
-          checked={remember}
-          type="checkbox"
-        />
-      </Row>
-      {loginError && <Error>{loginError}</Error>}
-
-      <Submit  onClick={() => handleLogin()}>Submit</Submit>
-    </>
-  );
-
-  let registerWindow = (
-    <>
-      <Input
-        onChange={(e) => {
-          setNewUser({ ...newUser, username: e.target.value });
-          setRegError("");
-        }}
-        className="registerInput"
-        value={newUser.username}
-        type="text"
-        placeholder="Pick a username!"
-      />
-      <Input
-        onChange={(e) => {
-          setNewUser({ ...newUser, email: e.target.value });
-          setRegError("");
-        }}
-        className="registerInput"
-        value={newUser.email}
-        type="text"
-        placeholder="What's your email?"
-      />
-      <Input
-        onChange={(e) => {
-          setNewUser({ ...newUser, first_name: e.target.value });
-          setRegError("");
-        }}
-        className="registerInput"
-        type="text"
-        placeholder="What's your first name?"
-      />
-      <Input
-        onChange={(e) => {
-          setNewUser({ ...newUser, last_name: e.target.value });
-          setRegError("");
-        }}
-        className="registerInput"
-        type="text"
-        placeholder="What's your last name?"
-      />
-      <Input
-        onChange={(e) => {
-          setNewUser({ ...newUser, password: e.target.value });
-          setRegError("");
-        }}
-        className="registerInput"
-        type="password"
-        placeholder="Enter a password"
-      />
-      <Input
-        onChange={(e) => {
-          setNewUser({ ...newUser, passwordTwo: e.target.value });
-          setRegError("");
-        }}
-        onKeyPress={(e) => handleRegisterKeyPress(e)}
-        className="registerInput"
-        type="password"
-        placeholder="Re-enter your password"
-      />
-      {regError && <Error>{regError}</Error>}
-      {user.isRegistered ? (
-        <Submit onClick={() => push("/profile/uploads")}>Next</Submit>
-      ) : (
-        <Submit onClick={() => handleRegister()}>Submit</Submit>
-      )}
-    </>
-  );
-
-  const handleLoginClick = () => {
-    if (nullToggle || registerToggle) {
-      setToggle({
-        ...toggle,
-        nullToggle: false,
-        loginToggle: true,
-        registerToggle: false,
-      });
-    } else {
-      setToggle({
-        ...toggle,
-        registerToggle: false,
-        loginToggle: false,
-        nullToggle: true,
-      });
-    }
-  };
-  const handleRegisterClick = () => {
-    if (nullToggle || loginToggle) {
-      setToggle({
-        ...toggle,
-        registerToggle: true,
-        loginToggle: false,
-        nullToggle: false,
-      });
-    } else {
-      setToggle({
-        ...toggle,
-        registerToggle: false,
-        loginToggle: false,
-        nullToggle: true,
-      });
-    }
-  };
-  const windowToggle = nullToggle ? (
-    <></>
+  const windowDisplayToggle = nullToggle ? (
+    <React.Fragment></React.Fragment>
   ) : loginToggle ? (
-    loginWindow
+    <LoginWindow
+      handle={handle}
+      remember={remember}
+      loginError={loginError}
+      loginUser={loginUser}
+    />
   ) : registerToggle ? (
-    registerWindow
+    <RegsiterWindow
+      push={push}
+      handle={handle}
+      user={user}
+      regError={regError}
+      newUser={newUser}
+    />
   ) : (
-    <></>
+    <React.Fragment></React.Fragment>
   );
 
-  return (
-    <Window>
-      <div>
-        <p>A place for friends to...</p>
-        <Bee src={bee} alt="" />
-        <Box>
-          <Title>Gather</Title>
-          {windowToggle}
-        </Box>
-        <ToggleBox>
-          <LoginToggle onClick={handleLoginClick}>Login</LoginToggle>
-
-          <RegisterToggle loginToggle={loginToggle} onClick={handleRegisterClick}>
-            Register
-          </RegisterToggle>
-        </ToggleBox>
-      </div>
-
-    </Window>
+  let display = (
+    <span>
+      <p>A place for friends to...</p>
+      <Bee src={bee} alt="" />
+      <Box>
+        <Title>Gather</Title>
+        {windowDisplayToggle}
+      </Box>
+      <ToggleBox>
+        <LoginToggle onClick={handle.loginClick}>Login</LoginToggle>
+        <RegisterToggle
+          loginToggle={loginToggle}
+          onClick={handle.registerClick}
+        >
+          Register
+        </RegisterToggle>
+      </ToggleBox>
+    </span>
   );
+
+  return <Window>{display}</Window>;
 };
 
 export default Login;
