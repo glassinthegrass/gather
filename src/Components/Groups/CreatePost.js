@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Loading from "../Loading";
 
+
 const CreatePost = ({preview,loading,handleImage,handlePostContent,handleSubmit,postContent}) => {
   //loading switch for display upon upload
   let displayLoadingSwitch = loading ? (

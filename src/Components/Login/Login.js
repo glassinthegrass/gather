@@ -59,7 +59,12 @@ const Login = (props) => {
 
   //handler object
   const handle = {
-    
+    registerNext:()=>{
+      let us=user
+      delete us.isRegistered
+      us.isLoggedIn=true
+      setUser(us)
+    },
     loginEmail: (email) => {
       setLoginError("");
       let user = { ...loginUser };

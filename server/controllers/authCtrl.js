@@ -39,9 +39,10 @@ module.exports = {
 
         await db.groups.create_group_users(1, registeredUser.user_id, false);
         delete registeredUser.hash;
-        registeredUser.isRegistered = true;
         req.session.user = registeredUser;
-        return res.status(200).send(req.session.user);
+        req.session.user.isLoggedIn=true
+        registeredUser.isRegistered = true;
+        return res.status(200).send(registeredUser);
       }
     } catch (err) {
       return res.status(500).send("Bzzzt- something went wrong.");

@@ -8,7 +8,7 @@ import { HeaderIcons, Holding, ProfileMenuBox } from "./styles";
 const ProfileIcons = (props) => {
   const { user_id, profileMenu } = props;
   return (
-    <>
+    <React.Fragment>
       <Link to={`/home`}>
         <HeaderIcons src={home} alt="" />
       </Link>
@@ -24,7 +24,7 @@ const ProfileIcons = (props) => {
         </Link>
         <ProfileMenuBox>{profileMenu}</ProfileMenuBox>
       </Holding>
-    </>
+    </React.Fragment>
   );
 };
 export default ProfileIcons;

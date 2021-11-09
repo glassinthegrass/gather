@@ -45,7 +45,7 @@ export const RegsiterWindow = ({user,push,handle,regError,newUser})=>(
       />
       {regError && <Error>{regError}</Error>}
       {user.isRegistered ? (
-        <Submit onClick={() => push("/profile/uploads")}>Next</Submit>
+        <Submit onClick={() => {push("/profile/uploads")}}>Next</Submit>
       ) : (
         <Submit onClick={() => handle.register()}>Submit</Submit>
       )}
