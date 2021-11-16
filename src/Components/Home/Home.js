@@ -250,5 +250,5 @@ let Text = styled.p`
   white-space: nowrap;
   padding-left: 10px;
   padding-right: 10px;
-  ${(props) => props.theme.color + ";" + props.theme.fontShadow};
+  ${(props) => props.theme.color};
 `;

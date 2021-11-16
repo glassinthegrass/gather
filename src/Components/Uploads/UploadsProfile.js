@@ -102,7 +102,6 @@ const UploadsProfile = (props) => {
   );
   return (
     <Containter>
-
       <UploadContainer>
         <HiddenInput
           type="file"
@@ -110,10 +109,8 @@ const UploadsProfile = (props) => {
           onChange={(e) => handleFile(e.target.files)}
         />
         <Label htmlFor="single">{picSwitch}</Label>
-
         {loadingSwitch}
       </UploadContainer>
-      {console.log(response)}
     </Containter>
   );
 };

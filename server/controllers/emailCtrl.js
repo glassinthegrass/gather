@@ -21,8 +21,7 @@ module.exports = {
           to: email,
           subject: `${first_name} You've been registered to Gather!`, //This will show on the subject of the email
           text: "thanks for joining gather!", //for clients with plaintext support only
-          html: `<div>${"Thanks for joining gather!"}<div> 
-                  <img src="cid:unique@nodemailer.com"/>`,
+          html: `<div>"Thanks for joining gather!"<div>`,
           attachments: [
             {
               //this is the attachment of the document
