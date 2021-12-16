@@ -44,9 +44,7 @@ export const RegsiterWindow = ({user,push,handle,regError,newUser})=>(
         placeholder="Re-enter your password"
       />
       {regError && <Error>{regError}</Error>}
-      {user.isRegistered ? (
-        <Submit onClick={() => {push("/profile/uploads")}}>Next</Submit>
-      ) : (
+      {user.isRegistered ? (<Submit>Registered! Login Now!</Submit>):(
         <Submit onClick={() => handle.register()}>Submit</Submit>
       )}
     </React.Fragment>
