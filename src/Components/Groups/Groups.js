@@ -80,11 +80,9 @@ let Container = styled.section`
 `;
 let Spacer = styled.div`
   height: 3rem;
-
   font-weight: 900;
   font-size: 20px;
   display: flex;
-
   justify-content: center;
   align-items: center;
 `;

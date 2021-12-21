@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import UserPosts from "./UserPosts";
 import UserProfile from "./UserProfile";
-import Groups from "../Profile/Groups";
+import GroupsView from '../Groups/GroupsView'
 
 const Profile = (props) => {
   const [loggedInUser, setLoggedInUser] = useContext(userContext);
@@ -19,6 +19,8 @@ const Profile = (props) => {
   const [offsetToggle, setOffsetToggle] = useState(true);
   const [loadingToggle, setLoadingToggle] = useState(true);
   const [toggle, setToggle] = useState(null);
+  const [filter, setFilter] = useState("user");
+  const [groups, setGroups] = useState([]);
 
   const handleSetToggle = (loadingToggle) => {
     setLoadingToggle(!loadingToggle);
@@ -71,6 +73,12 @@ const Profile = (props) => {
     }
   }, [offsetToggle, user_id, offset, posts]);
 
+  useEffect(() => {
+    axios
+      .get(`/api/groups/all?filter=${filter}&user_id=${user_id}`)
+      .then((res) => setGroups(res.data))
+      .catch((err) => console.log(err));
+  }, [filter, user_id]);
   const handleOffsetPosts = () => {
     setOffsetToggle(true);
   };
@@ -94,6 +102,37 @@ const Profile = (props) => {
   const toggleGroups = () => {
     toggle === null || toggle === false ? setToggle(true) : setToggle(null);
   };
+
+
+  const handleGroupSearch = (groupName) => {
+    if (groupName.length > 2) {
+      axios
+        .get(`/api/groups?searchQuery=${groupName}`)
+        .then((res) => {
+          if (res.data[0]) {
+            setGroups(res.data);
+          } else {
+            axios
+              .get(`/api/groups/all?filter=${filter}&user_id=${user_id}`)
+              .then((res) => {
+                setGroups(res.data);
+              })
+              .catch((err) => console.log(err));
+          }
+        })
+        .catch((err) => console.log(err));
+    } else {
+      axios
+        .get(`/api/groups/all?filter=${filter}&user_id=${user_id}`)
+        .then((res) => {
+          setGroups(res.data);
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+  const handleFilter = () => {
+    filter === 'all' ? setFilter('user'):setFilter("all");
+  };
   let postsOrGroups =
     toggle === null ? (
       <></>
@@ -107,7 +146,15 @@ const Profile = (props) => {
         )}
       </ProfileContainer>
     ) : (
-      <Groups loggedInUser={loggedInUser} user={user} />
+      <GroupsView
+      handleFilter={handleFilter}
+      handleGroupSearch={handleGroupSearch}
+      filter={filter}
+      allGroups={groups}
+      loggedInUser={user}
+      user={user}
+      push={push}
+      />
     );
 
   return (
@@ -145,14 +192,17 @@ let Container = styled.section`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  ${props=>props.theme.dark?props.theme.backgroundColor:''};
+  ${(props) => (props.theme.dark ? props.theme.backgroundColor : "")};
 `;
 let PostToggle = styled.h1`
   border: 1px solid rgb(88, 88, 88, 0.5);
   width: 50%;
   height: 30px;
   font-size: 8px;
-${props=>props.theme.dark?props.theme.backgroundColor:'background-color: rgb(252, 219, 166)'};
+  ${(props) =>
+    props.theme.dark
+      ? props.theme.backgroundColor
+      : "background-color: rgb(252, 219, 166)"};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -218,7 +268,7 @@ let Back = styled.div`
   position: fixed;
   display: flex;
   font-weight: 800;
-  width:2rem;
+  width: 2rem;
   align-items: center;
   justify-content: center;
   margin-right: 92vw;
@@ -226,7 +276,7 @@ let Back = styled.div`
   z-index: 5;
   font-size: 30px;
   cursor: pointer;
-  padding:2px;
+  padding: 2px;
   border-radius: 3px;
   background-color: rgb(88, 88, 88);
   color: rgb(252, 142, 52);

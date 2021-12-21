@@ -12,7 +12,7 @@ const GroupsView = ({
   user,
   loggedInUser,
   handleFilter,
-  handleGroupSearch,
+  handleGroupSearch
 }) => {
   const [groups, setGroups] = useState([]);
   //re-used Groupsview after the fact required some rejiggering to get it to function with different starting inputs on the pages. needs clean up but works.
@@ -182,13 +182,11 @@ let Toggles = styled.div`
   border: 1px solid rgb(88, 88, 88, 0.5);
   width: 50%;
   height: 30px;
-
   display: flex;
   justify-content: center;
   margin: 5px;
   align-items: center;
   border-radius: 10px;
-
   font-weight: 300;
   z-index: 4;
   font-size: 20px;
@@ -208,7 +206,6 @@ let Toggles = styled.div`
   }
   @media (max-width: 600px) {
     font-size: 15px;
-
     font-weight: 600;
   }
 `;
@@ -219,7 +216,6 @@ let Spacer = styled.div`
   justify-content: center;
   align-items: center;
   align-content: center;
-
   font-weight: 600;
 `;
 let Container = styled.section`

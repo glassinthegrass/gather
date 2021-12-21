@@ -84,7 +84,7 @@ const Home = (props) => {
 
   //maps
   const mappedGroups = groups.map((group, i) => {
-    return <Groups group={group} key={i} />;
+    return <Groups group={group} push={push} key={i} />;
   });
 
   let mappedPosts = posts.map((post, i) => {
@@ -113,6 +113,7 @@ const Home = (props) => {
   );
   //main display
   let display = (
+    <HomeDiv>
     <Box>
       <GroupBox>
         <Title>Your Hives</Title>
@@ -125,9 +126,10 @@ const Home = (props) => {
       {gotAllPosts}
       <Spacer></Spacer>
     </Box>
+    </HomeDiv>
   );
 
-  return <HomeDiv>{display}</HomeDiv>;
+  return display;
 };
 
 export default Home;

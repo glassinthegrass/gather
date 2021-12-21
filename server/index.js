@@ -105,8 +105,8 @@ app.post(`/api/post-comment`, authUser.isLoggedIn, postCtrl.createPostComment);
 
 //groups
 app.get("/api/groups/all", authUser.isLoggedIn, groupCtrl.getAllGroups);
-app.get("/api/groups", authUser.isLoggedIn, groupCtrl.searchGroups);
 app.get("/api/groups/:user_id", authUser.isLoggedIn, groupCtrl.getGroupsByUser);
+app.get("/api/groups", authUser.isLoggedIn, groupCtrl.searchGroups);
 app.get(
   "/api/member/groups",
   authUser.isLoggedIn,
@@ -131,7 +131,6 @@ app.put(
 );
 app.delete("/api/groups", authUser.isLoggedIn, groupCtrl.deleteUserFromGroup);
 app.delete("/api/delete-group", authUser.isLoggedIn, groupCtrl.deleteGroup);
-
 
 //email
 app.post("/api/email", authUser.isLoggedIn, emailCtrl.sendEmail);
@@ -169,6 +168,6 @@ massive(
   },
   { scripts: path.join(__dirname, "../db") }
 ).then((dbInstance) => {
-  app.set('db', dbInstance);
+  app.set("db", dbInstance);
   app.listen(SERVER_PORT, () => console.log(`GATHER on port ${SERVER_PORT}`));
 });

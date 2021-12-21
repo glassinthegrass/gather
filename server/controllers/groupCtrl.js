@@ -1,6 +1,6 @@
 const cloudinary = require("cloudinary").v2;
 const { format } = require("date-fns");
-let date =format(new Date(), 'MM/dd/yyyy')
+let date = format(new Date(), "MM/dd/yyyy");
 
 module.exports = {
   createGroup: async (req, res) => {
@@ -14,7 +14,7 @@ module.exports = {
         const [newGroup] = await db.groups.create_group(
           group_name,
           subject,
-date
+          date
         );
         await db.groups.create_group_users(newGroup.group_id, user_id, true);
 
@@ -68,9 +68,11 @@ date
     try {
       if (filter === "all") {
         const allGroups = await db.groups.get_all_groups();
+        console.log(allGroups, "all");
         return res.status(200).send(allGroups);
       } else {
         const userGroups = await db.groups.get_groups_by_user(user_id);
+        console.log(userGroups, "user");
         return res.status(200).send(userGroups);
       }
     } catch (err) {
@@ -141,13 +143,13 @@ date
   },
   deleteGroupFromPerson: async (req, res) => {
     const db = req.app.get("db");
-    const { group_id,person_id } = req.query;
+    const { group_id, person_id } = req.query;
     try {
       await db.groups.delete_person_from_group(person_id, group_id);
       const groups = await db.people.get_groups_by_person_id(person_id);
       return res.status(200).send(groups);
     } catch (err) {
-      console.log(err)
+      console.log(err);
       return res.sendStatus(404);
     }
   },
