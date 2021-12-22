@@ -84,7 +84,7 @@ const Posts = (props) => {
                   crop="fill"
                   gravity="auto"
                   fetch_format="png"
-                />{" "}
+                />
               </UserImage>
 
               <UserName>{`${post.first_name} ${post.last_name}`}</UserName>
